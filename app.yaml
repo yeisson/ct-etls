@@ -1,0 +1,21 @@
+runtime: python
+env: flex
+
+entrypoint: gunicorn -t 300 -b :$PORT main:app
+
+runtime_config:
+  python_version: 2
+
+automatic_scaling:
+  min_num_instances: 2
+
+#network:
+#  instance_tag: contento
+#  name: contento-bps-network
+#  subnetwork_name: contento-subnet1
+
+#[START env]
+env_variables:
+    CLOUD_STORAGE_BUCKET: geocoding_uploaded_files
+    # GOOGLE_CLOUD_PROJECT: sitimapa1
+#[END env]

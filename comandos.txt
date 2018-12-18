@@ -1,0 +1,59 @@
+python massive.py \
+    --input gs://geocoding_uploaded_files/georreferenciar_20mil.csv \
+    --output gs://geocoding_uploaded_files/salida/respuesta \
+    --runner DataflowRunner \
+    --project sitimapa1 \
+    --temp_location gs://geocoding_uploaded_files/tmp/ \
+    --max_num_workers 20 \
+    --num_workers 20 \
+    --autoscaling_algorithm=NONE
+
+
+python massivelocal.py --input georreferenciar_1mil.csv --output salida
+
+
+
+----------------------------
+
+
+rm -r env && \
+virtualenv env && \
+source env/bin/activate && \
+pip install -r requirements.txt && \
+
+
+windows cmd instalacion desde cero:
+1) borrar carpeta env
+1.5) si no esta instalado el virtualenv:   pip install virtualenv
+2) crear el virtuaenv:   virtualenv env   
+3) correr el .bat:   env\Scripts\activate.bat
+4) install depedencias:   pip install -r requirements.txt
+5) correr flask:
+
+set FLASK_APP=main.py
+ set FLASK_DEBUG=1
+ python -m flask run
+
+
+ windows cmd cuando ya se tenga env:
+ correr punto 3 y 5
+
+
+
+
+
+
+cmd
+set FLASK_APP=main.py
+
+powershell
+env/bin/activate.ps1
+
+$env:FLASK_APP = "main.py"
+$env:FLASK_DEBUG = "1"
+flask run
+
+para github
+1) commit
+2) pull
+3) push

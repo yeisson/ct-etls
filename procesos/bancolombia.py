@@ -53,7 +53,8 @@ def archivos_bm():
             blob.upload_from_filename(local_route + archivo)
 
             mensaje = bancolombia_bm_beam.run(archivo, mifecha)
-            # if mensaje == "Corrio Full HD":
+            
+            if mensaje == "Corrio Full HD 2":
                 move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
     return "El cargue de archivos: " + mensaje
 

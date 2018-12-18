@@ -49,10 +49,10 @@ def archivos_bm():
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-bancolombia')
-            blob = bucket.blob('bm' + archivo)
+            blob = bucket.blob('bm/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
-            mensaje = bancolombia_bm_beam.run(archivo, mifecha)
+            mensaje = bancolombia_bm_beam.run('gs://ct-bancolombia/bm/' + archivo, mifecha)
             
             if mensaje == "Corrio Full HD 2":
                 move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)

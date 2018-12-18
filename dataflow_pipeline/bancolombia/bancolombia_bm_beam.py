@@ -279,7 +279,17 @@ def run(archivo, mifecha):
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
 	# pipeline =  beam.Pipeline(runner="DirectRunner")
-	pipeline =  beam.Pipeline(runner=mi_runner)
+	pipeline =  beam.Pipeline(runner=mi_runner, argv=[
+        "--project", gcs_project,
+        "--staging_location", ("%s/dataflow_files/staging_location" % gcs_path),
+        "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
+        "--output", ("%s/dataflow_files/output" % gcs_path),
+        "--setup_file", "./setup.py",
+        "--max_num_workers", "5",
+		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
+        # "--num_workers", "30",
+        # "--autoscaling_algorithm", "NONE"
+    ])
 	
 	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT")
 	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("archivos/BANCOLOMBIA_BM_20181203.csv", skip_header_lines=1)

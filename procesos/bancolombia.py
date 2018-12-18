@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
+from google.cloud import bigquery
 import dataflow_pipeline.bancolombia.bancolombia_prejuridico_beam as bancolombia_prejuridico_beam
 import dataflow_pipeline.bancolombia.bancolombia_seguimiento_beam as bancolombia_seguimiento_beam
 import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
@@ -23,19 +24,19 @@ def Hola():
 @bancolombia_api.route("/prejuridico")
 def Prejuridico():
     # return "Hola Prejuridico"
-    mensaje = bancolombia_prejuridico_beam.run()
+    mensaje = bancolombia_prejuridico_beam.run('a', 'b')
     return "Corriendo : " + mensaje
 
 @bancolombia_api.route("/seguimiento")
 def Seguimiento():
-    mensaje = bancolombia_seguimiento_beam.run()
+    mensaje = bancolombia_seguimiento_beam.run('a', 'b')
     return "Corriendo : " + mensaje
 
-@bancolombia_api.route("/base_marcada")
-def Base_marcada():
-    # return "Hola Base Marcada"
-    mensaje = bancolombia_bm_beam.run()
-    return "Corriendo : " + mensaje
+#@bancolombia_api.route("/base_marcada")
+#def Base_marcada():
+#    # return "Hola Base Marcada"
+#    mensaje = bancolombia_bm_beam.run()
+#    return "Corriendo : " + mensaje
 
 @bancolombia_api.route("/archivos_base_marcada")
 def archivos_bm():
@@ -46,15 +47,27 @@ def archivos_bm():
         if archivo.endswith(".csv"):
             mifecha = archivo[15:23]
 
-            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-bancolombia')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
             blob = bucket.blob('bm/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_admin.bm` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = bancolombia_bm_beam.run('gs://ct-bancolombia/bm/' + archivo, mifecha)
             
-            if mensaje == "Corrio Full HD 2":
+            if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
     return "El cargue de archivos: " + mensaje
 

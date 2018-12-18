@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import jsonify
 from shutil import copyfile, move
+from google.cloud import storage
 import dataflow_pipeline.bancolombia.bancolombia_prejuridico_beam as bancolombia_prejuridico_beam
 import dataflow_pipeline.bancolombia.bancolombia_seguimiento_beam as bancolombia_seguimiento_beam
 import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
@@ -39,13 +40,21 @@ def Base_marcada():
 @bancolombia_api.route("/archivos_base_marcada")
 def archivos_bm():
     # archivos = os.listdir("gs://ct-bancolombia/bm/")
-    archivos = os.listdir(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/")
+    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"
+    archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
             mifecha = archivo[15:23]
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia')
+            blob = bucket.blob('bm' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
             mensaje = bancolombia_bm_beam.run(archivo, mifecha)
-            if mensaje == "Corrio Full HD":
-                move(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"+archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
+            # if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
     return "El cargue de archivos: " + mensaje
 
 @bancolombia_api.route("/archivos_prejuridico")

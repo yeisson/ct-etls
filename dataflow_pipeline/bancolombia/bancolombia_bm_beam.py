@@ -276,6 +276,7 @@ def run(archivo, mifecha):
 
 	gcs_path = "gs://ct-bancolombia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
+	fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
 	# pipeline =  beam.Pipeline(runner="DirectRunner")
@@ -293,7 +294,7 @@ def run(archivo, mifecha):
 	
 	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT")
 	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("archivos/BANCOLOMBIA_BM_20181203.csv", skip_header_lines=1)
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"+archivo, skip_header_lines=1)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"+archivo, skip_header_lines=1)
 
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
 

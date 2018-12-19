@@ -41,6 +41,15 @@ def Seguimiento():
 @bancolombia_api.route("/archivos_base_marcada")
 def archivos_bm():
     # archivos = os.listdir("gs://ct-bancolombia/bm/")
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+    # response["percentage"] = 0
+    # response["georreferenciadas"] = 0
+    # response["no_georreferenciadas"] = 0
+    # response["no_procesadas"] = 0
+
     local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
@@ -69,7 +78,12 @@ def archivos_bm():
             
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
-    return "El cargue de archivos: " + mensaje
+                response["code"] = 200
+                response["description"] = "Se procesaron los ficheros Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "El cargue de archivos: " + mensaje
 
 @bancolombia_api.route("/archivos_prejuridico")
 def archivos_Prejuridico():

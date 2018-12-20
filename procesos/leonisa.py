@@ -21,7 +21,8 @@ def inicio():
 def Seguimiento():
 
     #Variables de conexion a MS SQL
-    SERVER="BDA01\DELTA"
+    #SERVER="BDA01\DELTA"
+    SERVER="192.168.20.63\DELTA"
     USER="DP_USER"
     PASSWORD="Contento2018"
     DATABASE="Leonisa"

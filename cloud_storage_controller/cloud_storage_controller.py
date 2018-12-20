@@ -8,12 +8,10 @@ from google.cloud import storage
 # Configure this environment variable via app.yaml
 
 # CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../OAuth2Credential.json'
 # [end config]
 
-DATAFLOW_BUCKET = "geocoding_uploaded_files"
-
-def create_file(filename, content):
+def create_file(filename, content, DATAFLOW_BUCKET):
     uploaded_file = content
 
     if not uploaded_file:
@@ -32,10 +30,10 @@ def create_file(filename, content):
     blob.upload_from_string(content)
 
     # The public URL can be used to directly access the uploaded file via HTTP.
-    return blob.public_url
+    return "file created"
 
 
-def get_file_as_string(filePath):
+def get_file_as_string(filePath, DATAFLOW_BUCKET):
     gcs = storage.Client()
 
     bucket = gcs.get_bucket(DATAFLOW_BUCKET)
@@ -47,35 +45,8 @@ def get_file_as_string(filePath):
 
     return blob.download_as_string()
 
-def add_close_json_file(filePath):
-    gcs = storage.Client()
 
-    bucket = gcs.get_bucket(DATAFLOW_BUCKET)
-
-    blob = bucket.get_blob(filePath)
-
-    blob.upload_from_string(blob.download_as_string()[:-2] + "]")
-
-    return True
-
-def add_token_to_file(filePath, token):
-
-    gcs = storage.Client()
-    bucket = gcs.get_bucket(DATAFLOW_BUCKET)
-    blob = bucket.get_blob(filePath)
-    content = blob.download_as_string()
-
-    lines = content.split('\n')
-    finalContent = ""
-
-    for line in lines:
-        line = re.sub(r'[^\x00-\x7F]+',' ', line).replace('\r', '').replace('"', '').replace('\\', '') # se eliminan caracteres que no sean codificables a ascii
-        # finalContent = finalContent + line + "," + token + "\n"
-        # finalContent = finalContent + token + "," + line + "\n"
-    
-    blob.upload_from_string(finalContent)
-
-def get_total_lines(filePath):
+def get_total_lines(filePath, DATAFLOW_BUCKET):
 
     gcs = storage.Client()
     bucket = gcs.get_bucket(DATAFLOW_BUCKET)
@@ -86,7 +57,7 @@ def get_total_lines(filePath):
     
     return len(lines)
 
-def get_public_route(fileName):
+def get_public_route(fileName, DATAFLOW_BUCKET):
     gcs = storage.Client()
 
     bucket = gcs.get_bucket(DATAFLOW_BUCKET)

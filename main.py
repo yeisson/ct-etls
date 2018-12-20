@@ -20,6 +20,7 @@ from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
 from procesos.telefonia import telefonia_api
 from procesos.negociadores import negociadores_api
+from procesos.leonisa import leonisa_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -30,6 +31,7 @@ app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
 app.register_blueprint(telefonia_api, url_prefix='/telefonia')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
+app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

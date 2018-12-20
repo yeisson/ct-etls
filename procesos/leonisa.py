@@ -55,14 +55,13 @@ def Seguimiento():
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-leonisa")
 
     # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-    #deleteQuery = "DELETE FROM `contento-bi.leonisa.seguimiento` WHERE 1=1"
+    deleteQuery = "DELETE FROM `contento-bi.leonisa.seguimiento` WHERE 1=1"
 
     #Primero eliminamos todos los registros que contengan esa fecha
-    #client = bigquery.Client()
-    #query_job = client.query(deleteQuery)
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
 
-    #result = query_job.result()
-    #query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+    query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
     #Luego procedemos a correr el proceso de Dataflow
     flowAnswer = leonisa_seguimiento_beam.run(filename, date)

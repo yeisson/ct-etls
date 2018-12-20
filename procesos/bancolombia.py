@@ -79,7 +79,7 @@ def archivos_bm():
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
                 response["code"] = 200
-                response["description"] = "Se procesaron los ficheros Full HD"
+                response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
     return jsonify(response), response["code"]

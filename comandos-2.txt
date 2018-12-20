@@ -1,0 +1,72 @@
+python massive.py \
+    --input gs://geocoding_uploaded_files/georreferenciar_20mil.csv \
+    --output gs://geocoding_uploaded_files/salida/respuesta \
+    --runner DataflowRunner \
+    --project sitimapa1 \
+    --temp_location gs://geocoding_uploaded_files/tmp/ \
+    --max_num_workers 20 \
+    --num_workers 20 \
+    --autoscaling_algorithm=NONE
+
+
+python massivelocal.py --input georreferenciar_1mil.csv --output salida
+
+
+
+----------------------------
+
+
+rm -r env && \
+virtualenv env && \
+source env/bin/activate && \
+pip install -r requirements.txt && \
+FLASK_APP=main.py FLASK_DEBUG=1 python -m flask run
+
+
+
+
+
+----------------------------
+
+pip install --upgrade setuptools
+
+rm -r env && \
+virtualenv env && \
+source env/bin/activate && \
+pip install -r requirements.txt && \
+FLASK_APP=main.py FLASK_DEBUG=1 python -m flask run
+
+
+deactivate
+
+
+------------------------------
+gunicorn --bind 0.0.0.0:5000 wsgi:app
+
+
+from main import app
+
+if __name__ == "__main__":
+    app.run()
+
+Recargar el demonio (el servicio)
+systemctl daemon-reload
+
+Fichero de configuracion del servicio
+sudo nano /etc/systemd/system/contento-etls.service
+
+sudo systemctl start contento-etls
+sudo systemctl stop contento-etls
+sudo systemctl restart contento-etls
+sudo systemctl status contento-etls
+
+Seguir los logs en tiempo real
+sudo journalctl -f -u contento-etls.service -n
+
+Montar unidad de red en CentOS 7
+sudo mount -t cifs -o username=yeisson.graciano //192.168.20.87/aries /media/aries
+sudo mount -t cifs -o username=yeisson.graciano,password=******** //192.168.20.87/aries /media/aries
+
+Esperar hasta que un Flow termine
+result = pipeline.run()
+result.wait_until_finish()

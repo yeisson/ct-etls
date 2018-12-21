@@ -88,22 +88,82 @@ def archivos_bm():
 @bancolombia_api.route("/archivos_prejuridico")
 def archivos_Prejuridico():
 
-    archivos = os.listdir(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Fuente Archivos")
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Fuente Archivos/"
+    archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
             mifecha = archivo[21:29]
-            mensaje = bancolombia_prejuridico_beam.run(archivo, mifecha)
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('prejuridico/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_admin.prejuridico` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = bancolombia_prejuridico_beam.run('gs://ct-bancolombia/prejuridico/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Fuente Archivos/"+archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
 
 @bancolombia_api.route("/archivos_seguimiento")
 def archivos_Seguimiento():
 
-    archivos = os.listdir(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/fuentes_seg")
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/fuentes_seg/"
+    archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
             mifecha = archivo[20:28]
-            mensaje = bancolombia_seguimiento_beam.run(archivo, mifecha)
-            if mensaje == "Corrio sin problema":
-                move(fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/fuentes_seg/"+archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/procesados_seg/"+archivo)
-    return "Corriendo : " + mensaje
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-seguimiento/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_admin.seguimiento` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = bancolombia_seguimiento_beam.run('gs://ct-bancolombia/info-seguimiento/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/procesados_seg/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje

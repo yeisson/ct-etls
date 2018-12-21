@@ -10,6 +10,7 @@ import os
 import argparse
 import uuid
 import datetime
+import socket
 
 import apache_beam as beam
 from apache_beam.io import ReadFromText
@@ -184,10 +185,22 @@ def run(archivo, mifecha):
 	gcs_path = "gs://ct-bancolombia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
-	pipeline =  beam.Pipeline(runner="DirectRunner")
+	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
+	# pipeline =  beam.Pipeline(runner="DirectRunner")
+	pipeline =  beam.Pipeline(runner=mi_runner, argv=[
+        "--project", gcs_project,
+        "--staging_location", ("%s/dataflow_files/staging_location" % gcs_path),
+        "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
+        "--output", ("%s/dataflow_files/output" % gcs_path),
+        "--setup_file", "./setup.py",
+        "--max_num_workers", "5",
+		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
+        # "--num_workers", "30",
+        # "--autoscaling_algorithm", "NONE"
+	])
 	
 	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT")
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Fuente Archivos/"+archivo, skip_header_lines=1)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
 

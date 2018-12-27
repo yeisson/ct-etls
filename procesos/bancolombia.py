@@ -95,7 +95,7 @@ def archivos_Prejuridico():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Fuente Archivos/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Prejuridico/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -121,7 +121,7 @@ def archivos_Prejuridico():
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = bancolombia_prejuridico_beam.run('gs://ct-bancolombia/prejuridico/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Prejuridicos Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Prejuridico/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True

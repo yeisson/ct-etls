@@ -136,7 +136,7 @@ def archivos_Seguimiento():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/fuentes_seg/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Seguimiento/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -162,7 +162,7 @@ def archivos_Seguimiento():
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = bancolombia_seguimiento_beam.run('gs://ct-bancolombia/info-seguimiento/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/nflorez/procesados_seg/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Seguimiento/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True

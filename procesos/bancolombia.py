@@ -11,7 +11,7 @@ import socket
 
 bancolombia_api = Blueprint('bancolombia_api', __name__)
 
-fileserver_baseroute = ("//192.168.20.87", "")[socket.gethostname()=="contentobi"]
+fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 @bancolombia_api.route("/")
 def inicio():

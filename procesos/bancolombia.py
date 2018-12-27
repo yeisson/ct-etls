@@ -50,7 +50,8 @@ def archivos_bm():
     # response["no_georreferenciadas"] = 0
     # response["no_procesadas"] = 0
 
-    local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"
+    # local_route = fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Fuente Archivos/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Base_marcada/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -77,7 +78,8 @@ def archivos_bm():
             mensaje = bancolombia_bm_beam.run('gs://ct-bancolombia/bm/' + archivo, mifecha)
             
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
+                # move(local_route + archivo, fileserver_baseroute + "/aries/Inteligencia_Negocios/EQUIPO BI/dcaro/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Base_marcada/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True

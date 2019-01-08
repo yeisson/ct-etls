@@ -18,9 +18,11 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
-from procesos.telefonia import telefonia_api
 from procesos.negociadores import negociadores_api
 from procesos.leonisa import leonisa_api
+from procesos.Telefonia.login_logout import login_logout_api
+from procesos.Telefonia.csat import csat_api
+from procesos.Telefonia.agent_status import agent_status_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -29,7 +31,9 @@ CORS(app)
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
-app.register_blueprint(telefonia_api, url_prefix='/telefonia')
+app.register_blueprint(login_logout_api, url_prefix='/telefonia')
+app.register_blueprint(csat_api, url_prefix='/telefonia')
+app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
 app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 

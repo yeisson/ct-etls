@@ -147,7 +147,7 @@ def run(data):
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/csat.txt")
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/csat.txt")
 	lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/csat/" + fecha, file_name_suffix='.txt',shard_name_template='')
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(

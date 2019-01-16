@@ -5,3 +5,4 @@
 /archivos
 *.pyc
 OAuth2Credential.json
+*.pkl

@@ -77,6 +77,7 @@ def Ejecutar():
     rows = query_job.result()
     data = ""
     file = open("/media/BI_Archivos/GOOGLE/Telefonia/csat.txt","a")
+    # file = open("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/csat.txt","a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str("cbps_survey") + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
         datos = requests.get(url).content
@@ -137,6 +138,7 @@ def Ejecutar():
     file.close()
     ejecutar = csat_beam.run(data)
     os.remove("/media/BI_Archivos/GOOGLE/Telefonia/csat.txt")
+    # os.remove("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/csat.txt")
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 
 ########################################################################################################################

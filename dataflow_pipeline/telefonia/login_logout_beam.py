@@ -121,11 +121,9 @@ def run(data):
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.txt")
-	# lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	transformed | 'Escribir en Archivo2' >> WriteToText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out2/" + fecha, file_name_suffix='.txt',shard_name_template='')
-
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("\media\BI_Archivos\GOOGLE\Telefonia\Login_out.txt")
+	lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
+	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
 	# 	gcs_project + ":telefonia.login_logout", 
 	# 	schema=TABLE_SCHEMA, 

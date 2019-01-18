@@ -105,7 +105,7 @@ class formatearData(beam.DoFn):
 
 
 ############################ CODIGO DE EJECUCION ###################################
-def run(data):
+def run():
 
 	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"

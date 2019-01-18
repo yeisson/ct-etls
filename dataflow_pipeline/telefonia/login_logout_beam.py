@@ -107,7 +107,7 @@ class formatearData(beam.DoFn):
 ############################ CODIGO DE EJECUCION ###################################
 def run(data):
 
-	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
+	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -122,7 +122,9 @@ def run(data):
     ])
 
 	lines = pipeline | 'Lectura de Archivo' >> beam.io.ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.txt")
-	lines | 'Escribir en Archivo' >> beam.io.WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
+	
+	# lines | 'Escribir en Archivo' >> beam.io.WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
+	lines | 'Escribir en Archivo' >> beam.io.WriteToText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out2", file_name_suffix='.txt',shard_name_template='')
 	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
 	# 	gcs_project + ":telefonia.login_logout", 
@@ -132,5 +134,6 @@ def run(data):
 	# 	)
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
+
 
 ################################################################################

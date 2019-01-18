@@ -124,7 +124,7 @@ def run(data):
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.csv")
 	
 	# lines | 'Escribir en Archivo' >> beam.io.WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
-	lines | 'Escribir en Archivo' >> WriteToText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out2", file_name_suffix='.csv',shard_name_template='')
+	lines | 'Escribir en Archivo' >> WriteToText("/media/BI_Archivos/GOOGLE/Telefonia/x/Login_out2", file_name_suffix='.csv',shard_name_template='')
   # lines | 'Escribir en Archivo' >> WriteToText("archivos/Base_Marcada_small", file_name_suffix='.csv',shard_name_template='')
 	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(

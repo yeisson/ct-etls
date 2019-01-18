@@ -74,7 +74,7 @@ def Ejecutar():
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
-    file = open("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.txt","a")
+    file = open("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.csv","a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str("login_time") + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
         datos = requests.get(url).content
@@ -87,7 +87,7 @@ def Ejecutar():
                 data = (data +str(rown["date"])+"|"+str(rown["agent"])+"|"+str(rown["identification"])+"|"+str(rown["login_date"])+"|"+str(rown["logout_date"])+"|"+str(rown["login_time"])+"|"+ str(row.ipdial_code) + "|" + str(row.id_cliente) + "|" + str(row.cartera)) + "/n"
     file.close()
     ejecutar = login_logout_beam.run(data)
-    # os.remove("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.txt")
+    # os.remove("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.csv")
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 
 ########################################################################################################################

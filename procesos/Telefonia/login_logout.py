@@ -88,7 +88,7 @@ def Ejecutar():
     file.close()
     ejecutar = login_logout_beam.run()
     os.remove("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.csv")
-    return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
-    # return (ejecutar)
+    # return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
+    return (ejecutar)
 
 ########################################################################################################################

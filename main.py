@@ -22,6 +22,7 @@ from procesos.leonisa import leonisa_api
 from procesos.Telefonia.login_logout import login_logout_api
 from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
+from procesos.Telefonia.cdr import cdr_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
@@ -34,6 +35,7 @@ app.register_blueprint(avon_api, url_prefix='/avon')
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
 app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
+app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
 app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')

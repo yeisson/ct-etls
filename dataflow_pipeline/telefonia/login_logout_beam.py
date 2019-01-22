@@ -66,6 +66,7 @@ ruta1 = "media"
 ruta2 = "/192.168.20.87"
 ext = ".csv"
 KEY_REPORT = "login_logout"
+sub_path = KEY_REPORT + '/'
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "login_time"
 ###############################################################################
@@ -127,7 +128,7 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + KEY_REPORT + "/" + fecha)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
 		gcs_project + ":telefonia." + KEY_REPORT, 

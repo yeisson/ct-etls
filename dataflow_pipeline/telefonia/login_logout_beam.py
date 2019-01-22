@@ -138,7 +138,6 @@ def run():
 	# 	)
 	jobObject = pipeline.run()
 	# return ("Proceso de transformacion y cargue, completado")
-	return jsonify(lines)
-
+	return json(lines)
 
 ################################################################################

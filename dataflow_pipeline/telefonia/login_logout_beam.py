@@ -62,7 +62,12 @@ else:
     mes = ayer.month
 ano = ayer.year
 fecha = str(ano)+str(mes)+str(dia)
-# fecha = "20181204 - 20181231"
+ruta1 = "media"
+ruta2 = "/192.168.20.87"
+ext = ".csv"
+KEY_REPORT = "login_logout"
+fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
+CODE_REPORT = "login_time"
 ###############################################################################
 
 
@@ -122,20 +127,16 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/Login_out.csv")
-	# lines | 'Escribir en Archivo' >> beam.io.WriteToText(gcs_path + "/Login_out/" + fecha, file_name_suffix='.txt',shard_name_template='')
-	# lines | 'Escribir en Archivo' >> WriteToText("/media/BI_Archivos/GOOGLE/Telefonia/x/Login_out2", file_name_suffix='.csv',shard_name_template='')
- 	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Base_Marcada_small", file_name_suffix='.csv',shard_name_template='')
-	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-	# 	gcs_project + ":telefonia.login_logout", 
-	# 	schema=TABLE_SCHEMA, 
-	# 	create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-	# 	write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-	# )
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + KEY_REPORT + "/" + fecha)
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
+	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
+		gcs_project + ":telefonia." + KEY_REPORT, 
+		schema=TABLE_SCHEMA, 
+		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
+	)
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
-	# return json(lines)
 
 
 ################################################################################

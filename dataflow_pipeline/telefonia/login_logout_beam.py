@@ -137,7 +137,7 @@ def run():
 	# 	write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 	# 	)
 	jobObject = pipeline.run()
-	# return ("Proceso de transformacion y cargue, completado")
-	return json(lines)
+	return ("Proceso de transformacion y cargue, completado")
+	# return json(lines)
 
 ################################################################################

@@ -115,7 +115,6 @@ def Ejecutar():
     deleteQuery = "DELETE FROM `contento-bi.telefonia." + KEY_REPORT +"` WHERE date = '" + fechaBQ + "'"
     client = bigquery.Client()
     query_job = client.query(deleteQuery)
-
     ejecutar = login_logout_beam.run()
     blob.delete()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)

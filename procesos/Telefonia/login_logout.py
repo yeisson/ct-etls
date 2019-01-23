@@ -108,7 +108,7 @@ def Ejecutar():
                     str(row.cartera) + "\n")
     file.close()
 
-    blob = bucket.blob(sub_path + fecha)
+    blob = bucket.blob(sub_path + fecha + ext)
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext)
 
 # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery

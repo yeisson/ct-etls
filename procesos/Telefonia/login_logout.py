@@ -116,7 +116,7 @@ def Ejecutar():
     client = bigquery.Client()
     query_job = client.query(deleteQuery)
     ejecutar = login_logout_beam.run()
-    blob.delete()
+    # blob.delete()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 
 ########################################################################################################################

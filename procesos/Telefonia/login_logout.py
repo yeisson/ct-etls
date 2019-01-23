@@ -63,6 +63,7 @@ GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
+fechaBQ = str(ano)+"-"+str(mes)+"-"+str(dia)
 Ruta = "media"
 Ruta_Alterna = "/192.168.20.87"
 KEY_REPORT = "login_logout"
@@ -109,6 +110,12 @@ def Ejecutar():
 
     blob = bucket.blob(sub_path + fecha)
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext)
+
+# Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+    deleteQuery = "DELETE FROM `contento-bi.telefonia." + KEY_REPORT +"` WHERE date = '" + fechaBQ + "'"
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
+
     ejecutar = login_logout_beam.run()
     blob.delete()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)

@@ -63,8 +63,8 @@ GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
-ruta1 = "media"
-ruta2 = "/192.168.20.87"
+Ruta = "media"
+Ruta_Alterna = "/192.168.20.87"
 KEY_REPORT = "login_logout"
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "login_time"
@@ -86,7 +86,7 @@ def Ejecutar():
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
-    file = open("/"+ ruta1 +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext,"a")
+    file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
         datos = requests.get(url).content
@@ -108,7 +108,7 @@ def Ejecutar():
     file.close()
 
     blob = bucket.blob(sub_path + fecha)
-    blob.upload_from_filename("/"+ ruta1 +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext)
+    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/"+ KEY_REPORT +"-"+ fecha + ext)
     ejecutar = login_logout_beam.run()
     blob.delete()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)

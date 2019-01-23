@@ -62,8 +62,6 @@ else:
     mes = ayer.month
 ano = ayer.year
 fecha = str(ano)+str(mes)+str(dia)
-ruta1 = "media"
-ruta2 = "/192.168.20.87"
 ext = ".csv"
 KEY_REPORT = "login_logout"
 sub_path = KEY_REPORT + '/'
@@ -128,6 +126,7 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
+	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha)
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(

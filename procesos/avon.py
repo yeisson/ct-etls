@@ -99,10 +99,8 @@ def archivos_Seguimiento():
                 response["status"] = True
 
     return jsonify(response), response["code"]
-    # return "Corriendo : " + mensaje    
+    # return "Corriendo : " + mensaje
 
-    
-=======
 
 @avon_api.route("/prejuridico")
 def prejuridico():
@@ -176,4 +174,3 @@ def prejuridico():
     flowAnswer = avon_prejuridico_beam.run(filename, FECHA_CARGUE)
 
     return jsonify(flowAnswer), 200
->>>>>>> 60ca528489caa3bb171500cfecc0f465da84992e

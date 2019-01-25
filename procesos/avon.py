@@ -172,4 +172,4 @@ def prejuridico():
     flowAnswer = avon_prejuridico_beam.run()
 
     # return jsonify(flowAnswer), 200
-    return "R" + flowAnswer
+    return "R, " + flowAnswer

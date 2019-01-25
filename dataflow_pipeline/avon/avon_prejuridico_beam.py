@@ -140,7 +140,7 @@ def run():
 	
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/prejuridico/Avon_inf_prej_" + FECHA_CARGUE + ".csv")
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/prejuridico/Avon_inf_prej2_" + FECHA_CARGUE,file_name_suffix='.csv',shard_name_template='')
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/prejuridico/Avon_inf_prej2_" + FECHA_CARGUE,file_name_suffix='.csv',shard_name_template='')
 	
 	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
         gcs_project + ":avon.prejuridico",

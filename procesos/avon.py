@@ -171,5 +171,10 @@ def prejuridico():
 
     flowAnswer = avon_prejuridico_beam.run()
 
+    # Poner la ruta de cargue en una variable
+    blobing = ("gs://ct-avon/prejuridico/Avon_inf_prej_" + FECHA_CARGUE + ".csv")
+    # Eliminar el archivo en la variable
+    blobing.delete()
+    
     # return jsonify(flowAnswer), 200
     return "R, " + flowAnswer

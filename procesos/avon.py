@@ -169,7 +169,7 @@ def prejuridico():
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
-    # flowAnswer = avon_prejuridico_beam.run()
+    flowAnswer = avon_prejuridico_beam.run()
 
     # return jsonify(flowAnswer), 200
-    return "R" + "flowAnswer"
+    return "R" + flowAnswer

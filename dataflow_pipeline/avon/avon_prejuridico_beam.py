@@ -42,7 +42,7 @@ TABLE_SCHEMA = (
 	'Telefono_Deudor:STRING,'
 	'Telefono_Deudor_1:STRING,'
 	'Num_Campanas:STRING,'
-	'Past Due:STRING,'
+	'Past_Due:STRING,'
 	'Ultim_Num_Invoice:STRING,'
 	'Valor_Factura:STRING,'
 	'Ultim_Ano_Pedido:STRING,'
@@ -61,10 +61,10 @@ TABLE_SCHEMA = (
 	'Telefono_Referencia_Comercial_1:STRING,'
 	'Nombres_Referencia_Comercial_2:STRING,'
 	'Telefono_Referencia_Comercial_2:STRING,'
-	'Est.Disp:STRING,'
+	'Est_Disp:STRING,'
 	'Ciclo:STRING,'
 	'Vlr_redimir:STRING,'
-	'Origen:STRING,'
+	'Origen:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -92,7 +92,7 @@ class formatearData(beam.DoFn):
 				'Telefono_Deudor': arrayCSV[15],
 				'Telefono_Deudor_1': arrayCSV[16],
 				'Num_Campanas': arrayCSV[17],
-				'Past Due': arrayCSV[18],
+				'Past_Due': arrayCSV[18],
 				'Ultim_Num_Invoice': arrayCSV[19],
 				'Valor_Factura': arrayCSV[20],
 				'Ultim_Ano_Pedido': arrayCSV[21],
@@ -111,7 +111,7 @@ class formatearData(beam.DoFn):
 				'Telefono_Referencia_Comercial_1': arrayCSV[34],
 				'Nombres_Referencia_Comercial_2': arrayCSV[35],
 				'Telefono_Referencia_Comercial_2': arrayCSV[36],
-				'Est.Disp': arrayCSV[37],
+				'Est_Disp': arrayCSV[37],
 				'Ciclo': arrayCSV[38],
 				'Vlr_redimir': arrayCSV[39],
 				'Origen': arrayCSV[40]
@@ -143,7 +143,7 @@ def run():
 	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/prejuridico/Avon_inf_prej2_" + FECHA_CARGUE,file_name_suffix='.csv',shard_name_template='')
 	
 	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
-        gcs_project + ":avon.prejuridico2",
+        gcs_project + ":avon.prejuridico",
         schema=TABLE_SCHEMA,
         create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)

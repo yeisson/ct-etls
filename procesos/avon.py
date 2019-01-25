@@ -120,7 +120,7 @@ def prejuridico():
     deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE Fecha = '" + Fecha + "'"
     client = bigquery.Client()
     query_job = client.query(deleteQuery)
-    query_job.result()
+    query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query('SELECT * FROM ' + TABLE_DB)

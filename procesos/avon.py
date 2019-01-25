@@ -116,13 +116,13 @@ def prejuridico():
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
     
-    # # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-    # deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE Fecha = '" + Fecha + "'"
-    # client = bigquery.Client()
-    # query_job = client.query(deleteQuery)
-    # query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+    # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+    deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE Fecha = '" + Fecha + "'"
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
+    query_job.result()
 
-    # Insertamos los datos de la nueva consulta equivalentes al mismo día de la anterior eliminacion
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query('SELECT * FROM ' + TABLE_DB)
 
 

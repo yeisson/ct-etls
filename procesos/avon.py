@@ -58,8 +58,7 @@ def archivos_Seguimiento():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje    
 
-<<<<<<< HEAD
-    @avon_api.route("/archivos_Balance")
+@avon_api.route("/archivos_Balance")
 def archivos_Seguimiento():
 
     response = {}

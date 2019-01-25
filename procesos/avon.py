@@ -111,9 +111,23 @@ def prejuridico():
     DATABASE="Avon"
     TABLE_DB = "dbo.Tb_Cargue"
     FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+    
+    # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+    deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE Fecha = '" + Fecha + "'"
+
+    #Primero eliminamos todos los registros que contengan esa fecha
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
+
+    #result = query_job.result()
+    query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+
+
     conn.execute_query('SELECT * FROM ' + TABLE_DB)
 
     cloud_storage_rows = ""

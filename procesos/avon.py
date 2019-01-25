@@ -12,6 +12,7 @@ import _mssql
 import datetime
 
 
+
 avon_api = Blueprint('avon_api', __name__)
 
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
@@ -171,10 +172,12 @@ def prejuridico():
 
     flowAnswer = avon_prejuridico_beam.run()
 
-    # Poner la ruta de cargue en una variable
-    blobing = ("gs://ct-avon/prejuridico/Avon_inf_prej_" + FECHA_CARGUE + ".csv")
-    # Eliminar el archivo en la variable
-    blobing.delete()
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-avon')
+    blob = bucket.blob("prejuridico/Avon_inf_prej_"+ FECHA_CARGUE + ".csv")
+# Eliminar el archivo en la variable
+    blob.delete()
     
     # return jsonify(flowAnswer), 200
     return "R, " + flowAnswer

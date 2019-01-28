@@ -64,8 +64,8 @@ GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
 fechaBQ = str(ano)+"-"+str(mes)+"-"+str(dia)
-Ruta = "media"
-Ruta_Alterna = "/192.168.20.87"
+Ruta = "/192.168.20.87"
+Ruta_Alterna = "media"
 KEY_REPORT = "login_logout"
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "login_time"

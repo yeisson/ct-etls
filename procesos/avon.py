@@ -190,7 +190,7 @@ def prejuridico():
     blob.delete()
     
     # return jsonify(flowAnswer), 200
-    return "R" + "flowAnswer"
+    return "R, " + flowAnswer
 
 
 @avon_api.route("/seguimiento")

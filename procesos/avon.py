@@ -13,6 +13,7 @@ import _mssql
 import datetime
 
 
+
 avon_api = Blueprint('avon_api', __name__)
 
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
@@ -110,13 +111,23 @@ def prejuridico():
     DATABASE="Avon"
     TABLE_DB = "dbo.Tb_Cargue"
     FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+    
+    # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+    deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE Fecha = '" + Fecha + "'"
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
+    query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query('SELECT * FROM ' + TABLE_DB)
 
-    cloud_storage_rows = ""
 
+
+    cloud_storage_rows = ""
     # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
     for row in conn:
         text_row =  ""
@@ -169,9 +180,17 @@ def prejuridico():
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
-    # flowAnswer = avon_prejuridico_beam.run()
+    flowAnswer = avon_prejuridico_beam.run()
 
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-avon')
+    blob = bucket.blob("prejuridico/Avon_inf_prej_"+ FECHA_CARGUE + ".csv")
+# Eliminar el archivo en la variable
+    blob.delete()
+    
     # return jsonify(flowAnswer), 200
+<<<<<<< HEAD
     return "R" + "flowAnswer"
 
 
@@ -210,3 +229,6 @@ def seguimiento():
 
     # return jsonify(flowAnswer), 200
     return "X"
+=======
+    return "R, " + flowAnswer
+>>>>>>> 9b69f9b65d3a0cddb1e58ca1785e4d3df4974362

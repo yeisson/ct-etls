@@ -4,6 +4,7 @@ from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.avon.avon_prejuridico_beam as avon_prejuridico_beam
+import dataflow_pipeline.avon.avon_seguimiento_beam as avon_seguimiento_beam
 import dataflow_pipeline.avon.avon_pagos_beam as avon_pagos_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
@@ -58,10 +59,6 @@ def archivos_pagos():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje    
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f545dac6137312474f5e88049986194a29fd4324
 @avon_api.route("/archivos_Balance")
 def archivos_Seguimiento():
 
@@ -176,3 +173,40 @@ def prejuridico():
 
     # return jsonify(flowAnswer), 200
     return "R" + "flowAnswer"
+
+
+@avon_api.route("/seguimiento")
+def seguimiento():
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Avon"
+    TABLE_DB = "dbo.Tb_Seguimiento"
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+    # conn.execute_query('SELECT Ano,Cam-pana,Factura,Zona,Unidad,Seccion,Territorio,Nit,Apellidos,Nombres,Direccion_Deudor,Direccion_Deudor_1,Barrio_Deudor,Departamento_Deudor,Ciudad_Deudor,Telefono_Deudor,Telefono_Deudor_1,Num_Campanas,Past Due,Ultim_Num_Invoice,Valor_Factura,Ultim_Ano_Pedido,Ultim_Campana_Pedido,Saldo,Email,Fecha_Factura,Valor_PD1,Telefono_Deudor_2,CT,Nombres_Referencia_Personal_1,Telefono_Referencia_Personal_1,Nombres_Referencia_Personal_2,Telefono_Referencia_Personal_2,Nombres_Referencia_Comercial_1,Telefono_Referencia_Comercial_1,Nombres_Referencia_Comercial_2,Telefono_Referencia_Comercial_2,Est.Disp,Ciclo,Vlr_redimir,Origen FROM' + TABLE_DB)
+    conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) = CAST(GETDATE() as DATE) ')
+
+    cloud_storage_rows = ""
+
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += str(row['Id_Gestion']).encode('utf-8') + "|"
+        text_row += str(row['Id_Causal']).encode('utf-8') + "|"
+        text_row += str(row['Fecha_Seguimiento']).encode('utf-8') + "|"
+        text_row += row['Id_Usuario'].encode('utf-8') + "|"
+        text_row += str(row['Valor_Obligacion']).encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    filename = "Seguimiento/Avon_inf_seg_" + ".csv"
+    #Finalizada la carga en local creamos un Bucket con los datos
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
+
+    # flowAnswer = avon_seguimiento_beam.run()
+
+    # return jsonify(flowAnswer), 200
+    return "X"

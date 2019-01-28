@@ -215,7 +215,7 @@ def seguimiento():
         text_row += str(row['Id_Causal']).encode('utf-8') + "|"
         text_row += str(row['Fecha_Seguimiento']).encode('utf-8') + "|"
         text_row += row['Id_Usuario'].encode('utf-8') + "|"
-        text_row += str(row['Valor_Obligacion']).encode('utf-8') + "|"
+        text_row += str(row['Valor_Obligacion']).encode('utf-8')
         text_row += "\n"
 
         cloud_storage_rows += text_row
@@ -224,7 +224,14 @@ def seguimiento():
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
-    # flowAnswer = avon_seguimiento_beam.run()
+    flowAnswer = avon_seguimiento_beam.run()
+
+    # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-avon')
+    blob = bucket.blob("Seguimiento/Avon_inf_seg_" + ".csv")
+    # Eliminar el archivo en la variable
+    blob.delete()
 
     # return jsonify(flowAnswer), 200
-    return "X"
+    return "X" + flowAnswer 

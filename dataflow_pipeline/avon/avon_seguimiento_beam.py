@@ -27,15 +27,11 @@ TABLE_SCHEMA = (
 	'Id_Causal:STRING, '
 	'Fecha_Seguimiento:STRING, '
     'Id_Usuario:STRING, '
-    'Valor_Obligacion:STRING, '
+    'Valor_Obligacion:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
 
-	def __init__(self, mifecha):
-		super(formatearData, self).__init__()
-		self.mifecha = mifecha
-	
 	def process(self, element):
 		# print(element)
 		arrayCSV = element.split('|')
@@ -44,7 +40,7 @@ class formatearData(beam.DoFn):
 				'Id_Causal':arrayCSV[1],
 				'Fecha_Seguimiento':arrayCSV[2],
 				'Id_Usuario':arrayCSV[3],
-				'Valor_Obligacion':arrayCSV[4],
+				'Valor_Obligacion':arrayCSV[4]
 				}
 		
 		return [tupla]
@@ -63,35 +59,22 @@ def run():
         "--setup_file", "./setup.py",
         "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-        # "--num_workers", "30",
-        # "--autoscaling_algorithm", "NONE"		
 	])
 	
-	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181206 1100.csv", skip_header_lines=1)
-	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
-
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-
-	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
-
-	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
-	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
-
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.Info_Pagos", 
-		schema=TABLE_SCHEMA, 
-		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-		)
-
-	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
-	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/Seguimiento/Avon_inf_seg_" + ".csv")
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Seguimiento/Avon_inf_seg_2",file_name_suffix='.csv',shard_name_template='')
+	
+	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
+        gcs_project + ":avon.seguimiento",
+        schema=TABLE_SCHEMA,
+        create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
+        write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
-	return ("Corrio Full HD")
+	return ("Corrio sin problema")
 
 
 

@@ -190,7 +190,6 @@ def prejuridico():
     blob.delete()
     
     # return jsonify(flowAnswer), 200
-<<<<<<< HEAD
     return "R" + "flowAnswer"
 
 
@@ -229,6 +228,3 @@ def seguimiento():
 
     # return jsonify(flowAnswer), 200
     return "X"
-=======
-    return "R, " + flowAnswer
->>>>>>> 9b69f9b65d3a0cddb1e58ca1785e4d3df4974362

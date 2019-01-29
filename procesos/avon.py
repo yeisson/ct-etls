@@ -224,7 +224,7 @@ def seguimiento():
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
-    flowAnswer = avon_seguimiento_beam.run()
+    # flowAnswer = avon_seguimiento_beam.run()
 
     # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
     storage_client = storage.Client()
@@ -234,4 +234,4 @@ def seguimiento():
     blob.delete()
 
     # return jsonify(flowAnswer), 200
-    return "X" + flowAnswer 
+    return "X" + "flowAnswer" 

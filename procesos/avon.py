@@ -12,7 +12,7 @@ import socket
 import _mssql
 import datetime
 
-
+#coding: utf-8 
 
 avon_api = Blueprint('avon_api', __name__)
 

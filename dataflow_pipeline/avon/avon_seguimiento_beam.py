@@ -22,6 +22,8 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
+#coding: utf-8 
+
 TABLE_SCHEMA = (
 	'Id_Gestion:STRING, '
 	'Id_Causal:STRING, '
@@ -29,7 +31,7 @@ TABLE_SCHEMA = (
     'Id_Usuario:STRING, '
     'Valor_Obligacion:STRING '
 )
-# ?
+
 class formatearData(beam.DoFn):
 
 	def process(self, element):

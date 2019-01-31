@@ -34,7 +34,6 @@ import socket
 import argparse
 import uuid
 import datetime
-from flask import Flask, request, jsonify, redirect
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText

@@ -64,8 +64,8 @@ GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
 fechaBQ = str(ano)+"-"+str(mes)+"-"+str(dia)
-Ruta = "media"
-Ruta_Alterna ="/192.168.20.87"
+Ruta = "/192.168.20.87"
+Ruta_Alterna ="media"
 KEY_REPORT = "login_logout"
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "login_time"
@@ -74,45 +74,45 @@ CODE_REPORT = "login_time"
 
 @login_logout_api.route("/" + KEY_REPORT)  #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket('ct-telefonia')
-    gcs_path = 'gs://ct-telefonia'
-    sub_path = KEY_REPORT + '/'
-    ext = ".csv"
+    # storage_client = storage.Client()
+    # bucket = storage_client.get_bucket('ct-telefonia')
+    # gcs_path = 'gs://ct-telefonia'
+    # sub_path = KEY_REPORT + '/'
+    # ext = ".csv"
 
 
-    client = bigquery.Client()
-    QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial')
-    query_job = client.query(QUERY)
-    rows = query_job.result()
-    data = ""
-    file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
-    for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
-        datos = requests.get(url).content
-        if len(requests.get(url).content) < 40:
-            continue
-        else:
-            i = json.loads(datos)
-            for rown in i:
-                file.write(
-                    str(rown["date"])+"|"+
-                    str(rown["agent"])+"|"+
-                    str(rown["identification"])+"|"+
-                    str(rown["login_date"])+"|"+
-                    str(rown["logout_date"])+"|"+
-                    str(rown["login_time"])+"|"+
-                    str(row.ipdial_code) + "|" +
-                    str(row.id_cliente) + "|" +
-                    str(row.cartera) + "\n")
-    file.close()
+    # client = bigquery.Client()
+    # QUERY = (
+    #     'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial')
+    # query_job = client.query(QUERY)
+    # rows = query_job.result()
+    # data = ""
+    # file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
+    # for row in rows:
+    #     url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
+    #     datos = requests.get(url).content
+    #     if len(requests.get(url).content) < 40:
+    #         continue
+    #     else:
+    #         i = json.loads(datos)
+    #         for rown in i:
+    #             file.write(
+    #                 str(rown["date"])+"|"+
+    #                 str(rown["agent"])+"|"+
+    #                 str(rown["identification"])+"|"+
+    #                 str(rown["login_date"])+"|"+
+    #                 str(rown["logout_date"])+"|"+
+    #                 str(rown["login_time"])+"|"+
+    #                 str(row.ipdial_code) + "|" +
+    #                 str(row.id_cliente) + "|" +
+    #                 str(row.cartera) + "\n")
+    # file.close()
 
-    blob = bucket.blob(sub_path + fecha + ext)
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
+    # blob = bucket.blob(sub_path + fecha + ext)
+    # blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
 
     ejecutar = login_logout_beam.run()
-    blob.delete()
+    # blob.delete()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 
 ########################################################################################################################

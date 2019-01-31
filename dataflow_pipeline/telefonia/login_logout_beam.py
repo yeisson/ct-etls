@@ -130,11 +130,11 @@ def run():
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia." + KEY_REPORT, 
-		schema=TABLE_SCHEMA, 
-		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
+	# 	gcs_project + ":telefonia." + KEY_REPORT, 
+	# 	schema=TABLE_SCHEMA, 
+	# 	create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
+	# 	write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")

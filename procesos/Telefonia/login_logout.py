@@ -15,10 +15,8 @@
 
 
 ########################### LIBRERIAS #####################################
-from __future__ import print_function, absolute_import
-from flask import Flask, request, jsonify, redirect
-from flask_cors import CORS
 from flask import Blueprint
+from flask import jsonify
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 from google.cloud import datastore

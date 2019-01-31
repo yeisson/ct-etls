@@ -126,9 +126,11 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha + ext)
+	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha + ext)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-telefonia/login_logout/20190130.csv")
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
+	transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-telefonia/login_logout/20190130" + "REWORK",file_name_suffix='.csv',shard_name_template='')
 
 	# transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
 	# 	gcs_project + ":telefonia." + KEY_REPORT, 

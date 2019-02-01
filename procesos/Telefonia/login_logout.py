@@ -109,8 +109,8 @@ def Ejecutar():
     blob = bucket.blob(sub_path + fecha + ext)
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
 
-    ejecutar = login_logout_beam.run()
-    blob.delete()
-    return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
+    # ejecutar = login_logout_beam.run()
+    # blob.delete()
+    return ("Proceso de listamiento de datos: listo ..........................................................." + "ejecutar")
 
 ########################################################################################################################

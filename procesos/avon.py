@@ -61,11 +61,7 @@ def archivos_pagos():
     # return "Corriendo : " + mensaje    
 
 @avon_api.route("/archivos_Balance")
-<<<<<<< HEAD
-def archivos_Balance():
-=======
 def archivos_Seguimiento():
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 
     response = {}
     response["code"] = 400
@@ -86,11 +82,7 @@ def archivos_Seguimiento():
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-<<<<<<< HEAD
-            deleteQuery = "DELETE FROM `contento-bi.avon.avon_Balance` WHERE fecha = '" + mifecha + "'"
-=======
             deleteQuery = "DELETE FROM `contento-bi.avon_Balance` WHERE fecha = '" + mifecha + "'"
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -100,11 +92,7 @@ def archivos_Seguimiento():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-<<<<<<< HEAD
-            mensaje = avon_balance_beam.run('gs://ct-avon/Balance/' + archivo, mifecha)
-=======
             mensaje = avon_pagos_beam.run('gs://ct-avon/Balance/' + archivo, mifecha)
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Avon/Balance/Procesados/"+archivo)
                 response["code"] = 200
@@ -112,9 +100,6 @@ def archivos_Seguimiento():
                 response["status"] = True
 
     return jsonify(response), response["code"]
-<<<<<<< HEAD
-    # return "Corriendo : " + mensaje    
-=======
     # return "Corriendo : " + mensaje
 
 
@@ -250,4 +235,3 @@ def seguimiento():
 
     # return jsonify(flowAnswer), 200
     return "X" + "flowAnswer" 
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad

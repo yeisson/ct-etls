@@ -6,11 +6,7 @@ from google.cloud import bigquery
 import dataflow_pipeline.avon.avon_prejuridico_beam as avon_prejuridico_beam
 import dataflow_pipeline.avon.avon_seguimiento_beam as avon_seguimiento_beam
 import dataflow_pipeline.avon.avon_pagos_beam as avon_pagos_beam
-<<<<<<< HEAD
-import dataflow_pipeline.avon.avon_balance_beam as avon_balance_beam
-=======
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 import os
 import socket
 import _mssql

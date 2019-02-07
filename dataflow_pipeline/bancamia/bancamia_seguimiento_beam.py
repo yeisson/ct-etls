@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -25,13 +26,18 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-<<<<<<< HEAD
-    'BALANCE:STRING '
-=======
-    'BALANCE:STRING, '
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
+	'Nit:STRING, '
+	'Nombres:STRING, '
+	'Nro_Operacion_Bantotal:STRING, '
+	'Nro_Operacion_Cobis:STRING, '
+	'Fecha_Gestion:STRING, '
+	'Estado_de_Cobro:STRING, '
+	'Codigo_Efectivo:STRING, '
+	'Grabador:STRING, '
+	'Duracion:STRING, '
+	'Hora_Inicial:STRING, '
+	'Codigo_Estado_de_Cobro:STRING '
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -47,20 +53,27 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-<<<<<<< HEAD
-				'BALANCE':arrayCSV[2]
-=======
-				'BALANCE':arrayCSV[2],
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
+				'Nit': arrayCSV[0],
+				'Nombres': arrayCSV[1],
+				'Nro_Operacion_Bantotal': arrayCSV[2],
+				'Nro_Operacion_Cobis': arrayCSV[3],
+				'Fecha_Gestion': arrayCSV[4],
+				'Estado_de_Cobro': arrayCSV[5],
+				'Codigo_Efectivo': arrayCSV[6],
+				'Grabador': arrayCSV[7],
+				'Duracion': arrayCSV[8],
+				'Hora_Inicial': arrayCSV[9],
+				'Codigo_Estado_de_Cobro': arrayCSV[10]
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-bancamia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -87,12 +100,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-<<<<<<< HEAD
-		gcs_project + ":avon.avon_Balance", 
-=======
-		gcs_project + ":avon_Balance", 
->>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
+	transformed | 'Escritura a BigQuery bancamia' >> beam.io.WriteToBigQuery(
+		gcs_project + ":bancamia.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

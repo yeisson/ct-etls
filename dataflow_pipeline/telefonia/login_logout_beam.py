@@ -65,7 +65,6 @@ ext = ".csv"
 KEY_REPORT = "login_logout"
 sub_path = KEY_REPORT + '/'
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-CODE_REPORT = "login_time"
 ###############################################################################
 
 

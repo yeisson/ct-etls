@@ -32,7 +32,8 @@ import os
 import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
-import dataflow_pipeline.telefonia.login_logout_beam as login_logout_beam
+import time
+import dataflow_pipeline.telefonia.login_logout_beam as login_logout_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 login_logout_api = Blueprint('login_logout_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
@@ -61,12 +62,11 @@ GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
-fechaBQ = str(ano)+"-"+str(mes)+"-"+str(dia)
-Ruta = "media"
+Ruta ="media"
 Ruta_Alterna ="/192.168.20.87"
-KEY_REPORT = "login_logout"
+KEY_REPORT = "login_logout" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-CODE_REPORT = "login_time"
+CODE_REPORT = "login_time" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 ########################### CODIGO #####################################################################################
 
@@ -77,7 +77,7 @@ def Ejecutar():
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
     ext = ".csv"
-
+    blob = bucket.blob(sub_path + fecha + ext)
 
     client = bigquery.Client()
     QUERY = (
@@ -85,6 +85,13 @@ def Ejecutar():
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
+    
+    try:
+        os.remove("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext) #Eliminar de aries
+        blob.delete() #Eliminar del storage
+    except: 
+        print("hola")
+
     file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
@@ -104,13 +111,13 @@ def Ejecutar():
                     str(row.ipdial_code) + "|" +
                     str(row.id_cliente) + "|" +
                     str(row.cartera) + "\n")
+    
     file.close()
-
-    blob = bucket.blob(sub_path + fecha + ext)
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
+    time.sleep(10)
+    ejecutar = login_logout_beam.run() #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    time.sleep(60)
 
-    ejecutar = login_logout_beam.run()
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
-
 
 ########################################################################################################################

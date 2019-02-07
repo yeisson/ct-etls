@@ -1,7 +1,7 @@
 ####################################################################################################
 ####################################################################################################
 ############################                                          ##############################
-############################ REPORTE BEAM DE TELEFONIA = LOGIN-LOGOUT ##############################
+############################ REPORTE BEAM DE TELEFONIA = CSAT         ##############################
 ############################                                          ##############################
 ####################################################################################################
 ####################################################################################################
@@ -13,9 +13,9 @@
 # FILA.11.................... INDICE
 # FILA.22.................... LIBRERIAS
 # FILA.49.................... VARIABLES GLOBALES
-# FILA.67.................... PARAMETROS DE LA TABLA EN BQ
-# FILA.96.................... PAR-DO
-# FILA.131................... CODIGO DE EJECUCION
+# FILA.66.................... PARAMETROS DE LA TABLA EN BQ
+# FILA.83.................... PAR-DO
+# FILA.106................... CODIGO DE EJECUCION
 
 ##############################################################
 
@@ -61,7 +61,10 @@ else:
     mes = ayer.month
 ano = ayer.year
 fecha = str(ano)+str(mes)+str(dia)
-# fecha = "20181204 - 20181231"
+ext = ".csv"
+KEY_REPORT = "csat"
+sub_path = KEY_REPORT + '/'
+fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 ###############################################################################
 
 
@@ -131,9 +134,9 @@ class formatearData(beam.DoFn):
 
 
 ############################ CODIGO DE EJECUCION ###################################
-def run(data):
+def run():
 
-	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
+	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -147,17 +150,18 @@ def run(data):
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/csat.txt")
-	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/csat.txt")
-	lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/csat/" + fecha, file_name_suffix='.txt',shard_name_template='')
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha + ext)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
+
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia.csat", 
-		schema=TABLE_SCHEMA,
+		gcs_project + ":telefonia." + KEY_REPORT, 
+		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-		)
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
 
-#################################################################################
+
+################################################################################

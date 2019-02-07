@@ -10,7 +10,7 @@ import os
 import argparse
 import uuid
 import datetime
-
+import socket
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
@@ -23,97 +23,98 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
 	'idkey:STRING, '
-	'fecha:DATE, '
-	'ano:STRING, '
-	'campana:STRING, '
-	'codigo:STRING, '
-	'zona:STRING, '
-	'unidad:STRING, '
-	'seccion:STRING, '
-	'territorio:STRING, '
-	'cedula:STRING, '
-	'apellido:STRING, '
-	'nombre:STRING, '
-	'direccion1:STRING, '
-	'direccion2:STRING, '
-	'barrio:STRING, '
-	'departamento:STRING, '
-	'ciudad:STRING, '
-	'telefono1:STRING, '
-	'telefono2:STRING, '
-	'numero_de_campanas:STRING, '
-	'past_due:STRING, '
-	'ultimo_numero_de_factura:STRING, '
-	'last_amount_1:STRING, '
-	'ultimo_ano_pedido:STRING, '
-	'ultima_campana_pedido:STRING, '
-	'balance:STRING, '
-	'email:STRING, '
-	'fecha_caida_pd1:DATE, '
-	'valor_pd1:STRING, '
-	'telefono3:STRING, '
-	'ct:STRING, '
-	'nombre_ref_personal1:STRING, '
-	'tel_ref_personal1:STRING, '
-	'nombre_ref_personal2:STRING, '
-	'tel_ref_personal2:STRING, '
-	'nombre_ref_comercial1:STRING, '
-	'tel_ref_comercial1:STRING, '
-	'nombre_ref_comercial2:STRING, '
-	'tel_ref_comercial2:STRING, '
-	'est_disp:STRING, '
-	'segmento:STRING, '
-	'riesgo:STRING '
+	'Fecha:STRING, '
+	'Ano:STRING,'
+	'Campana:STRING,'
+	'Factura:STRING,'
+	'Zona:STRING,'
+	'Unidad:STRING,'
+	'Seccion:STRING,'
+	'Territorio:STRING,'
+	'Nit:STRING,'
+	'Apellidos:STRING,'
+	'Nombres:STRING,'
+	'Direccion_Deudor:STRING,'
+	'Direccion_Deudor_1:STRING,'
+	'Barrio_Deudor:STRING,'
+	'Departamento_Deudor:STRING,'
+	'Ciudad_Deudor:STRING,'
+	'Telefono_Deudor:STRING,'
+	'Telefono_Deudor_1:STRING,'
+	'Num_Campanas:STRING,'
+	'Past_Due:STRING,'
+	'Ultim_Num_Invoice:STRING,'
+	'Valor_Factura:STRING,'
+	'Ultim_Ano_Pedido:STRING,'
+	'Ultim_Campana_Pedido:STRING,'
+	'Saldo:STRING,'
+	'Email:STRING,'
+	'Fecha_Factura:STRING,'
+	'Valor_PD1:STRING,'
+	'Telefono_Deudor_2:STRING,'
+	'CT:STRING,'
+	'Nombres_Referencia_Personal_1:STRING,'
+	'Telefono_Referencia_Personal_1:STRING,'
+	'Nombres_Referencia_Personal_2:STRING,'
+	'Telefono_Referencia_Personal_2:STRING,'
+	'Nombres_Referencia_Comercial_1:STRING,'
+	'Telefono_Referencia_Comercial_1:STRING,'
+	'Nombres_Referencia_Comercial_2:STRING,'
+	'Telefono_Referencia_Comercial_2:STRING,'
+	'Est_Disp:STRING,'
+	'Ciclo:STRING,'
+	'Vlr_redimir:STRING,'
+	'Origen:STRING'
 )
 
 class formatearData(beam.DoFn):
 	
 	def process(self, element):
-		print(element)
 		arrayCSV = element.split('|')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'ano' : arrayCSV[0],
-				'campana' : arrayCSV[1],
-				'codigo' : arrayCSV[2],
-				'zona' : arrayCSV[3],
-				'unidad' : arrayCSV[4],
-				'seccion' : arrayCSV[5],
-				'territorio' : arrayCSV[6],
-				'cedula' : arrayCSV[7],
-				'apellido' : arrayCSV[8],
-				'nombre' : arrayCSV[9],
-				'direccion1' : arrayCSV[10],
-				'direccion2' : arrayCSV[11],
-				'barrio' : arrayCSV[12],
-				'departamento' : arrayCSV[13],
-				'ciudad' : arrayCSV[14],
-				'telefono1' : arrayCSV[15],
-				'telefono2' : arrayCSV[16],
-				'numero_de_campanas' : arrayCSV[17],
-				'past_due' : arrayCSV[18],
-				'ultimo_numero_de_factura' : arrayCSV[19],
-				'last_amount_1' : arrayCSV[20],
-				'ultimo_ano_pedido' : arrayCSV[21],
-				'ultima_campana_pedido' : arrayCSV[22],
-				'balance' : arrayCSV[23],
-				'email' : arrayCSV[24],
-				'fecha_caida_pd1' : arrayCSV[25][0:4]+"-"+arrayCSV[25][4:6]+"-"+arrayCSV[25][6:8],
-				'valor_pd1' : arrayCSV[26],
-				'telefono3' : arrayCSV[27],
-				'ct' : arrayCSV[28],
-				'nombre_ref_personal1' : arrayCSV[29],
-				'tel_ref_personal1' : arrayCSV[30],
-				'nombre_ref_personal2' : arrayCSV[31],
-				'tel_ref_personal2' : arrayCSV[32],
-				'nombre_ref_comercial1' : arrayCSV[33],
-				'tel_ref_comercial1' : arrayCSV[34],
-				'nombre_ref_comercial2' : arrayCSV[35],
-				'tel_ref_comercial2' : arrayCSV[36],
-				'est_disp' : arrayCSV[37],
-				'segmento' : arrayCSV[38],
-				'riesgo' : arrayCSV[39]
+				'Fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
+				'Ano': arrayCSV[0],
+				'Campana': arrayCSV[1],
+				'Factura': arrayCSV[2],
+				'Zona': arrayCSV[3],
+				'Unidad': arrayCSV[4],
+				'Seccion': arrayCSV[5],
+				'Territorio': arrayCSV[6],
+				'Nit': arrayCSV[7],
+				'Apellidos': arrayCSV[8],
+				'Nombres': arrayCSV[9],
+				'Direccion_Deudor': arrayCSV[10],
+				'Direccion_Deudor_1': arrayCSV[11],
+				'Barrio_Deudor': arrayCSV[12],
+				'Departamento_Deudor': arrayCSV[13],
+				'Ciudad_Deudor': arrayCSV[14],
+				'Telefono_Deudor': arrayCSV[15],
+				'Telefono_Deudor_1': arrayCSV[16],
+				'Num_Campanas': arrayCSV[17],
+				'Past_Due': arrayCSV[18],
+				'Ultim_Num_Invoice': arrayCSV[19],
+				'Valor_Factura': arrayCSV[20],
+				'Ultim_Ano_Pedido': arrayCSV[21],
+				'Ultim_Campana_Pedido': arrayCSV[22],
+				'Saldo': arrayCSV[23],
+				'Email': arrayCSV[24],
+				'Fecha_Factura': arrayCSV[25],
+				'Valor_PD1': arrayCSV[26],
+				'Telefono_Deudor_2': arrayCSV[27],
+				'CT': arrayCSV[28],
+				'Nombres_Referencia_Personal_1': arrayCSV[29],
+				'Telefono_Referencia_Personal_1': arrayCSV[30],
+				'Nombres_Referencia_Personal_2': arrayCSV[31],
+				'Telefono_Referencia_Personal_2': arrayCSV[32],
+				'Nombres_Referencia_Comercial_1': arrayCSV[33],
+				'Telefono_Referencia_Comercial_1': arrayCSV[34],
+				'Nombres_Referencia_Comercial_2': arrayCSV[35],
+				'Telefono_Referencia_Comercial_2': arrayCSV[36],
+				'Est_Disp': arrayCSV[37],
+				'Ciclo': arrayCSV[38],
+				'Vlr_redimir': arrayCSV[39],
+				'Origen': arrayCSV[40]
 				}
 		
 		return [tupla]
@@ -122,27 +123,30 @@ class formatearData(beam.DoFn):
 
 def run():
 
-	#gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
-	#gcs_project = "contento-bi"
+	gcs_path = 'gs://ct-avon' #Definicion de la raiz del bucket
+	gcs_project = "contento-bi"
+	FECHA_CARGUE = str(datetime.date.today())
 
-	pipeline =  beam.Pipeline(runner="DirectRunner")
+	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
+	pipeline =  beam.Pipeline(runner=mi_runner, argv=[
+        "--project", gcs_project,
+        "--staging_location", ("%s/dataflow_files/staging_location" % gcs_path),
+        "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
+        "--output", ("%s/dataflow_files/output" % gcs_path),
+        "--setup_file", "./setup.py",
+        "--max_num_workers", "5",
+		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
+    ])
 	
-	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT")
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("archivos/AVON_INF_PREJ_20181111.TXT")
-
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/prejuridico/Avon_inf_prej_" + FECHA_CARGUE + ".csv")
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-
-	transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_avon",file_name_suffix='.txt',shard_name_template='')
-	# transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-avon/prejuridico/info_carga_avon",file_name_suffix='.txt',shard_name_template='')
-
-	# transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
-    #     gcs_project + ":avon.prejuridico2",
-    #     schema=TABLE_SCHEMA,
-    #     create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-    #     write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
-
-	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
-	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/prejuridico/Avon_inf_prej2_" + FECHA_CARGUE,file_name_suffix='.csv',shard_name_template='')
+	
+	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
+        gcs_project + ":avon.prejuridico",
+        schema=TABLE_SCHEMA,
+        create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
+        write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()

@@ -27,7 +27,11 @@ TABLE_SCHEMA = (
 	'fecha:STRING, '
 	'ZONA:STRING, '
     'CODIGO:STRING, '
+<<<<<<< HEAD
     'BALANCE:STRING '
+=======
+    'BALANCE:STRING, '
+>>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 )
 # ?
 class formatearData(beam.DoFn):
@@ -45,7 +49,11 @@ class formatearData(beam.DoFn):
 				'fecha' : self.mifecha,
 				'ZONA':arrayCSV[0],
 				'CODIGO':arrayCSV[1],
+<<<<<<< HEAD
 				'BALANCE':arrayCSV[2]
+=======
+				'BALANCE':arrayCSV[2],
+>>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 				}
 		
 		return [tupla]
@@ -80,7 +88,11 @@ def run(archivo, mifecha):
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
+<<<<<<< HEAD
 		gcs_project + ":avon.avon_Balance", 
+=======
+		gcs_project + ":avon_Balance", 
+>>>>>>> 7aae071caffb112d1ee8d3c2ce9515423c9010ad
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

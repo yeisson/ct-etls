@@ -13,9 +13,9 @@
 # FILA.11.................... INDICE
 # FILA.22.................... LIBRERIAS
 # FILA.49.................... VARIABLES GLOBALES
-# FILA.66.................... PARAMETROS DE LA TABLA EN BQ
-# FILA.83.................... PAR-DO
-# FILA.106................... CODIGO DE EJECUCION
+# FILA.67.................... PARAMETROS DE LA TABLA EN BQ
+# FILA.96.................... PAR-DO
+# FILA.131................... CODIGO DE EJECUCION
 
 ##############################################################
 
@@ -61,11 +61,7 @@ else:
     mes = ayer.month
 ano = ayer.year
 fecha = str(ano)+str(mes)+str(dia)
-ext = ".csv"
-KEY_REPORT = "login_logout"
-sub_path = KEY_REPORT + '/'
-fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-CODE_REPORT = "login_time"
+# fecha = "20181204 - 20181231"
 ###############################################################################
 
 
@@ -73,13 +69,31 @@ CODE_REPORT = "login_time"
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
 TABLE_SCHEMA = (
-	'date:DATE,'
-	'agent:STRING,'
-	'identification:STRING,'
-	'login_date:DATETIME,'
-	'logout_date:DATETIME,'
-	'login_time:STRING,'
-	'ipdial_code:STRING,'
+	'id_call:STRING,'
+	'type_call:STRING,'
+	'talk_time:INTEGER,'
+	'id_agent:STRING,'
+	'agent_name:STRING,'
+	'agent_identification:STRING,'
+	'skill:STRING,'
+	'date:DATETIME,'
+	'hour:INTEGER,'
+	'day_of_week:STRING,'
+	'typing_code:STRING,'
+	'descri_typing_code:STRING,'
+	'typing_code2:STRING,'
+	'descri_typing_code2:STRING,'
+	'hit:STRING,'
+	'telephone_destination:STRING,'
+	'telephone_costs:INTEGER,'
+	'telephone_number:STRING,'
+	'who_hangs_up:STRING,'
+	'customer_identification:STRING,'
+	'month:INTEGER,'
+	'screen_recording:STRING,'
+	'operation:STRING,'
+	'ring:STRING,'
+	'abandon:STRING,'
 	'id_cliente:STRING,'
 	'cartera:STRING'
 )
@@ -93,15 +107,33 @@ class formatearData(beam.DoFn):
 	def process(self, element):
 		arrayCSV = element.split('|')
 		tupla= {
-				'date': arrayCSV[0],
-				'agent': arrayCSV[1],
-				'identification': arrayCSV[2],
-				'login_date': arrayCSV[3],
-				'logout_date': arrayCSV[4],
-				'login_time': arrayCSV[5],
-				'ipdial_code': arrayCSV[6],
-				'id_cliente': arrayCSV[7],
-				'cartera': arrayCSV[8]
+				'id_call': arrayCSV[0],
+				'type_call': arrayCSV[1],
+				'talk_time': arrayCSV[2],
+				'id_agent': arrayCSV[3],
+				'agent_name': arrayCSV[4],
+				'agent_identification': arrayCSV[5],
+				'skill': arrayCSV[6],
+				'date': arrayCSV[7],
+				'hour': arrayCSV[8],
+				'day_of_week': arrayCSV[9],
+				'typing_code': arrayCSV[10],
+				'descri_typing_code': arrayCSV[11],
+				'typing_code2': arrayCSV[12],
+				'descri_typing_code2': arrayCSV[13],
+				'hit': arrayCSV[14],
+				'telephone_destination': arrayCSV[15],
+				'telephone_costs': arrayCSV[16],
+				'telephone_number': arrayCSV[17],
+				'who_hangs_up': arrayCSV[18],
+				'customer_identification': arrayCSV[19],
+				'month': arrayCSV[20],
+				'screen_recording': arrayCSV[21],
+				'operation': arrayCSV[22],
+				'ring': arrayCSV[23],
+				'abandon': arrayCSV[24],
+				'id_cliente': arrayCSV[25],
+				'cartera': arrayCSV[26]
 				}
 		return [tupla]
 
@@ -109,9 +141,9 @@ class formatearData(beam.DoFn):
 
 
 ############################ CODIGO DE EJECUCION ###################################
-def run():
+def run(data):
 
-	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -125,18 +157,17 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha + ext)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/cdr.txt")
+	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/cdr.txt") #local debug
+	lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/cdr/" + fecha, file_name_suffix='.txt',shard_name_template='')
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
-
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia." + KEY_REPORT, 
-		schema=TABLE_SCHEMA, 
+		gcs_project + ":telefonia.cdr", 
+		schema=TABLE_SCHEMA,
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
-
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
+		)
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
 
-
-################################################################################
+#################################################################################

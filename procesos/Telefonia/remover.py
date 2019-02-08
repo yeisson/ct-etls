@@ -22,7 +22,6 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
-import dataflow_pipeline.telefonia.remover_beam as remover_beam
 
 remover_api = Blueprint('remover_api', __name__)
 #############################################################################

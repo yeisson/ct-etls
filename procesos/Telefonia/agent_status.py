@@ -62,10 +62,8 @@ GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
-Ruta ="media"
-Ruta_Alterna ="/192.168.20.87"
 KEY_REPORT = "agent_status" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
+Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "cbps_satustime" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 ########################### CODIGO #####################################################################################

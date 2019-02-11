@@ -66,21 +66,21 @@ def Ejecutar():
     try:
         blob1.delete()
     except: 
-        print("No hay archivo que borrar")
+        print("En lala ruta: gs://ct-telefonia/agent_status/ No se encontraron archivos para borrar")
     
     try:
         blob2.delete()
     except: 
-        print("No hay archivo que borrar")
+        print("En lala ruta: gs://ct-telefonia/cdr/ No se encontraron archivos para borrar")
     
     try:
         blob3.delete()
     except: 
-        print("No hay archivo que borrar")
+        print("En lala ruta: gs://ct-telefonia/csat/ No se encontraron archivos para borrar")
     
     try:
         blob4.delete()
     except: 
-        print("No hay archivo que borrar")
+        print("En lala ruta: gs://ct-telefonia/login_logout/ No se encontraron archivos para borrar")
     
     return("Los archivos fueron eliminados con exito")

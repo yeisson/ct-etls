@@ -23,48 +23,34 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
 	'idkey:STRING, '
-	'Fecha:STRING, '
-	'Ano:STRING,'
-	'Campana:STRING,'
+	'Fecha_Cargue:STRING, '
+	'Id_Docdeu:STRING,'
+	'Nit:STRING,'
 	'Factura:STRING,'
+	'Fecha_Factura:STRING,'
+	'Campana:STRING,'
+	'Ano:STRING,'
 	'Zona:STRING,'
 	'Unidad:STRING,'
 	'Seccion:STRING,'
-	'Territorio:STRING,'
-	'Nit:STRING,'
-	'Apellidos:STRING,'
-	'Nombres:STRING,'
-	'Direccion_Deudor:STRING,'
-	'Direccion_Deudor_1:STRING,'
-	'Barrio_Deudor:STRING,'
-	'Departamento_Deudor:STRING,'
-	'Ciudad_Deudor:STRING,'
-	'Telefono_Deudor:STRING,'
-	'Telefono_Deudor_1:STRING,'
-	'Num_Campanas:STRING,'
 	'Past_Due:STRING,'
-	'Ultim_Num_Invoice:STRING,'
+	'Ultim_Num_InVoice:STRING,'
 	'Valor_Factura:STRING,'
-	'Ultim_Ano_Pedido:STRING,'
-	'Ultim_Campana_Pedido:STRING,'
 	'Saldo:STRING,'
-	'Email:STRING,'
-	'Fecha_Factura:STRING,'
+	'N_Vencidas:STRING,'
+	'Num_Campanas:STRING,'
+	'estado:STRING,'
 	'Valor_PD1:STRING,'
-	'Telefono_Deudor_2:STRING,'
 	'CT:STRING,'
-	'Nombres_Referencia_Personal_1:STRING,'
-	'Telefono_Referencia_Personal_1:STRING,'
-	'Nombres_Referencia_Personal_2:STRING,'
-	'Telefono_Referencia_Personal_2:STRING,'
-	'Nombres_Referencia_Comercial_1:STRING,'
-	'Telefono_Referencia_Comercial_1:STRING,'
-	'Nombres_Referencia_Comercial_2:STRING,'
-	'Telefono_Referencia_Comercial_2:STRING,'
-	'Est_Disp:STRING,'
+	'Fecha:STRING,'
+	'Usuario:STRING,'
+	'asignacion:STRING,'
 	'Ciclo:STRING,'
 	'Vlr_redimir:STRING,'
-	'Origen:STRING'
+	'dia:STRING,'
+	'Dia_Estrategia:STRING,'
+	'Origen:STRING,'
+	'marca:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -73,48 +59,34 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split('|')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				'Fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'Ano': arrayCSV[0],
-				'Campana': arrayCSV[1],
+				'Fecha_Cargue' : datetime.datetime.today().strftime('%Y-%m-%d'),
+				'Id_Docdeu': arrayCSV[0],
+				'Nit': arrayCSV[1],
 				'Factura': arrayCSV[2],
-				'Zona': arrayCSV[3],
-				'Unidad': arrayCSV[4],
-				'Seccion': arrayCSV[5],
-				'Territorio': arrayCSV[6],
-				'Nit': arrayCSV[7],
-				'Apellidos': arrayCSV[8],
-				'Nombres': arrayCSV[9],
-				'Direccion_Deudor': arrayCSV[10],
-				'Direccion_Deudor_1': arrayCSV[11],
-				'Barrio_Deudor': arrayCSV[12],
-				'Departamento_Deudor': arrayCSV[13],
-				'Ciudad_Deudor': arrayCSV[14],
-				'Telefono_Deudor': arrayCSV[15],
-				'Telefono_Deudor_1': arrayCSV[16],
-				'Num_Campanas': arrayCSV[17],
-				'Past_Due': arrayCSV[18],
-				'Ultim_Num_Invoice': arrayCSV[19],
-				'Valor_Factura': arrayCSV[20],
-				'Ultim_Ano_Pedido': arrayCSV[21],
-				'Ultim_Campana_Pedido': arrayCSV[22],
-				'Saldo': arrayCSV[23],
-				'Email': arrayCSV[24],
-				'Fecha_Factura': arrayCSV[25],
-				'Valor_PD1': arrayCSV[26],
-				'Telefono_Deudor_2': arrayCSV[27],
-				'CT': arrayCSV[28],
-				'Nombres_Referencia_Personal_1': arrayCSV[29],
-				'Telefono_Referencia_Personal_1': arrayCSV[30],
-				'Nombres_Referencia_Personal_2': arrayCSV[31],
-				'Telefono_Referencia_Personal_2': arrayCSV[32],
-				'Nombres_Referencia_Comercial_1': arrayCSV[33],
-				'Telefono_Referencia_Comercial_1': arrayCSV[34],
-				'Nombres_Referencia_Comercial_2': arrayCSV[35],
-				'Telefono_Referencia_Comercial_2': arrayCSV[36],
-				'Est_Disp': arrayCSV[37],
-				'Ciclo': arrayCSV[38],
-				'Vlr_redimir': arrayCSV[39],
-				'Origen': arrayCSV[40]
+				'Fecha_Factura': arrayCSV[3],
+				'Campana': arrayCSV[4],
+				'Ano': arrayCSV[5],
+				'Zona': arrayCSV[6],
+				'Unidad': arrayCSV[7],
+				'Seccion': arrayCSV[8],
+				'Past_Due': arrayCSV[9],
+				'Ultim_Num_InVoice': arrayCSV[10],
+				'Valor_Factura': arrayCSV[11],
+				'Saldo': arrayCSV[12],
+				'N_Vencidas': arrayCSV[13],
+				'Num_Campanas': arrayCSV[14],
+				'estado': arrayCSV[15],
+				'Valor_PD1': arrayCSV[16],
+				'CT': arrayCSV[17],
+				'Fecha': arrayCSV[18],
+				'Usuario': arrayCSV[19],
+				'asignacion': arrayCSV[20],
+				'Ciclo': arrayCSV[21],
+				'Vlr_redimir': arrayCSV[22],
+				'dia': arrayCSV[23],
+				'Dia_Estrategia': arrayCSV[24],
+				'Origen': arrayCSV[25],
+				'marca': arrayCSV[26]
 				}
 		
 		return [tupla]

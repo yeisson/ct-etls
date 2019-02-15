@@ -30,7 +30,7 @@ remover_api = Blueprint('remover_api', __name__)
 
 ########################### DEFINICION DE VARIABLES ###########################
 
-ayer = datetime.datetime.today() - datetime.timedelta(days = 2)
+ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
 ano = str(ayer.year)
 if len(str(ayer.day)) == 1:
     dia = "0" + str(ayer.day)
@@ -43,8 +43,7 @@ else:
 
 
 fecha = str(ano)+str(mes)+str(dia)
-Ruta ="media"
-Ruta_Alterna ="/192.168.20.87"
+Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 KEY_REPORT = "remover"
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 

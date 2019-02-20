@@ -86,9 +86,13 @@ def Ejecutar():
     
     try:
         os.remove("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext) #Eliminar de aries
+    except: 
+        print("Eliminado de aries")
+    
+    try:
         blob.delete() #Eliminar del storage
     except: 
-        print("hola")
+        print("Eliminado de storage")
 
     file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
     for row in rows:

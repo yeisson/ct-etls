@@ -146,7 +146,7 @@ def prejuridico():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    time.sleep(4800) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
     # Eliminar el archivo en la variable
     blob.delete()
     conn.close()

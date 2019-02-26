@@ -50,7 +50,12 @@ TABLE_SCHEMA = (
 	'dia:STRING,'
 	'Dia_Estrategia:STRING,'
 	'Origen:STRING,'
-	'marca:STRING'
+	'marca:STRING,'
+	'Nombres:STRING,'
+	'Apellidos:STRING,'
+	'Territorio:STRING,'
+	'Est_Disp:STRING'
+
 )
 
 class formatearData(beam.DoFn):
@@ -86,7 +91,11 @@ class formatearData(beam.DoFn):
 				'dia': arrayCSV[23],
 				'Dia_Estrategia': arrayCSV[24],
 				'Origen': arrayCSV[25],
-				'marca': arrayCSV[26]
+				'marca': arrayCSV[26],
+				'Nombres': arrayCSV[27],
+				'Apellidos': arrayCSV[28],
+				'Territorio': arrayCSV[29],
+				'Est_Disp': arrayCSV[30],
 				}
 		
 		return [tupla]

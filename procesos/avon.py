@@ -113,70 +113,89 @@ def prejuridico():
     TABLE_DB = "dbo.Tb_Docdeu"
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')
+    # Fecha = "2018-12-20"
+    filename = "prejuridico/Avon_inf_prej_" + FECHA_CARGUE +  ".csv"
+    Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-avon')
+    blob = bucket.blob(filename)
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
-    conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha = " + "CAST('"+ Fecha + "'AS DATE)")
-    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-
-    cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
-    for row in conn:
-        text_row =  ""
-        text_row += row['Id_Docdeu'].encode('utf-8') + "|"
-        text_row += row['Nit'].encode('utf-8') + "|"
-        text_row += row['Factura'].encode('utf-8') + "|"
-        text_row += str(row['Fecha_Factura']).encode('utf-8') + "|"
-        text_row += row['Campana'].encode('utf-8') + "|"
-        text_row += row['Ano'].encode('utf-8') + "|"
-        text_row += row['Zona'].encode('utf-8') + "|"
-        text_row += str(row['Unidad']).encode('utf-8') + "|"
-        text_row += str(row['Seccion']).encode('utf-8') + "|"
-        text_row += str(row['Past Due']).encode('utf-8') + "|"
-        text_row += str(row['Ultim_Num_InVoice']).encode('utf-8') + "|"
-        text_row += str(row['Valor_Factura']).encode('utf-8') + "|"
-        text_row += str(row['Saldo']).encode('utf-8') + "|"
-        text_row += str(row['N_Vencidas']).encode('utf-8') + "|"
-        text_row += str(row['Num_Campanas']).encode('utf-8') + "|"
-        text_row += str(row['estado']).encode('utf-8') + "|"
-        text_row += str(row['Valor_PD1']).encode('utf-8') + "|"
-        text_row += str(row['CT']).encode('utf-8') + "|"
-        text_row += row['Fecha'].encode('utf-8') + "|"
-        text_row += row['Usuario'].encode('utf-8') + "|"
-        text_row += str(row['asignacion']).encode('utf-8') + "|"
-        text_row += row['Ciclo'].encode('utf-8') + "|"
-        text_row += str(row['Vlr_redimir']).encode('utf-8') + "|"
-        text_row += str(row['dia']).encode('utf-8') + "|"
-        text_row += str(row['Dia_Estrategia']).encode('utf-8') + "|"
-        text_row += str(row['Origen']).encode('utf-8') + "|"
-        text_row += row['marca'].encode('utf-8') + "|"
-        text_row += "\n"
-
-        cloud_storage_rows += text_row
-    
-    filename = "prejuridico/Avon_inf_prej_" + FECHA_CARGUE +  ".csv"
-    gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
-
     try:
-        deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` WHERE CAST(Fecha AS DATE) = CURRENT_DATE()"
-        client = bigquery.Client()
-        query_job = client.query(deleteQuery)
-        query_job.result()
-    except:
-        print("no se pudo eliminar porque no existe una tabla llamada asi")
+        # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha = " + "CAST('"+ Fecha + "'AS DATE)")
 
-    time.sleep(10)
-    
-    flowAnswer = avon_prejuridico_beam.run()
+        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha > CAST('2018-12-20' AS DATE)")
+        conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
 
-    time.sleep(20)
-# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket('ct-avon')
-    blob = bucket.blob(filename)
-    # Eliminar el archivo en la variable
-    blob.delete()
+        cloud_storage_rows = ""
+        # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+        for row in conn:
+            text_row =  ""
+            text_row += row['Id_Docdeu'].encode('utf-8') + "|"
+            text_row += row['Nit'].encode('utf-8') + "|"
+            text_row += row['Factura'].encode('utf-8') + "|"
+            text_row += str(row['Fecha_Factura']).encode('utf-8') + "|"
+            text_row += row['Campana'].encode('utf-8') + "|"
+            text_row += row['Ano'].encode('utf-8') + "|"
+            text_row += row['Zona'].encode('utf-8') + "|"
+            text_row += str(row['Unidad']).encode('utf-8') + "|"
+            text_row += str(row['Seccion']).encode('utf-8') + "|"
+            text_row += str(row['Past Due']).encode('utf-8') + "|"
+            text_row += str(row['Ultim_Num_InVoice']).encode('utf-8') + "|"
+            text_row += str(row['Valor_Factura']).encode('utf-8') + "|"
+            text_row += str(row['Saldo']).encode('utf-8') + "|"
+            text_row += str(row['N_Vencidas']).encode('utf-8') + "|"
+            text_row += str(row['Num_Campanas']).encode('utf-8') + "|"
+            text_row += str(row['estado']).encode('utf-8') + "|"
+            text_row += str(row['Valor_PD1']).encode('utf-8') + "|"
+            text_row += str(row['CT']).encode('utf-8') + "|"
+            text_row += row['Fecha'].encode('utf-8') + "|"
+            text_row += row['Usuario'].encode('utf-8') + "|"
+            text_row += str(row['asignacion']).encode('utf-8') + "|"
+            text_row += row['Ciclo'].encode('utf-8') + "|"
+            text_row += str(row['Vlr_redimir']).encode('utf-8') + "|"
+            text_row += str(row['dia']).encode('utf-8') + "|"
+            text_row += str(row['Dia_Estrategia']).encode('utf-8') + "|"
+            text_row += str(row['Origen']).encode('utf-8') + "|"
+            text_row += row['marca'].encode('utf-8') + "|"
+            text_row += row['Nombres'].encode('utf-8') + "|"
+            text_row += unicode(row['Apellidos']).encode('utf-8') + "|"
+            text_row += unicode(row['Territorio']).encode('utf-8') + "|"
+            text_row += str(row['Est.Disp']).encode('utf-8') + "|"
+            text_row += "\n"
+            cloud_storage_rows += text_row
+        
+        
+        # file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename,"a")
+        # file.close()
+        # blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename)
+        gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
+
+        try:
+            deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` where CAST(Fecha AS STRING) = " + "CAST('"+ Fecha + "'AS STRING)"
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+            query_job.result()
+        except:
+            print("no se pudo eliminar porque no existe una tabla llamada asi")
+
+        time.sleep(10)
+        
+        flowAnswer = avon_prejuridico_beam.run()
+
+        time.sleep(10)
+    # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket('ct-avon')
+        blob = bucket.blob(filename)
+        # Eliminar el archivo en la variable
+        blob.delete()
+        # return "R, " + 'flowAnswer'
+    except IOError:
+        dIO =  "No se han cargado archivos el dia de hoy"
+    # return dIO
     return "R, " + 'flowAnswer'
 
 ############################################################################################
@@ -193,7 +212,6 @@ def seguimiento():
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    # conn.execute_query('SELECT Ano,Cam-pana,Factura,Zona,Unidad,Seccion,Territorio,Nit,Apellidos,Nombres,Direccion_Deudor,Direccion_Deudor_1,Barrio_Deudor,Departamento_Deudor,Ciudad_Deudor,Telefono_Deudor,Telefono_Deudor_1,Num_Campanas,Past Due,Ultim_Num_Invoice,Valor_Factura,Ultim_Ano_Pedido,Ultim_Campana_Pedido,Saldo,Email,Fecha_Factura,Valor_PD1,Telefono_Deudor_2,CT,Nombres_Referencia_Personal_1,Telefono_Referencia_Personal_1,Nombres_Referencia_Personal_2,Telefono_Referencia_Personal_2,Nombres_Referencia_Comercial_1,Telefono_Referencia_Comercial_1,Nombres_Referencia_Comercial_2,Telefono_Referencia_Comercial_2,Est.Disp,Ciclo,Vlr_redimir,Origen FROM' + TABLE_DB)
     conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) = CAST(GETDATE() as DATE) ')
 
     cloud_storage_rows = ""
@@ -206,7 +224,7 @@ def seguimiento():
         text_row += str(row['Fecha_Seguimiento']).encode('utf-8') + "|"
         text_row += row['Id_Usuario'].encode('utf-8') + "|"
         text_row += str(row['Valor_Obligacion']).encode('utf-8') + "|"
-        text_row += str(row['Id_Docdeu']).encode('utf-8')
+        text_row += str(row['Id_Docdeu']).encode('utf-8') + "|"
 
 
         text_row += "\n"

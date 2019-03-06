@@ -6,6 +6,7 @@ from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.bridge.bridge_beam as bridge_beam
 import dataflow_pipeline.bridge.bridge_beam2 as bridge_beam2
+import dataflow_pipeline.bridge.bridge_beam3 as bridge_beam3
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -263,6 +264,77 @@ def bridge2():
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
 
     flowAnswer = bridge_beam2.run(table)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    # time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    blob.delete()
+    conn.close()
+    return "R, " + flowAnswer
+
+
+
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge3", methods=['GET'])
+def bridge3():
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+# Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+    
+    cloud_storage_rows = ""
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if row['Nit'].encode('utf-8') is None else row['Nit'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Fecha Gestion']).encode('utf-8') is None else str(row['Fecha Gestion']).encode('utf-8') + "|"
+        text_row += '' + "|" if row['Nota'].encode('utf-8') is None else row['Nota'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Grabador'].encode('utf-8') is None else row['Grabador'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') is None else row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['T_entrada'].encode('utf-8') is None else row['T_entrada'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Hora Grabacion'].encode('utf-8') is None else row['Hora Grabacion'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Consdocdeu'].encode('utf-8') is None else row['Consdocdeu'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Regional'].encode('utf-8') is None else row['Regional'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Dias De Mora'].encode('utf-8') is None else row['Dias De Mora'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Duracion'].encode('utf-8') is None else row['Duracion'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Fecha Promesa'].encode('utf-8') is None else row['Fecha Promesa'].encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_3" + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam3.run(table)
 
 # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
     storage_client = storage.Client()

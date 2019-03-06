@@ -116,7 +116,7 @@ def Ejecutar():
     
     file.close()
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
-    time.sleep(120)
+    time.sleep(600)
     ejecutar = login_logout_beam.run() #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(30)
 

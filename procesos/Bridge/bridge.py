@@ -8,6 +8,7 @@ import dataflow_pipeline.bridge.bridge_beam as bridge_beam
 import dataflow_pipeline.bridge.bridge_beam2 as bridge_beam2
 import dataflow_pipeline.bridge.bridge_beam3 as bridge_beam3
 import dataflow_pipeline.bridge.bridge_beam4 as bridge_beam4
+import dataflow_pipeline.bridge.bridge_beam5 as bridge_beam5
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -148,11 +149,14 @@ def bridge():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     conn.close()
-    return "R, " + flowAnswer
+    return TABLE_DB + flowAnswer
+
+
+
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -271,11 +275,11 @@ def bridge2():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    # time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     conn.close()
-    return "R, " + flowAnswer
+    return TABLE_DB + flowAnswer
 
 
 
@@ -342,11 +346,11 @@ def bridge3():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    # time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     conn.close()
-    return "R, " + flowAnswer
+    return TABLE_DB + flowAnswer
 
 
 
@@ -382,7 +386,8 @@ def bridge4():
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
     
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    # Debido a que los registros en esta tabla pueden tener saltos de 
+    # linea y punto y comas inmersos
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row[0].encode('utf-8') is None else row[0].encode('utf-8') + "|"
@@ -404,8 +409,153 @@ def bridge4():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    # time.sleep(2100) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     conn.close()
-    return "R, " + flowAnswer
+    return TABLE_DB + flowAnswer
+    
+
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge5", methods=['GET'])
+def bridge5():
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+# Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+    
+    cloud_storage_rows = ""
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if row['Nit'].encode('utf-8') is None else row['Nit'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Consdocdeu'].encode('utf-8') is None else row['Consdocdeu'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Clasif'].encode('utf-8') is None else row['Clasif'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Grupo'].encode('utf-8') is None else row['Grupo'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Segmento'].encode('utf-8') is None else row['Segmento'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Contacto'].encode('utf-8') is None else row['Contacto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Valor Obligacion'].encode('utf-8') is None else row['Valor Obligacion'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Valor Vencido'].encode('utf-8') is None else row['Valor Vencido'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Dias Mora'].encode('utf-8') is None else row['Dias Mora'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Cant Pagos']).encode('utf-8') is None else str(row['Cant Pagos']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Vr Pagado']).encode('utf-8') is None else str(row['Vr Pagado']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Cta_Dia']).encode('utf-8') is None else str(row['Cta_Dia']).encode('utf-8') + "|"
+        text_row += '' + "|" if row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') is None else row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Asignado'].encode('utf-8') is None else row['Asignado'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Contactabilidad'].encode('utf-8') is None else row['Contactabilidad'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Foco Plan Trabajo'].encode('utf-8') is None else row['Foco Plan Trabajo'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Ult Contacto Dir']).encode('utf-8') is None else str(row['Ult Contacto Dir']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Dia Ult_contacto']).encode('utf-8') is None else str(row['Dia Ult_contacto']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['T  Ult contacto']).encode('utf-8') is None else str(row['T  Ult contacto']).encode('utf-8') + "|"
+        text_row += '' + "|" if row[19].encode('utf-8') is None else row[19].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Total Gest'].encode('utf-8') is None else row['Total Gest'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Total Contactos'].encode('utf-8') is None else row['Total Contactos'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Total SMS'].encode('utf-8') is None else row['Total SMS'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest Lun-Vier'].encode('utf-8') is None else row['Gest Lun-Vier'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest Sab-Dom'].encode('utf-8') is None else row['Gest Sab-Dom'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Contactos Lun-Vier'].encode('utf-8') is None else row['Contactos Lun-Vier'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Contactos Sab-Dom'].encode('utf-8') is None else row['Contactos Sab-Dom'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gestiones <  Ult Contacto'].encode('utf-8') is None else row['Gestiones <  Ult Contacto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest Agente > Ult Contacto'].encode('utf-8') is None else row['Gest Agente > Ult Contacto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['SMS > Ult Contacto'].encode('utf-8') is None else row['SMS > Ult Contacto'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Lun-Vier']).encode('utf-8') is None else str(row['Contactab Lun-Vier']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Sab-Dom']).encode('utf-8') is None else str(row['Contactab Sab-Dom']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Lun']).encode('utf-8') is None else str(row['Contactab Lun']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Mar']).encode('utf-8') is None else str(row['Contactab Mar']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Mier']).encode('utf-8') is None else str(row['Contactab Mier']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Jue']).encode('utf-8') is None else str(row['Contactab Jue']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Vier']).encode('utf-8') is None else str(row['Contactab Vier']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Sab']).encode('utf-8') is None else str(row['Contactab Sab']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Dom']).encode('utf-8') is None else str(row['Contactab Dom']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row[39]).encode('utf-8') is None else str(row[39]).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row[40]).encode('utf-8') is None else str(row[40]).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Tarde']).encode('utf-8') is None else str(row['Contactab Tarde']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contactab Noche']).encode('utf-8') is None else str(row['Contactab Noche']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['6. Contactab 6 am']).encode('utf-8') is None else str(row['6. Contactab 6 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['7. Contactab 7 am']).encode('utf-8') is None else str(row['7. Contactab 7 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['8. Contactab 8 am']).encode('utf-8') is None else str(row['8. Contactab 8 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['9. Contactab 9 am']).encode('utf-8') is None else str(row['9. Contactab 9 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['10. Contactab 10 am']).encode('utf-8') is None else str(row['10. Contactab 10 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['11. Contactab 11 am']).encode('utf-8') is None else str(row['11. Contactab 11 am']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['12. Contactab 12 pm']).encode('utf-8') is None else str(row['12. Contactab 12 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['13. Contactab 1 pm']).encode('utf-8') is None else str(row['13. Contactab 1 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['14. Contactab 2 pm']).encode('utf-8') is None else str(row['14. Contactab 2 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['15. Contactab 3 pm']).encode('utf-8') is None else str(row['15. Contactab 3 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['16. Contactab 4 pm']).encode('utf-8') is None else str(row['16. Contactab 4 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['17. Contactab 5 pm']).encode('utf-8') is None else str(row['17. Contactab 5 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['18. Contactab 6 pm']).encode('utf-8') is None else str(row['18. Contactab 6 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['19. Contactab 7 pm']).encode('utf-8') is None else str(row['19. Contactab 7 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['20. Contactab 8 pm']).encode('utf-8') is None else str(row['20. Contactab 8 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['21. Contactab 9 pm']).encode('utf-8') is None else str(row['21. Contactab 9 pm']).encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest 6 AM'].encode('utf-8') is None else row['Gest 6 AM'].encode('utf-8') + "|"
+        text_row += '' + "|" if row[60].encode('utf-8') is None else row[60].encode('utf-8') + "|"
+        text_row += '' + "|" if row[61].encode('utf-8') is None else row[61].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest Tarde'].encode('utf-8') is None else row['Gest Tarde'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Gest Noche'].encode('utf-8') is None else row['Gest Noche'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Lun'].encode('utf-8') is None else row['Lun'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Mar'].encode('utf-8') is None else row['Mar'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Mier'].encode('utf-8') is None else row['Mier'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Jue'].encode('utf-8') is None else row['Jue'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Vier'].encode('utf-8') is None else row['Vier'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Sab'].encode('utf-8') is None else row['Sab'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Dom'].encode('utf-8') is None else row['Dom'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['06 00 a m '].encode('utf-8') is None else row['06 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['07 00 a m '].encode('utf-8') is None else row['07 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['08 00 a m '].encode('utf-8') is None else row['08 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['09 00 a m '].encode('utf-8') is None else row['09 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['10 00 a m '].encode('utf-8') is None else row['10 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['11 00 a m '].encode('utf-8') is None else row['11 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['12 00 a m '].encode('utf-8') is None else row['12 00 a m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['01 00 p m '].encode('utf-8') is None else row['01 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['02 00 p m '].encode('utf-8') is None else row['02 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['03 00 p m '].encode('utf-8') is None else row['03 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['04 00 p m '].encode('utf-8') is None else row['04 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['05 00 p m '].encode('utf-8') is None else row['05 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['06 00 p m '].encode('utf-8') is None else row['06 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['07 00 p m '].encode('utf-8') is None else row['07 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['08 00 p m '].encode('utf-8') is None else row['08 00 p m '].encode('utf-8') + "|"
+        text_row += '' + "|" if row['09 00 p m '].encode('utf-8') is None else row['09 00 p m '].encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_5" + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam5.run(table)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + flowAnswer

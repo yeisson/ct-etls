@@ -99,7 +99,6 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split('|')
 
 		tupla= {
-				'idkey': str(uuid.uuid4()),
 				'Consecutivo_Documento_Deudor': arrayCSV[0],
 				'Valor_Cuota': arrayCSV[1],
 				'Nit': arrayCSV[2],

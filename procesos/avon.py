@@ -127,8 +127,8 @@ def prejuridico():
     try:
         # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha = " + "CAST('"+ Fecha + "'AS DATE)")
 
-        conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha > CAST('2019-02-01' AS DATE)")
-        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
+        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = CAST('2019-02-01' AS DATE)")
+        conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
 
         cloud_storage_rows = ""
         # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
@@ -191,7 +191,7 @@ def prejuridico():
         storage_client = storage.Client()
         bucket = storage_client.get_bucket('ct-avon')
         blob = bucket.blob(filename)
-        # Eliminar el archivo en la variable
+        # Eliminar el archivo en la variable        
         blob.delete()
         # return "R, " + 'flowAnswer'
     except IOError:

@@ -11,25 +11,29 @@ import _mssql
 import time
 from datetime import datetime
 
+#coding: utf-8 
+
 leonisa_api = Blueprint('leonisa_api', __name__)
 
-@leonisa_api.route("/")
-def inicio():
-    return "API's de Leonisa"
+fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 @leonisa_api.route("/seguimiento")
 def Seguimiento():
-
     #Variables de conexion a MS SQL
     #SERVER="BDA01\DELTA"
     SERVER="192.168.20.63\DELTA"
     USER="DP_USER"
     PASSWORD="Contento2018"
     DATABASE="Leonisa"
+    TABLE_DB = "dbo.Tb_Seguimiento"
+    # HOY = datetime.datetime.today().strftime('%Y-%m-%d')
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query('SELECT Id_Seguimiento, Id_Docdeu, Id_Gestion, Id_Causal, Fecha_Seguimiento, Id_Usuario, Id_Abogado, Id_pago FROM dbo.Tb_Seguimiento WHERE Fecha_Seguimiento BETWEEN  GETDATE()-1 AND GETDATE()+1')
+
+    # conn.execute_query('SELECT Id_Seguimiento, Id_Docdeu, Id_Gestion, Id_Causal, Fecha_Seguimiento, Id_Usuario, Id_Abogado, Id_pago FROM dbo.Tb_Seguimiento WHERE Fecha_Seguimiento BETWEEN  GETDATE()-1 AND GETDATE()+1')
+    conn.execute_query
+    ('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) = CAST(GETDATE() as DATE) ')
 
     cloud_storage_rows = ""
 
@@ -50,20 +54,27 @@ def Seguimiento():
     
     date = datetime.today().strftime('%Y-%m-%d-%H-%M')
 
-    filename = "info-seguimiento/LEONISA_INF_SEG_" + date + ".csv"
+    filename = "Seguimiento/Leonisa_inf_seg_" + ".csv"
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-leonisa")
 
-    # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-    deleteQuery = "DELETE FROM `contento-bi.leonisa.seguimiento` WHERE 1=1"
+    try:
+        deleteQuery = "DELETE FROM `contento-bi.avon.seguimiento` WHERE CAST(SUBSTR(Fecha_Seguimiento,0,10) AS DATE) = CURRENT_DATE()"
+        client = bigquery.Client()
+        query_job = client.query(deleteQuery)
+        query_job.result()
+    except:
+        print("no se pudo eliminar")
+ 
+    flowAnswer = avon_seguimiento_beam.run()
 
-    #Primero eliminamos todos los registros que contengan esa fecha
-    client = bigquery.Client()
-    query_job = client.query(deleteQuery)
+    # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-leonisa')
+    blob = bucket.blob("Seguimiento/Leonisa_inf_seg_" + ".csv")
 
-    query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+    # Eliminar el archivo en la variable
+    blob.delete()
 
-    #Luego procedemos a correr el proceso de Dataflow
-    flowAnswer = leonisa_seguimiento_beam.run(filename, date)
-
-    return jsonify(flowAnswer), 200
+    # return jsonify(flowAnswer), 200
+    return "X" + "flowAnswer" 

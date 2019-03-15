@@ -9,6 +9,7 @@ import dataflow_pipeline.bridge.bridge_beam2 as bridge_beam2
 import dataflow_pipeline.bridge.bridge_beam3 as bridge_beam3
 import dataflow_pipeline.bridge.bridge_beam4 as bridge_beam4
 import dataflow_pipeline.bridge.bridge_beam5 as bridge_beam5
+import dataflow_pipeline.bridge.bridge_beam6 as bridge_beam6
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -20,6 +21,15 @@ import datetime
 
 bridge_api = Blueprint('bridge_api', __name__)
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
+
+
+
+#####################################################################################################################################
+##################################################### BD_CONSOLIDADO ################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
 
 @bridge_api.route("/bridge", methods=['GET'])
 def bridge():
@@ -159,7 +169,7 @@ def bridge():
 
 
 #####################################################################################################################################
-#####################################################################################################################################
+######################################################### BD_NTILES #################################################################
 #####################################################################################################################################
 #####################################################################################################################################
 
@@ -286,7 +296,7 @@ def bridge2():
 
 
 #####################################################################################################################################
-#####################################################################################################################################
+##################################################### CONS_GEST #####################################################################
 #####################################################################################################################################
 #####################################################################################################################################
 
@@ -356,7 +366,7 @@ def bridge3():
 
 
 #####################################################################################################################################
-#####################################################################################################################################
+############################################################ CTA_DIA ################################################################
 #####################################################################################################################################
 #####################################################################################################################################
 
@@ -419,7 +429,7 @@ def bridge4():
 
 
 #####################################################################################################################################
-#####################################################################################################################################
+#################################################### DETALLE_CONTACTABILIDAD ########################################################
 #####################################################################################################################################
 #####################################################################################################################################
 
@@ -460,7 +470,7 @@ def bridge5():
         text_row += '' + "|" if row['Contacto'].encode('utf-8') is None else row['Contacto'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Valor Obligacion'].encode('utf-8') is None else row['Valor Obligacion'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Valor Vencido'].encode('utf-8') is None else row['Valor Vencido'].encode('utf-8') + "|"
-        text_row += '' + "|" if row['Dias Mora'].encode('utf-8') is None else row['Dias Mora'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Dias Mora']).encode('utf-8') is None else str(row['Dias Mora']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Cant Pagos']).encode('utf-8') is None else str(row['Cant Pagos']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Vr Pagado']).encode('utf-8') is None else str(row['Vr Pagado']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Cta_Dia']).encode('utf-8') is None else str(row['Cta_Dia']).encode('utf-8') + "|"
@@ -559,3 +569,93 @@ def bridge5():
     # blob.delete()
     conn.close()
     return TABLE_DB + flowAnswer
+  
+
+
+
+#####################################################################################################################################
+#################################################### INFORME_CONTACTABILIDAD ########################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge6", methods=['GET'])
+def bridge6():
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+# Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+    
+    cloud_storage_rows = ""
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row['Nit']).encode('utf-8') is None else str(row['Nit']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Fecha Gestion']).encode('utf-8') is None else str(row['Fecha Gestion']).encode('utf-8') + "|"
+        text_row += '' + "|" if row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') is None else row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Grabador'].encode('utf-8') is None else row['Grabador'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Consdocdeu'].encode('utf-8') is None else row['Consdocdeu'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Contacto'].encode('utf-8') is None else row['Contacto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Tipo Gest'].encode('utf-8') is None else row['Tipo Gest'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Prioridad'].encode('utf-8') is None else row['Prioridad'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Dias Mora'].encode('utf-8') is None else row['Dias Mora'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Rango Mora'].encode('utf-8') is None else row['Rango Mora'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Valor Obligacion'].encode('utf-8') is None else row['Valor Obligacion'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Valor Vencido'].encode('utf-8') is None else row['Valor Vencido'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Endeudamiento'].encode('utf-8') is None else row['Endeudamiento'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Valor Cuota'].encode('utf-8') is None else row['Valor Cuota'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Probabilidad de Propension de pago'].encode('utf-8') is None else row['Probabilidad de Propension de pago'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Grupo de Priorizacion'].encode('utf-8') is None else row['Grupo de Priorizacion'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Grupo'].encode('utf-8') is None else row['Grupo'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Nombre De Producto'].encode('utf-8') is None else row['Nombre De Producto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Region'].encode('utf-8') is None else row['Region'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Segmento'].encode('utf-8') is None else row['Segmento'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Calificacion Real'].encode('utf-8') is None else row['Calificacion Real'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Cuadrante'].encode('utf-8') is None else row['Cuadrante'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Causal'].encode('utf-8') is None else row['Causal'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Sector Economico'].encode('utf-8') is None else row['Sector Economico'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Cosecha'].encode('utf-8') is None else row['Cosecha'].encode('utf-8') + "|"
+        text_row += '' + "|" if row[25].encode('utf-8') is None else row[25].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Nombre Asesor'].encode('utf-8') is None else row['Nombre Asesor'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Producto'].encode('utf-8') is None else row['Producto'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Sede'].encode('utf-8') is None else row['Sede'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Fecha_CtaDia']).encode('utf-8') is None else str(row['Fecha_CtaDia']).encode('utf-8') + "|"
+        text_row += '' + "|" if row['DiaSem'].encode('utf-8') is None else row['DiaSem'].encode('utf-8') + "|"
+        text_row += '' + "|" if row['Sem'].encode('utf-8') is None else row['Sem'].encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_6" + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam6.run(table)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    time.sleep(300) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + flowAnswer    

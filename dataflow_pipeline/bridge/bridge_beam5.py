@@ -46,15 +46,15 @@ TABLE_SCHEMA = (
 			'Total_Gest:STRING,'
 			'Total_Contactos:STRING,'
 			'Total_SMS:STRING,'
-			'Gest_Lun-Vier:STRING,'
-			'Gest_Sab-Dom:STRING,'
-			'Contactos_Lun-Vier:STRING,'
-			'Contactos_Sab-Dom:STRING,'
-			'Gestiones_<_Ult_Contacto:STRING,'
-			'Gest_Agente_>_Ult_Contacto:STRING,'
-			'SMS_>_Ult_Contacto:STRING,'
-			'Contactab_Lun-Vier:STRING,'
-			'Contactab_Sab-Dom:STRING,'
+			'Gest_Lun_Vier:STRING,'
+			'Gest_Sab_Dom:STRING,'
+			'Contactos_Lun_Vier:STRING,'
+			'Contactos_Sab_Dom:STRING,'
+			'Gestiones_Ult_Contacto:STRING,'
+			'Gest_Agente_Ult_Contacto:STRING,'
+			'SMS_Ult_Contacto:STRING,'
+			'Contactab_Lun_Vier:STRING,'
+			'Contactab_Sab_Dom:STRING,'
 			'Contactab_Lun:STRING,'
 			'Contactab_Mar:STRING,'
 			'Contactab_Mier:STRING,'
@@ -66,22 +66,22 @@ TABLE_SCHEMA = (
 			'Contactab_Medio_Dia:STRING,'
 			'Contactab_Tarde:STRING,'
 			'Contactab_Noche:STRING,'
-			'6._Contactab_6_am:STRING,'
-			'7._Contactab_7_am:STRING,'
-			'8._Contactab_8_am:STRING,'
-			'9._Contactab_9_am:STRING,'
-			'10._Contactab_10_am:STRING,'
-			'11._Contactab_11_am:STRING,'
-			'12._Contactab_12_pm:STRING,'
-			'13._Contactab_1_pm:STRING,'
-			'14._Contactab_2_pm:STRING,'
-			'15._Contactab_3_pm:STRING,'
-			'16._Contactab_4_pm:STRING,'
-			'17._Contactab_5_pm:STRING,'
-			'18._Contactab_6_pm:STRING,'
-			'19._Contactab_7_pm:STRING,'
-			'20._Contactab_8_pm:STRING,'
-			'21._Contactab_9_pm:STRING,'
+			'Contactab_6_am:STRING,'
+			'Contactab_7_am:STRING,'
+			'Contactab_8_am:STRING,'
+			'Contactab_9_am:STRING,'
+			'Contactab_10_am:STRING,'
+			'Contactab_11_am:STRING,'
+			'Contactab_12_pm:STRING,'
+			'Contactab_1_pm:STRING,'
+			'Contactab_2_pm:STRING,'
+			'Contactab_3_pm:STRING,'
+			'Contactab_4_pm:STRING,'
+			'Contactab_5_pm:STRING,'
+			'Contactab_6_pm:STRING,'
+			'Contactab_7_pm:STRING,'
+			'Contactab_8_pm:STRING,'
+			'Contactab_9_pm:STRING,'
 			'Gest_6_AM:STRING,'
 			'Gest_Manana:STRING,'
 			'Gest_Medio_dia:STRING,'
@@ -94,22 +94,22 @@ TABLE_SCHEMA = (
 			'Vier:STRING,'
 			'Sab:STRING,'
 			'Dom:STRING,'
-			'06_00_am:STRING,'
-			'07_00_am:STRING,'
-			'08_00_am:STRING,'
-			'09_00_am:STRING,'
-			'10_00_am:STRING,'
-			'11_00_am:STRING,'
-			'12_00_am:STRING,'
-			'01_00_pm:STRING,'
-			'02_00_pm:STRING,'
-			'03_00_pm:STRING,'
-			'04_00_pm:STRING,'
-			'05_00_pm:STRING,'
-			'06_00_pm:STRING,'
-			'07_00_pm:STRING,'
-			'08_00_pm:STRING,'
-			'09_00_pm:STRING'
+			'H_06_00_am:STRING,'
+			'H_07_00_am:STRING,'
+			'H_08_00_am:STRING,'
+			'H_09_00_am:STRING,'
+			'H_10_00_am:STRING,'
+			'H_11_00_am:STRING,'
+			'H_12_00_am:STRING,'
+			'H_01_00_pm:STRING,'
+			'H_02_00_pm:STRING,'
+			'H_03_00_pm:STRING,'
+			'H_04_00_pm:STRING,'
+			'H_05_00_pm:STRING,'
+			'H_06_00_pm:STRING,'
+			'H_07_00_pm:STRING,'
+			'H_08_00_pm:STRING,'
+			'H_09_00_pm:STRING'
 			)
 
 class formatearData(beam.DoFn):
@@ -141,15 +141,15 @@ class formatearData(beam.DoFn):
 				'Total_Gest': arrayCSV[20],
 				'Total_Contactos': arrayCSV[21],
 				'Total_SMS': arrayCSV[22],
-				'Gest_Lun-Vier': arrayCSV[23],
-				'Gest_Sab-Dom': arrayCSV[24],
-				'Contactos_Lun-Vier': arrayCSV[25],
-				'Contactos_Sab-Dom': arrayCSV[26],
-				'Gestiones_<_Ult_Contacto': arrayCSV[27],
-				'Gest_Agente_>_Ult_Contacto': arrayCSV[28],
-				'SMS_>_Ult_Contacto': arrayCSV[29],
-				'Contactab_Lun-Vier': arrayCSV[30],
-				'Contactab_Sab-Dom': arrayCSV[31],
+				'Gest_Lun_Vier': arrayCSV[23],
+				'Gest_Sab_Dom': arrayCSV[24],
+				'Contactos_Lun_Vier': arrayCSV[25],
+				'Contactos_Sab_Dom': arrayCSV[26],
+				'Gestiones_Ult_Contacto': arrayCSV[27],
+				'Gest_Agente_Ult_Contacto': arrayCSV[28],
+				'SMS_Ult_Contacto': arrayCSV[29],
+				'Contactab_Lun_Vier': arrayCSV[30],
+				'Contactab_Sab_Dom': arrayCSV[31],
 				'Contactab_Lun': arrayCSV[32],
 				'Contactab_Mar': arrayCSV[33],
 				'Contactab_Mier': arrayCSV[34],
@@ -161,22 +161,22 @@ class formatearData(beam.DoFn):
 				'Contactab_Medio_Dia': arrayCSV[40],
 				'Contactab_Tarde': arrayCSV[41],
 				'Contactab_Noche': arrayCSV[42],
-				'6._Contactab_6_am': arrayCSV[43],
-				'7._Contactab_7_am': arrayCSV[44],
-				'8._Contactab_8_am': arrayCSV[45],
-				'9._Contactab_9_am': arrayCSV[46],
-				'10._Contactab_10_am': arrayCSV[47],
-				'11._Contactab_11_am': arrayCSV[48],
-				'12._Contactab_12_pm': arrayCSV[49],
-				'13._Contactab_1_pm': arrayCSV[50],
-				'14._Contactab_2_pm': arrayCSV[51],
-				'15._Contactab_3_pm': arrayCSV[52],
-				'16._Contactab_4_pm': arrayCSV[53],
-				'17._Contactab_5_pm': arrayCSV[54],
-				'18._Contactab_6_pm': arrayCSV[55],
-				'19._Contactab_7_pm': arrayCSV[56],
-				'20._Contactab_8_pm': arrayCSV[57],
-				'21._Contactab_9_pm': arrayCSV[58],
+				'Contactab_6_am': arrayCSV[43],
+				'Contactab_7_am': arrayCSV[44],
+				'Contactab_8_am': arrayCSV[45],
+				'Contactab_9_am': arrayCSV[46],
+				'Contactab_10_am': arrayCSV[47],
+				'Contactab_11_am': arrayCSV[48],
+				'Contactab_12_pm': arrayCSV[49],
+				'Contactab_1_pm': arrayCSV[50],
+				'Contactab_2_pm': arrayCSV[51],
+				'Contactab_3_pm': arrayCSV[52],
+				'Contactab_4_pm': arrayCSV[53],
+				'Contactab_5_pm': arrayCSV[54],
+				'Contactab_6_pm': arrayCSV[55],
+				'Contactab_7_pm': arrayCSV[56],
+				'Contactab_8_pm': arrayCSV[57],
+				'Contactab_9_pm': arrayCSV[58],
 				'Gest_6_AM': arrayCSV[59],
 				'Gest_Manana': arrayCSV[60],
 				'Gest_Medio_dia': arrayCSV[61],
@@ -189,22 +189,22 @@ class formatearData(beam.DoFn):
 				'Vier': arrayCSV[68],
 				'Sab': arrayCSV[69],
 				'Dom': arrayCSV[70],
-				'06_00_am': arrayCSV[71],
-				'07_00_am': arrayCSV[72],
-				'08_00_am': arrayCSV[73],
-				'09_00_am': arrayCSV[74],
-				'10_00_am': arrayCSV[75],
-				'11_00_am': arrayCSV[76],
-				'12_00_am': arrayCSV[77],
-				'01_00_pm': arrayCSV[78],
-				'02_00_pm': arrayCSV[79],
-				'03_00_pm': arrayCSV[80],
-				'04_00_pm': arrayCSV[81],
-				'05_00_pm': arrayCSV[82],
-				'06_00_pm': arrayCSV[83],
-				'07_00_pm': arrayCSV[84],
-				'08_00_pm': arrayCSV[85],
-				'09_00_pm': arrayCSV[86]
+				'H_06_00_am': arrayCSV[71],
+				'H_07_00_am': arrayCSV[72],
+				'H_08_00_am': arrayCSV[73],
+				'H_09_00_am': arrayCSV[74],
+				'H_10_00_am': arrayCSV[75],
+				'H_11_00_am': arrayCSV[76],
+				'H_12_00_am': arrayCSV[77],
+				'H_01_00_pm': arrayCSV[78],
+				'H_02_00_pm': arrayCSV[79],
+				'H_03_00_pm': arrayCSV[80],
+				'H_04_00_pm': arrayCSV[81],
+				'H_05_00_pm': arrayCSV[82],
+				'H_06_00_pm': arrayCSV[83],
+				'H_07_00_pm': arrayCSV[84],
+				'H_08_00_pm': arrayCSV[85],
+				'H_09_00_pm': arrayCSV[86]
 				}
 		
 		return [tupla]

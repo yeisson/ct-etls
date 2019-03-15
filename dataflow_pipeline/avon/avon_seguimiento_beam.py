@@ -30,7 +30,8 @@ TABLE_SCHEMA = (
 	'Fecha_Seguimiento:STRING, '
     'Id_Usuario:STRING, '
     'Valor_Obligacion:STRING, '
-	'Id_Docdeu:STRING'
+	'Id_Docdeu:STRING, '
+	'Nota:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -44,7 +45,8 @@ class formatearData(beam.DoFn):
 				'Fecha_Seguimiento':arrayCSV[2],
 				'Id_Usuario':arrayCSV[3],
 				'Valor_Obligacion':arrayCSV[4],
-				'Id_Docdeu':arrayCSV[5]
+				'Id_Docdeu':arrayCSV[5],
+				'Nota':arrayCSV[6]
 				}
 		
 		return [tupla]

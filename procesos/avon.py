@@ -267,9 +267,11 @@ def seguimiento():
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-avon')
     blob = bucket.blob("Seguimiento/Avon_inf_seg_" + ".csv")
+    # time.sleep(600)
     # Eliminar el archivo en la variable
     blob.delete()
-    conn.close()
+    # time.sleep(30)
+
     # return jsonify(flowAnswer), 200
     return "X" + "flowAnswer" 
    

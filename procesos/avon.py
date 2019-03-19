@@ -182,11 +182,11 @@ def prejuridico():
         except:
             print("no se pudo eliminar porque no existe una tabla llamada asi")
 
-        time.sleep(10)
+        time.sleep(20)
         
         flowAnswer = avon_prejuridico_beam.run()
 
-        time.sleep(10)
+        time.sleep(600)
     # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
         storage_client = storage.Client()
         bucket = storage_client.get_bucket('ct-avon')
@@ -259,19 +259,18 @@ def seguimiento():
 
     #Primero eliminamos todos los registros que contengan esa fecha
     
-
+    time.sleep(60)
 
     flowAnswer = avon_seguimiento_beam.run()
 
+    time.sleep(600)
     # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-avon')
     blob = bucket.blob("Seguimiento/Avon_inf_seg_" + ".csv")
-    # time.sleep(600)
     # Eliminar el archivo en la variable
     blob.delete()
-    # time.sleep(30)
-
+    
     # return jsonify(flowAnswer), 200
     return "X" + "flowAnswer" 
    

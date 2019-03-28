@@ -622,6 +622,7 @@ def bridge6():
 # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -641,9 +642,8 @@ def bridge6():
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
-    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
-    conn.execute_query("SELECT * FROM " + TABLE_DB)
-    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+    # Realizamos la consulta de los datos en MSSQL
+    conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE SUBSTRING(Sem,5,1) = '" + week + "'")
     
     cloud_storage_rows = ""
     # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
@@ -696,8 +696,8 @@ def bridge6():
     bucket = storage_client.get_bucket('ct-bridge')
     blob = bucket.blob(filename)
 
-    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    time.sleep(float(timer))
     # Eliminar el archivo en la variable
-    # blob.delete()
+    blob.delete()
     conn.close()
     return TABLE_DB + flowAnswer    

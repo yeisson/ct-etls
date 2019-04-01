@@ -700,4 +700,4 @@ def bridge6():
     # Eliminar el archivo en la variable
     blob.delete()
     conn.close()
-    return TABLE_DB + flowAnswer    
+    return TABLE_DB + flowAnswer

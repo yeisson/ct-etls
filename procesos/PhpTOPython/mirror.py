@@ -35,4 +35,4 @@ def delete():
     sub_producto = request.args.get('sub_producto')
 
 
-    return " Esta informacion corresponde a python: id = "   + " Producto = " + producto + " Sub Producto = " + sub_producto
+    return " Esta informacion corresponde a python: id = "  + id_cliente + " Producto = " + producto + " Sub Producto = " + sub_producto

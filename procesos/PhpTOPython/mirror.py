@@ -40,5 +40,10 @@ def delete():
     query_job = client.query(deleteQuery)
     query_job.result()
 
+    print("Esta informacion proviente de PYTHON")
+    print(id_cliente)
+    print(producto)
+    print(sub_producto)
+
     print("Proceso de eliminacion Completado")
     return "Proceso de eliminacion Completado"

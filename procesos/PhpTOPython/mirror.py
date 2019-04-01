@@ -33,15 +33,10 @@ def delete():
     id_cliente = request.args.get('id_cliente')
     producto = request.args.get('producto')
     sub_producto = request.args.get('sub_producto')
-
-
-    try:
-        deleteQuery = "DELETE FROM `contento-bi.Contento.Jerarquias_Metas` WHERE id_cliente = " + id_cliente + " AND producto = " + producto + " AND sub_producto = "  + sub_producto
-        client = bigquery.Client()
-        query_job = client.query(deleteQuery)
-        query_job.result()
-    except:
-        print("no se pudo eliminar")
-
+    
+    deleteQuery = "DELETE FROM `contento-bi.Contento.Jerarquias_Metas` WHERE id_cliente = '" + id_cliente + "' AND producto = '" + producto + "' AND sub_producto = '"  + sub_producto + "'"
+    client = bigquery.Client()
+    query_job = client.query(deleteQuery)
+    query_job.result()
 
     return "A la F"

@@ -35,4 +35,4 @@ def delete():
     sub_producto = request.args.get('sub_producto')
 
 
-    return id_cliente + " " + producto + " " + sub_producto
+    return "id = "  + id_cliente + " Producto = " + producto + " Sub Producto = " + sub_producto

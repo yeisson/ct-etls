@@ -34,8 +34,5 @@ def delete():
     producto = request.args.get('producto')
     sub_producto = request.args.get('sub_producto')
 
-    print(id_cliente)
-    print(producto)
-    print(sub_producto)
 
-    return "listo"
+    return id_cliente + " " + producto + " " + sub_producto

@@ -29,6 +29,7 @@ from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
 
 from procesos.Bridge.bridge import bridge_api
+from procesos.PhpTOPython.mirror import mirror_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -50,6 +51,7 @@ app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
+app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

@@ -114,7 +114,7 @@ def prejuridico():
     TABLE_DB = "dbo.Tb_Docdeu"
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')
-    # Fecha = "2018-12-20"
+    # Fecha = "2019-03-21"
     filename = "prejuridico/Avon_inf_prej_" + FECHA_CARGUE +  ".csv"
     Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
     storage_client = storage.Client()
@@ -127,8 +127,8 @@ def prejuridico():
     try:
         # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha = " + "CAST('"+ Fecha + "'AS DATE)")
 
-        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = CAST('2019-02-01' AS DATE)")
-        conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
+        conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = CAST('2019-03-21' AS DATE)")
+        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
 
         cloud_storage_rows = ""
         # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
@@ -169,13 +169,14 @@ def prejuridico():
             cloud_storage_rows += text_row
         conn.close()
         
-        # file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename,"a")
-        # file.close()
-        # blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename)
+        file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename,"a")
+        file.close()
+        blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Avon/"+filename)
         gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
         try:
             deleteQuery = "DELETE FROM `contento-bi.avon.prejuridico` where CAST(Fecha AS STRING) = " + "CAST('"+ Fecha + "'AS STRING)"
+            # deleteQuery = "DELETE FROM `contento-bi.avon.seguimiento` WHERE CAST(SUBSTR(Fecha_Factura,0,10) AS DATE) = CURRENT_DATE()"
             client = bigquery.Client()
             query_job = client.query(deleteQuery)
             query_job.result()
@@ -196,7 +197,7 @@ def prejuridico():
         # return "R, " + 'flowAnswer'
     except IOError:
         dIO =  "No se han cargado archivos el dia de hoy"
-        # return dIO
+    #     # return dIO
     return "R, " + 'flowAnswer'
 
 ############################################################################################
@@ -216,18 +217,18 @@ def seguimiento():
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
     conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu, Nota FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) = CAST(GETDATE() as DATE) ')
-    # conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu, Nota FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) >= CAST(' + "'2019-02-01' as DATE) ")
+    # conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu, Nota FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) = CAST(' + "'2019-01-30' as DATE) ")
 
     cloud_storage_rows = ""
 
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    # # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
     for row in conn:
         NOTA = str(row['Nota']).replace('\r', '').replace('\n', '')
         
         text_row =  ""
         text_row += str(row['Id_Gestion']).encode('utf-8') + "|"
         text_row += str(row['Id_Causal']).encode('utf-8') + "|"
-        text_row += str(row['Fecha_Seguimiento']).encode('utf-8') + "|"
+        text_row += str(row['Fecha_Seguimiento' ]).encode('utf-8') + "|"
         text_row += row['Id_Usuario'].encode('utf-8') + "|"
         text_row += str(row['Valor_Obligacion']).encode('utf-8') + "|"
         text_row += str(row['Id_Docdeu']).encode('utf-8') + "|"
@@ -246,7 +247,7 @@ def seguimiento():
     conn.close()
 
     filename = "Seguimiento/Avon_inf_seg_" + ".csv"
-    #Finalizada la carga en local creamos un Bucket con los datos
+    # #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-avon")
 
     try:
@@ -257,20 +258,20 @@ def seguimiento():
     except:
         print("no se pudo eliminar")
 
-    #Primero eliminamos todos los registros que contengan esa fecha
+    # #Primero eliminamos todos los registros que contengan esa fecha
     
-    time.sleep(60)
+    # # time.sleep(60)
 
     flowAnswer = avon_seguimiento_beam.run()
 
-    time.sleep(600)
-    # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    # # time.sleep(600)
+    # # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-avon')
     blob = bucket.blob("Seguimiento/Avon_inf_seg_" + ".csv")
     # Eliminar el archivo en la variable
     blob.delete()
     
-    # return jsonify(flowAnswer), 200
+    # # return jsonify(flowAnswer), 200
     return "X" + "flowAnswer" 
    

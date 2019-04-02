@@ -26,11 +26,9 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
 	'Id_Gestion:STRING, '
-	'Id_Casual:STRING, '
 	'Fecha_Seguimiento:STRING, '
     'Id_Usuario:STRING, '
-    'Id_Docdeu:STRING, '
-	'Id_Abogado:STRING'
+    'Id_Docdeu:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -40,11 +38,9 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split('|')
 
 		tupla= {'Id_Gestion':arrayCSV[0],
-				'Id_Casual':arrayCSV[1],
-				'Fecha_Seguimiento':arrayCSV[2],
-				'Id_Usuario':arrayCSV[3],
-				'Id_Docdeu':arrayCSV[4],
-				'Id_Abogado':arrayCSV[5]
+				'Fecha_Seguimiento':arrayCSV[1],
+				'Id_Usuario':arrayCSV[2],
+				'Id_Docdeu':arrayCSV[3]
 				}
 
 		return [tupla]

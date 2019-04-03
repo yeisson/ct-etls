@@ -15,7 +15,7 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 @linead_api.route("/archivos_seguimiento_linead")
 def archivos_Seguimiento_linead():
 
-   response = {}
+    response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False

@@ -95,7 +95,7 @@ def run(archivo):
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
-	return ("Corrio Full HD")
+	return ("El proceso de cargue a bigquery fue ejecutado con exito")
 
 
 

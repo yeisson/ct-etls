@@ -82,14 +82,12 @@ def load():
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             
-            # mensaje = bancolombia_castigada_seguimiento_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
-            # if mensaje == "Corrio Full HD":
-            #     move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Seguimiento/Procesados/"+archivo)
-            #     response["code"] = 200
-            #     response["description"] = "Se realizo la peticion Full HD"
-            #     response["status"] = True
+            mensaje = PhpTOPython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
+            if mensaje == "Corrio Full HD":
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
 
     return jsonify(response), response["code"]
-    # return "Corriendo : " + mensaje
 
     

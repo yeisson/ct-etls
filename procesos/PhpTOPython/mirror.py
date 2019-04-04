@@ -11,6 +11,7 @@ import time
 import socket
 import _mssql
 import datetime
+import glob
 
 # coding=utf-8
 
@@ -60,13 +61,12 @@ def delete():
 def load():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
-    # ruta = request.args.get('mi_archivo')
+    ruta = request.args.get('mi_archivo') # Recibe con esto / 
+  
+    r = os.listdir(ruta)
     
-    cwd = os.getcwd()
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    return dir_path
-
-    # "/var/gunicorn/contento-etls/procesos/PhpTOPython"
+    return str(r)
+    
 
 
     # response = {}

@@ -82,7 +82,7 @@ def load():
             mensaje = PhpTOPython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
             if mensaje == "El proceso de cargue a bigquery fue ejecutado con exito":
                 response["code"] = 200
-                response["description"] = "Se realizo la peticion Full HD"
+                response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"
                 response["status"] = True
 
     return jsonify(response), response["code"]

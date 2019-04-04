@@ -4,7 +4,7 @@ from flask import request
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
-# import dataflow_pipeline.bridge.phptopython_beam as phptopython_beam
+import dataflow_pipeline.bridge.phptopython_beam as phptopython_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -79,7 +79,7 @@ def load():
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             
-            mensaje = dataflow_pipeline.bridge.phptopython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
+            mensaje = phptopython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
             if mensaje == "El proceso de cargue a bigquery fue ejecutado con exito":
                 response["code"] = 200
                 response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"

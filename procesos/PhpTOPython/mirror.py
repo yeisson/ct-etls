@@ -11,7 +11,6 @@ import time
 import socket
 import _mssql
 import datetime
-import glob
 
 # coding=utf-8
 

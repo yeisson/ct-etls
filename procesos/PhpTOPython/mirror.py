@@ -61,6 +61,7 @@ def load():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
     # ruta = request.args.get('mi_archivo')
+    
     cwd = os.getcwd()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     return dir_path

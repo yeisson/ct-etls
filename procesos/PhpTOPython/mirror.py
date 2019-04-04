@@ -4,7 +4,7 @@ from flask import request
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
-import dataflow_pipeline.bridge.bridge_beam as bridge_beam
+import dataflow_pipeline.bridge.PhpTOPython_beam as PhpTOPython_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -16,9 +16,6 @@ import glob
 # coding=utf-8
 
 mirror_api = Blueprint('mirror_api', __name__)
-fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-
-
 
 #####################################################################################################################################
 #####################################################################################################################################

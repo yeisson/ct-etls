@@ -62,8 +62,34 @@ def load():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
     url = request.args.get('mi_archivo') # Recibe con esto / 
-  
-    r = os.listdir(url)
 
-    return str(r)
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = url
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bridge')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('Uploads_php/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            
+            # mensaje = bancolombia_castigada_seguimiento_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
+            # if mensaje == "Corrio Full HD":
+            #     move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Seguimiento/Procesados/"+archivo)
+            #     response["code"] = 200
+            #     response["description"] = "Se realizo la peticion Full HD"
+            #     response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje
+
     

@@ -1,5 +1,4 @@
 from __future__ import print_function, absolute_import
-
 import logging
 import re
 import json
@@ -7,11 +6,10 @@ import requests
 import uuid
 import time
 import os
+import socket
 import argparse
 import uuid
 import datetime
-import socket
-
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText

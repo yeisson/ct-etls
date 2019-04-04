@@ -4,7 +4,7 @@ from flask import request
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
-import dataflow_pipeline.bridge.phptopython_beam as phptopython_beam
+import dataflow_pipeline.phptopython.phptopython_beam as phptopython_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time

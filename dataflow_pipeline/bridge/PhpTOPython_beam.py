@@ -41,13 +41,8 @@ TABLE_SCHEMA = (
 )
 # ?
 class formatearData(beam.DoFn):
-
-	def __init__(self, mifecha):
-		super(formatearData, self).__init__()
-		self.mifecha = mifecha
 	
 	def process(self, element):
-		# print(element)
 		arrayCSV = element.split(';')
 
 		tupla= {'id_cliente': arrayCSV[0],

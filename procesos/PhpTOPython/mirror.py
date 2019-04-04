@@ -61,48 +61,9 @@ def delete():
 def load():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
-    ruta = request.args.get('mi_archivo') # Recibe con esto / 
+    url = request.args.get('mi_archivo') # Recibe con esto / 
   
-    r = os.listdir(ruta)
-    
+    r = os.listdir(url)
+
     return str(r)
     
-
-
-    # response = {}
-    # response["code"] = 400
-    # response["description"] = "No se encontraron ficheros"
-    # response["status"] = False
-
-    # local_route = fileserver_baseroute + "/" + ruta
-    # archivos = os.listdir(local_route)
-    # for archivo in archivos:
-    #     if archivo.endswith(".csv"):
-    #         mifecha = archivo[20:28]
-
-    #         storage_client = storage.Client()
-    #         bucket = storage_client.get_bucket('ct-bancolombia')
-
-    #         # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-    #         blob = bucket.blob('info-seguimiento/' + archivo)
-    #         blob.upload_from_filename(local_route + archivo)
-
-    #         # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-    #         deleteQuery = "DELETE FROM `contento-bi.bancolombia_admin.seguimiento` WHERE fecha = '" + mifecha + "'"
-
-    #         #Primero eliminamos todos los registros que contengan esa fecha
-    #         client = bigquery.Client()
-    #         query_job = client.query(deleteQuery)
-
-    #         #result = query_job.result()
-    #         query_job.result() # Corremos el job de eliminacion de datos de BigQuery
-
-    #         # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-    #         mensaje = bancolombia_seguimiento_beam.run('gs://ct-bancolombia/info-seguimiento/' + archivo, mifecha)
-    #         if mensaje == "Corrio Full HD":
-    #             move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Seguimiento/Procesados/"+archivo)
-    #             response["code"] = 200
-    #             response["description"] = "Se realizo la peticion Full HD"
-    #             response["status"] = True
-
-    # return jsonify(response), response["code"]

@@ -26,15 +26,15 @@ TABLE_SCHEMA = (
 	'sub_producto:STRING,'
 	'id_colaborador:STRING,'
 	'nombre_colaborador:STRING,'
+	'id_grabador:STRING,'
 	'id_lider:STRING,'
 	'nombre_lider:STRING,'
 	'id_ejecutivo:STRING,'
 	'nombre_ejecutivo:STRING,'
 	'id_gerente:STRING,'
 	'nombre_gerente:STRING,'
-	'METAxHora:STRING,'
-	'estado:STRING,'
-	'Ciudad:STRING'
+	'META:STRING,'
+	'ciudad:STRING'
 )
 # ?
 class formatearData(beam.DoFn):
@@ -47,15 +47,15 @@ class formatearData(beam.DoFn):
 				'sub_producto': arrayCSV[2],
 				'id_colaborador': arrayCSV[3],
 				'nombre_colaborador': arrayCSV[4],
-				'id_lider': arrayCSV[5],
-				'nombre_lider': arrayCSV[6],
-				'id_ejecutivo': arrayCSV[7],
-				'nombre_ejecutivo': arrayCSV[8],
-				'id_gerente': arrayCSV[9],
-				'nombre_gerente': arrayCSV[10],
-				'METAxHORA': arrayCSV[11],
-				'estado': arrayCSV[12],
-				'Ciudad': arrayCSV[13]
+				'id_grabador': arrayCSV[5],
+				'id_lider': arrayCSV[6],
+				'nombre_lider': arrayCSV[7],
+				'id_ejecutivo': arrayCSV[8],
+				'nombre_ejecutivo': arrayCSV[9],
+				'id_gerente': arrayCSV[10],
+				'nombre_gerente': arrayCSV[11],
+				'META': arrayCSV[12],
+				'ciudad': arrayCSV[13]
 				}
 		
 		return [tupla]

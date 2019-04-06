@@ -10,6 +10,11 @@ import dataflow_pipeline.bridge.bridge_beam3 as bridge_beam3
 import dataflow_pipeline.bridge.bridge_beam4 as bridge_beam4
 import dataflow_pipeline.bridge.bridge_beam5 as bridge_beam5
 import dataflow_pipeline.bridge.bridge_beam6 as bridge_beam6
+import dataflow_pipeline.bridge.bridge_beam7 as bridge_beam7
+import dataflow_pipeline.bridge.bridge_beam8 as bridge_beam8
+import dataflow_pipeline.bridge.bridge_beam9 as bridge_beam9
+import dataflow_pipeline.bridge.bridge_beam10 as bridge_beam10
+import dataflow_pipeline.bridge.bridge_beam11 as bridge_beam11
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -23,7 +28,6 @@ bridge_api = Blueprint('bridge_api', __name__)
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 
-
 #####################################################################################################################################
 ##################################################### BD_CONSOLIDADO ################################################################
 #####################################################################################################################################
@@ -34,9 +38,13 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 @bridge_api.route("/bridge", methods=['GET'])
 def bridge():
 
-#Parametros GET para modificar la consulta segun los parametros entregados
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -52,16 +60,15 @@ def bridge():
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
 
-
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query("SELECT * FROM " + TABLE_DB)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-    
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row['Consecutivo Documento Deudor'].encode('utf-8') is None else row['Consecutivo Documento Deudor'].encode('utf-8') + "|"
@@ -183,12 +190,14 @@ def bridge():
 
 @bridge_api.route("/bridge2", methods=['GET'])
 def bridge2():
+
     import sys
     reload(sys)
     sys.setdefaultencoding('utf8')
-# Parametros GET para modificar la consulta segun los parametros entregados
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -204,16 +213,15 @@ def bridge2():
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
 
-
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query("SELECT * FROM " + TABLE_DB)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-    
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row['Consecutivo Documento Deudor'].encode('utf-8') is None else row['Consecutivo Documento Deudor'].encode('utf-8') + "|"
@@ -317,12 +325,14 @@ def bridge2():
 
 @bridge_api.route("/bridge3", methods=['GET'])
 def bridge3():
+
     import sys
     reload(sys)
     sys.setdefaultencoding('utf8')
-# Parametros GET para modificar la consulta segun los parametros entregados
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -344,9 +354,9 @@ def bridge3():
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query("SELECT * FROM " + TABLE_DB)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-    
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row['Nit'].encode('utf-8') is None else row['Nit'].encode('utf-8') + "|"
@@ -394,12 +404,14 @@ def bridge3():
 
 @bridge_api.route("/bridge4", methods=['GET'])
 def bridge4():
+    
     import sys
     reload(sys)
     sys.setdefaultencoding('utf8')
-# Parametros GET para modificar la consulta segun los parametros entregados
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -415,17 +427,15 @@ def bridge4():
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
 
-
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query("SELECT * FROM " + TABLE_DB)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-    
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de 
-    # linea y punto y comas inmersos
+
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row[0].encode('utf-8') is None else row[0].encode('utf-8') + "|"
@@ -464,12 +474,14 @@ def bridge4():
 
 @bridge_api.route("/bridge5", methods=['GET'])
 def bridge5():
+    
     import sys
     reload(sys)
     sys.setdefaultencoding('utf8')
-# Parametros GET para modificar la consulta segun los parametros entregados
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
+    week = request.args.get('sem')
     if timer is None:
         timer = 600
     elif timer == "":
@@ -485,16 +497,15 @@ def bridge5():
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
 
-
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
     conn.execute_query("SELECT * FROM " + TABLE_DB)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
-    
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if row['Nit'].encode('utf-8') is None else row['Nit'].encode('utf-8') + "|"
@@ -616,10 +627,11 @@ def bridge5():
 
 @bridge_api.route("/bridge6", methods=['GET'])
 def bridge6():
+    
     import sys
     reload(sys)
     sys.setdefaultencoding('utf8')
-# Parametros GET para modificar la consulta segun los parametros entregados
+    # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
     week = request.args.get('sem')
@@ -638,15 +650,15 @@ def bridge6():
     FECHA_CARGUE = str(datetime.date.today())
     Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
 
-
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
-    # Realizamos la consulta de los datos en MSSQL
-    conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE SUBSTRING(Sem,5,1) = '" + week + "'")
-    
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
     cloud_storage_rows = ""
-    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+
     for row in conn:
         text_row =  ""
         text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
@@ -701,3 +713,358 @@ def bridge6():
     blob.delete()
     conn.close()
     return TABLE_DB + flowAnswer
+
+
+
+
+#####################################################################################################################################
+#################################################### MAESTRAS BD_CRUCE ##############################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge_maestra1", methods=['GET'])
+def maestra1():
+    
+
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+    timer = request.args.get('time')
+    week = request.args.get('sem')
+    if timer is None:
+        timer = 600
+    elif timer == "":
+        timer = 600
+    else: 
+        timer
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
+    cloud_storage_rows = ""    
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_" + TABLE_DB + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam7.run(table,TABLE_DB)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    
+    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + "flowAnswer"
+
+
+#####################################################################################################################################
+#################################################### MAESTRAS CODS ##################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge_maestra2", methods=['GET'])
+def maestra2():
+    
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+    timer = request.args.get('time')
+    week = request.args.get('sem')
+    if timer is None:
+        timer = 600
+    elif timer == "":
+        timer = 600
+    else: 
+        timer
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
+    cloud_storage_rows = ""
+    
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
+        text_row += '' + "|" if row[1].encode('utf-8') is None else row[1].encode('utf-8') + "|"
+        text_row += '' + "|" if row[2].encode('utf-8') is None else row[2].encode('utf-8') + "|"
+        text_row += '' + "|" if row[3].encode('utf-8') is None else row[3].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row[4]).encode('utf-8') is None else str(row[4]).encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_" + TABLE_DB + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam8.run(table,TABLE_DB)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    
+    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + "flowAnswer"
+
+    
+
+#####################################################################################################################################
+#################################################### MAESTRAS CONTACTABILIDAD_HISTORICA ##################################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge_maestra3", methods=['GET'])
+def maestra3():
+    
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+    timer = request.args.get('time')
+    week = request.args.get('sem')
+    if timer is None:
+        timer = 600
+    elif timer == "":
+        timer = 600
+    else: 
+        timer
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
+    cloud_storage_rows = ""
+
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
+        text_row += '' + "|" if row[1].encode('utf-8') is None else row[1].encode('utf-8') + "|"
+        text_row += '' + "|" if row[2].encode('utf-8') is None else row[2].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row[3]).encode('utf-8') is None else str(row[3]).encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_" + TABLE_DB + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam9.run(table,TABLE_DB)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    
+    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + "flowAnswer"
+
+    
+    
+
+#####################################################################################################################################
+########################################## MAESTRAS CONTACTABILIDAD_HISTORICA_BEST ##################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge_maestra4", methods=['GET'])
+def maestra4():
+    
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+    timer = request.args.get('time')
+    week = request.args.get('sem')
+    if timer is None:
+        timer = 600
+    elif timer == "":
+        timer = 600
+    else: 
+        timer
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
+    cloud_storage_rows = ""
+
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
+        text_row += '' + "|" if row[1].encode('utf-8') is None else row[1].encode('utf-8') + "|"
+        text_row += '' + "|" if row[2].encode('utf-8') is None else row[2].encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_" + TABLE_DB + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam10.run(table,TABLE_DB)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    
+    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + "flowAnswer"
+    
+    
+    
+
+#####################################################################################################################################
+###################################################################### dias unicos ##################################################
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+@bridge_api.route("/bridge_maestra5", methods=['GET'])
+def maestra5():
+    
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    # Parametros GET para modificar la consulta segun los parametros entregados
+    table = request.args.get('bdmssql')
+    timer = request.args.get('time')
+    week = request.args.get('sem')
+    if timer is None:
+        timer = 600
+    elif timer == "":
+        timer = 600
+    else: 
+        timer
+
+    SERVER="192.168.20.63\DELTA"
+    USER="DP_USER"
+    PASSWORD="Contento2018"
+    DATABASE="Contactabilidad"
+    TABLE_DB = "dbo." + str(table)
+    FECHA_CARGUE = str(datetime.date.today())
+    Fecha = datetime.datetime.today().strftime('%Y-%m-%d')    
+
+    #Nos conectamos a la BD y obtenemos los registros
+    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+
+    # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
+    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
+
+    cloud_storage_rows = ""
+
+    # Debido a que los registros en esta tabla pueden tener saltos de linea y punto y comas inmersos
+    for row in conn:
+        text_row =  ""
+        text_row += '' + "|" if str(row[0]).encode('utf-8') is None else str(row[0]).encode('utf-8') + "|"
+        text_row += '' + "|" if row[1].encode('utf-8') is None else row[1].encode('utf-8') + "|"
+        text_row += "\n"
+
+        cloud_storage_rows += text_row
+
+    
+    filename = FECHA_CARGUE + "_" + TABLE_DB + ".csv"
+    gcscontroller.create_file(filename, cloud_storage_rows, "ct-bridge")
+
+    flowAnswer = bridge_beam11.run(table,TABLE_DB)
+
+# Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('ct-bridge')
+    blob = bucket.blob(filename)
+
+    
+    time.sleep(float(timer)) #1hora y 20 minutos para que cierre la conexion  de mssql
+    # Eliminar el archivo en la variable
+    # blob.delete()
+    conn.close()
+    return TABLE_DB + "flowAnswer"
+
+    

@@ -70,12 +70,29 @@ CODE_REPORT = "cbps_cdr" #[[[[[[[[[[[[[[[[[[***********************************]
 
 @cdr_api.route("/" + KEY_REPORT)  #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
+
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
     ext = ".csv"
     blob = bucket.blob(sub_path + fecha + ext)
+
+    dateini = request.args.get('dateini')
+    dateend = request.args.get('dateend')
+    GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
+    GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
+
+    if dateini is None:
+        dateini = GetDate1
+    else:
+        dateini = dateini + hour1
+
+    if dateend is None:
+        dateend = GetDate2
+    else:
+        dateend = dateend + hour2
+
 
     client = bigquery.Client()
     QUERY = (
@@ -96,7 +113,7 @@ def Ejecutar():
 
     file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
     for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
+        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
         if len(requests.get(url).content) < 40:
             continue
@@ -104,33 +121,33 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["id_call"])+'|'+
-                    str(rown["type_call"])+'|'+
+                    str(rown["id_call"].encode('utf-8'))+'|'+
+                    str(rown["type_call"].encode('utf-8'))+'|'+
                     str(rown["talk_time"])+'|'+
                     str(rown["id_agent"])+'|'+
-                    str(rown["agent_name"])+'|'+
+                    str(rown["agent_name"].encode('utf-8'))+'|'+
                     str(rown["agent_identification"])+'|'+
                     str(rown["skill"])+'|'+
                     str(rown["date"])+'|'+
                     str(rown["hour"])+'|'+
-                    str(rown["day_of_week"])+'|'+
-                    str(rown["typing_code"])+'|'+
-                    str(rown["descri_typing_code"])+'|'+
-                    str(rown["typing_code2"])+'|'+
-                    str(rown["descri_typing_code2"])+'|'+
-                    str(rown["hit"])+'|'+
+                    str(rown["day_of_week"].encode('utf-8'))+'|'+
+                    str(rown["typing_code"].encode('utf-8'))+'|'+
+                    str(rown["descri_typing_code"].encode('utf-8'))+'|'+
+                    str(rown["typing_code2"].encode('utf-8'))+'|'+
+                    str(rown["descri_typing_code2"].encode('utf-8'))+'|'+
+                    str(rown["hit"].encode('utf-8'))+'|'+
                     str(rown["telephone_destination"])+'|'+
                     str(rown["telephone_costs"])+'|'+
                     str(rown["telephone_number"])+'|'+
-                    str(rown["who_hangs_up"])+'|'+
+                    str(rown["who_hangs_up"].encode('utf-8'))+'|'+
                     str(rown["customer_identification"])+'|'+
                     str(rown["month"])+'|'+
-                    str(rown["screen_recording"])+'|'+
-                    str(rown["operation"])+'|'+
+                    str(rown["screen_recording"].encode('utf-8'))+'|'+
+                    str(rown["operation"].encode('utf-8'))+'|'+
                     str(rown["ring"])+'|'+
                     str(rown["abandon"])+'|'+
-                    str(row.id_cliente)+"|"+
-                    str(row.cartera) + "\n")
+                    str(row.id_cliente).encode('utf-8')+"|"+
+                    str(row.cartera).encode('utf-8') + "\n")
     
     file.close()
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)

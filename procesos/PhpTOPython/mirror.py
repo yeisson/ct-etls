@@ -84,6 +84,8 @@ def load():
                 response["code"] = 200
                 response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"
                 response["status"] = True
+            os.remove()
+
 
     return jsonify(response), response["code"]
 

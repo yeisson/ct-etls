@@ -70,12 +70,29 @@ CODE_REPORT = "cbps_survey" #[[[[[[[[[[[[[[[[[[*********************************
 
 @csat_api.route("/" + KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
+
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
     ext = ".csv"
     blob = bucket.blob(sub_path + fecha + ext)
+
+    dateini = request.args.get('dateini')
+    dateend = request.args.get('dateend')
+    GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
+    GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
+
+    if dateini is None:
+        dateini = GetDate1
+    else:
+        dateini = dateini + hour1
+
+    if dateend is None:
+        dateend = GetDate2
+    else:
+        dateend = dateend + hour2
+
 
     client = bigquery.Client()
     QUERY = (
@@ -96,7 +113,7 @@ def Ejecutar():
 
     file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
     for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
+        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
         if len(requests.get(url).content) < 40:
             continue
@@ -104,7 +121,7 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["operation"])+","+
+                    str(rown["operation"].encode('utf-8'))+","+
                     str(rown["id_agent"])+","+
                     str(rown["skill"])+","+
                     str(rown["date"])+","+
@@ -122,10 +139,10 @@ def Ejecutar():
                     str(rown["q09"])+","+
                     str(rown["q10"])+","+
                     str(rown["duration"])+","+
-                    str(rown["type_call"])+","+
-                    str(rown["result"])+","+
-                    str(row.id_cliente)+","+
-                    str(row.cartera) + "\n")
+                    str(rown["type_call"].encode('utf-8'))+","+
+                    str(rown["result"].encode('utf-8'))+","+
+                    str(row.id_cliente).encode('utf-8')+","+
+                    str(row.cartera).encode('utf-8') + "\n")
     
     file.close()
     blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)

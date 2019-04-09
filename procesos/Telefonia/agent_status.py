@@ -1,20 +1,3 @@
-####################################################################################################
-##                               REPORTE DE TELEFONIA = AGENT STATUS TIME                         ##
-####################################################################################################
-
-
-
-######################## INDICE ##############################
-
-# FILA.7..................... INDICE
-# FILA.18.................... LIBRERIAS
-# FILA.45.................... VARIABLES GLOBALES
-# FILA.67.................... CODIGO DE EJECUCION
-
-##############################################################
-
-
-########################### LIBRERIAS #####################################
 from flask import Blueprint
 from flask import jsonify
 from flask import request
@@ -34,12 +17,9 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
-import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam  #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-
-#############################################################################
-
 
 
 ########################### DEFINICION DE VARIABLES ###########################
@@ -59,10 +39,16 @@ if len(str(ayer.month)) == 1:
 else:
     mes = str(ayer.month)
 
+GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
+GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
+
 fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "agent_status" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "cbps_satustime" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
+ext = ".csv"
+ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
+
 
 ########################### CODIGO #####################################################################################
 
@@ -73,13 +59,10 @@ def Ejecutar():
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
-    ext = ".csv"
+    output = gcs_path + "/" + sub_path + fecha + ext
     blob = bucket.blob(sub_path + fecha + ext)
-
     dateini = request.args.get('dateini')
     dateend = request.args.get('dateend')
-    GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
-    GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
     if dateini is None:
         dateini = GetDate1
@@ -91,7 +74,6 @@ def Ejecutar():
     else:
         dateend = dateend + hour2
 
-
     client = bigquery.Client()
     QUERY = (
         'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial')
@@ -100,7 +82,7 @@ def Ejecutar():
     data = ""
     
     try:
-        os.remove("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext) #Eliminar de aries
+        os.remove(ruta_completa) #Eliminar de aries
     except: 
         print("Eliminado de aries")
     
@@ -109,7 +91,7 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
+    file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
@@ -141,12 +123,14 @@ def Ejecutar():
                     str(row.id_cliente)+";"+
                     row.cartera.encode('utf-8') + "\n")
 
+
     file.close()
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
+    blob.upload_from_filename(ruta_completa)
     time.sleep(10)
-    ejecutar = agent_status_beam.run() #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
+
 
 ########################################################################################################################

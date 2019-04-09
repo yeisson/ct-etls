@@ -1,27 +1,3 @@
-####################################################################################################
-####################################################################################################
-############################                                          ##############################
-############################ REPORTE BEAM DE TELEFONIA = CSAT         ##############################
-############################                                          ##############################
-####################################################################################################
-####################################################################################################
-
-
-
-######################## INDICE ##############################
-
-# FILA.11.................... INDICE
-# FILA.22.................... LIBRERIAS
-# FILA.49.................... VARIABLES GLOBALES
-# FILA.66.................... PARAMETROS DE LA TABLA EN BQ
-# FILA.83.................... PAR-DO
-# FILA.106................... CODIGO DE EJECUCION
-
-##############################################################
-
-
-########################### LIBRERIAS #########################################
-
 from __future__ import print_function, absolute_import
 import logging
 import re
@@ -43,31 +19,6 @@ from apache_beam.metrics.metric import MetricsFilter
 from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
-
-###############################################################################
-
-
-
-####################### VARIABLES GLOBALES ####################################
-
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
-if len(str(ayer.day)) == 1:
-    dia = "0" + str(ayer.day)
-else:
-    dia = ayer.day
-if len(str(ayer.month)) == 1:
-    mes = "0"+ str(ayer.month)
-else:
-    mes = ayer.month
-ano = ayer.year
-fecha = str(ano)+str(mes)+str(dia)
-ext = ".csv"
-KEY_REPORT = "csat"
-sub_path = KEY_REPORT + '/'
-fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-###############################################################################
-
-
 
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
@@ -95,8 +46,6 @@ TABLE_SCHEMA = (
 	'id_cliente:STRING,'
 	'cartera:STRING'
 )
-################################################################################
-
 
 ################################# PAR'DO #######################################
 
@@ -130,11 +79,9 @@ class formatearData(beam.DoFn):
 				}
 		return [tupla]
 
-################################################################################
-
-
 ############################ CODIGO DE EJECUCION ###################################
-def run():
+
+def run(output,KEY_REPORT):
 
 	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
@@ -146,14 +93,13 @@ def run():
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + sub_path + fecha + ext)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(output)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + sub_path + fecha + "REWORK",file_name_suffix='.csv',shard_name_template='')
-
+	
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
 		gcs_project + ":telefonia." + KEY_REPORT, 
 		schema=TABLE_SCHEMA, 
@@ -162,6 +108,3 @@ def run():
 
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
-
-
-################################################################################

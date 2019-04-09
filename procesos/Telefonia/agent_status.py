@@ -127,7 +127,6 @@ def Ejecutar():
     time.sleep(10)
     ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
-    file.close()
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 

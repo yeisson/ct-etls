@@ -21,8 +21,7 @@ import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[
 
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
-
-########################### DEFINICION DE VARIABLES ###########################
+#############################3 DEFINICION DE VARIABLES ###########################
 
 hoy = datetime.datetime.now()
 ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
@@ -124,11 +123,11 @@ def Ejecutar():
                     row.cartera.encode('utf-8') + "\n")
 
 
-    file.close()
     blob.upload_from_filename(ruta_completa)
     time.sleep(10)
     ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
+    file.close()
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 

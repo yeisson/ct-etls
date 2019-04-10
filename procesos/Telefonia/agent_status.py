@@ -90,7 +90,7 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    file = open(ruta_completa,"a")
+    file = open(ruta_completa,"w")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content

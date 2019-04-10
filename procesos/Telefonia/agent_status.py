@@ -100,26 +100,26 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    rown["operation"].encode('utf-8')+";"+
-                    str(rown["date"])+";"+
-                    str(rown["hour"])+";"+
-                    str(rown["id_agent"])+";"+
-                    str(rown["agent_identification"])+";"+
-                    rown["agent_name"].encode('utf-8')+";"+
-                    str(rown["CALLS"])+";"+
-                    str(rown["CALLS INBOUND"])+";"+
-                    str(rown["CALLS OUTBOUND"])+";"+
-                    str(rown["CALLS INTERNAL"])+";"+
-                    str(rown["READY TIME"])+";"+
-                    str(rown["INBOUND TIME"])+";"+
-                    str(rown["OUTBOUND TIME"])+";"+
-                    str(rown["NOT-READY TIME"])+";"+
-                    str(rown["RING TIME"])+";"+
-                    str(rown["LOGIN TIME"])+";"+
-                    str(rown["AHT"])+";"+
-                    rown["OCUPANCY"].encode('utf-8')+";"+
-                    str(rown["AUX TIME"])+";"+
-                    str(row.id_cliente)+";"+
+                    rown["operation"].encode('utf-8')+"|"+
+                    str(rown["date"])+"|"+
+                    str(rown["hour"])+"|"+
+                    str(rown["id_agent"])+"|"+
+                    str(rown["agent_identification"])+"|"+
+                    rown["agent_name"].encode('utf-8')+"|"+
+                    str(rown["CALLS"])+"|"+
+                    str(rown["CALLS INBOUND"])+"|"+
+                    str(rown["CALLS OUTBOUND"])+"|"+
+                    str(rown["CALLS INTERNAL"])+"|"+
+                    str(rown["READY TIME"])+"|"+
+                    str(rown["INBOUND TIME"])+"|"+
+                    str(rown["OUTBOUND TIME"])+"|"+
+                    str(rown["NOT-READY TIME"])+"|"+
+                    str(rown["RING TIME"])+"|"+
+                    str(rown["LOGIN TIME"])+"|"+
+                    str(rown["AHT"])+"|"+
+                    rown["OCUPANCY"].encode('utf-8')+"|"+
+                    str(rown["AUX TIME"])+"|"+
+                    str(row.id_cliente)+"|"+
                     row.cartera.encode('utf-8') + "\n")
 
 

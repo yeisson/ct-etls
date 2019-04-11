@@ -1231,7 +1231,7 @@ def maestra7():
         text_row += '' + "|" if row['Nombre Asesor'].encode('utf-8') is None else row['Nombre Asesor'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Producto'].encode('utf-8') is None else row['Producto'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Sede'].encode('utf-8') is None else row['Sede'].encode('utf-8') + "|"
-        text_row += '' + "|" if row['Fecha_CtaDia'].encode('utf-8') is None else row['Fecha_CtaDia'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row[29]).encode('utf-8') is None else str(row[29]).encode('utf-8') + "|"
         text_row += '' + "|" if row['DiaSem'].encode('utf-8') is None else row['DiaSem'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Sem'].encode('utf-8') is None else row['Sem'].encode('utf-8') + "|"
         text_row += "\n"

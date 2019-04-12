@@ -1350,7 +1350,14 @@ def maestra9():
     # Parametros GET para modificar la consulta segun los parametros entregados
     table = request.args.get('bdmssql')
     timer = request.args.get('time')
-    week = request.args.get('sem')
+    month = request.args.get('mes')
+    month1 = request.args.get('mes')
+
+    if month is None:
+        month = ''
+    else:
+        month = ' where MONTH("Fecha Gestion") = ' + str(month1)
+
     if timer is None:
         timer = 600
     elif timer == "":
@@ -1370,7 +1377,7 @@ def maestra9():
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
-    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    conn.execute_query("SELECT * FROM " + TABLE_DB + month)
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
 
     cloud_storage_rows = ""

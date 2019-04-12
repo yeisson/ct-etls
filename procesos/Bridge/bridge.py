@@ -658,7 +658,7 @@ def bridge6():
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
 
     # Insertamos los datos de la nueva consulta equivalentes al mismo dia de la anterior eliminacion
-    conn.execute_query("SELECT * FROM " + TABLE_DB)
+    conn.execute_query("SELECT * FROM " + TABLE_DB + " where sem = 'Sem "+str(week)+"'")
     # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha >= CAST('2018-12-20' AS DATE)")
 
     cloud_storage_rows = ""
@@ -670,8 +670,8 @@ def bridge6():
         text_row += '' + "|" if row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') is None else row['Desc Ultimo Codigo De Gestion Prejuridico'].encode('utf-8') + "|"
         text_row += '' + "|" if row['Grabador'].encode('utf-8') is None else row['Grabador'].encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Consdocdeu']).encode('utf-8') is None else str(row['Consdocdeu']).encode('utf-8') + "|"
-        text_row += '' + "|" if row['Contacto'].encode('utf-8') is None else row['Contacto'].encode('utf-8') + "|"
-        text_row += '' + "|" if row['Tipo Gest'].encode('utf-8') is None else row['Tipo Gest'].encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Contacto']).encode('utf-8') is None else str(row['Contacto']).encode('utf-8') + "|"
+        text_row += '' + "|" if str(row['Tipo Gest']).encode('utf-8') is None else str(row['Tipo Gest']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Prioridad']).encode('utf-8') is None else str(row['Prioridad']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Dias Mora']).encode('utf-8') is None else str(row['Dias Mora']).encode('utf-8') + "|"
         text_row += '' + "|" if str(row['Rango Mora']).encode('utf-8') is None else str(row['Rango Mora']).encode('utf-8') + "|"
@@ -717,7 +717,6 @@ def bridge6():
     blob.delete()
     conn.close()
     return TABLE_DB + flowAnswer
-
 
 
 

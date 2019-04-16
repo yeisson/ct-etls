@@ -48,7 +48,7 @@ TABLE_SCHEMA = (
 class formatearData(beam.DoFn):
 	
 	def process(self, element):
-		arrayCSV = element.split(',')
+		arrayCSV = element.split('|')
 		tupla= {
 				'operation': arrayCSV[0],
 				'id_call': arrayCSV[1],
@@ -66,8 +66,8 @@ class formatearData(beam.DoFn):
 				'skill_result': arrayCSV[13],
 				'ani': arrayCSV[14],
 				'dnis': arrayCSV[15],
-				'id_cliente': arrayCSV[20],
-				'cartera': arrayCSV[21]
+				'id_cliente': arrayCSV[16],
+				'cartera': arrayCSV[17]
 				}
 		return [tupla]
 

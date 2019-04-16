@@ -18,6 +18,7 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
 import dataflow_pipeline.telefonia.skill_detail_beam as skill_detail_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import sys
 
 skill_detail_api = Blueprint('skill_detail_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
@@ -54,7 +55,8 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 
 @skill_detail_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
-
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
@@ -117,7 +119,6 @@ def Ejecutar():
                     rown["skill_result"]+"|"+
                     str(rown["ani"])+"|"+
                     str(rown["dnis"])+"|"+
-                    row.ipdial_code.encode('utf-8') + "|" +
                     str(row.id_cliente).encode('utf-8') + "|" +
                     row.cartera.encode('utf-8') + "\n")
     

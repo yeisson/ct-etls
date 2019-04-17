@@ -23,8 +23,9 @@ agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[**
 
 #############################3 DEFINICION DE VARIABLES ###########################
 
+zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
 hoy = datetime.datetime.now()
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
+ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
 ano = str(hoy.year)
 hour1 = "060000"
 hour2 = "235959"
@@ -90,7 +91,7 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    file = open(ruta_completa,"w")
+    file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content

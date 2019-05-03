@@ -14,37 +14,48 @@ import requests
 import os
 import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
+from procesos.Telefonia.login_logout import login_logout_api
+from procesos.Telefonia.csat import csat_api
+from procesos.Telefonia.agent_status import agent_status_api
+from procesos.Telefonia.cdr import cdr_api
+from procesos.Telefonia.remover import remover_api
+from procesos.Telefonia.skill_detail import skill_detail_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
 from procesos.negociadores import negociadores_api
 from procesos.leonisa import leonisa_api
-from procesos.Telefonia.login_logout import login_logout_api
-from procesos.Telefonia.csat import csat_api
-from procesos.Telefonia.agent_status import agent_status_api
-from procesos.Telefonia.cdr import cdr_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
 from procesos.avalcreditos import avalcreditos_api
+
+from procesos.Bridge.bridge import bridge_api
+from procesos.PhpTOPython.mirror import mirror_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
 app = Flask(__name__, static_url_path='/')
 CORS(app)
 
-app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
-app.register_blueprint(avon_api, url_prefix='/avon')
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
 app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
+app.register_blueprint(remover_api, url_prefix='/telefonia')
+app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+
+app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
+app.register_blueprint(avon_api, url_prefix='/avon')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
 app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')
 app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
 app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
+
+app.register_blueprint(bridge_api, url_prefix='/bridge')
+app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

@@ -1,27 +1,3 @@
-####################################################################################################
-####################################################################################################
-############################                                          ##############################
-############################ REPORTE BEAM DE TELEFONIA = LOGIN-LOGOUT ##############################
-############################                                          ##############################
-####################################################################################################
-####################################################################################################
-
-
-
-######################## INDICE ##############################
-
-# FILA.11.................... INDICE
-# FILA.22.................... LIBRERIAS
-# FILA.49.................... VARIABLES GLOBALES
-# FILA.67.................... PARAMETROS DE LA TABLA EN BQ
-# FILA.96.................... PAR-DO
-# FILA.131................... CODIGO DE EJECUCION
-
-##############################################################
-
-
-########################### LIBRERIAS #########################################
-
 from __future__ import print_function, absolute_import
 import logging
 import re
@@ -44,40 +20,18 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-###############################################################################
-
-
-
-####################### VARIABLES GLOBALES ####################################
-
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
-if len(str(ayer.day)) == 1:
-    dia = "0" + str(ayer.day)
-else:
-    dia = ayer.day
-if len(str(ayer.month)) == 1:
-    mes = "0"+ str(ayer.month)
-else:
-    mes = ayer.month
-ano = ayer.year
-fecha = str(ano)+str(mes)+str(dia)
-# fecha = "20181204 - 20181231"
-###############################################################################
-
-
-
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
 TABLE_SCHEMA = (
 	'id_call:STRING,'
 	'type_call:STRING,'
-	'talk_time:INTEGER,'
+	'talk_time:STRING,'
 	'id_agent:STRING,'
 	'agent_name:STRING,'
 	'agent_identification:STRING,'
 	'skill:STRING,'
-	'date:DATETIME,'
-	'hour:INTEGER,'
+	'date:STRING,'
+	'hour:STRING,'
 	'day_of_week:STRING,'
 	'typing_code:STRING,'
 	'descri_typing_code:STRING,'
@@ -89,7 +43,7 @@ TABLE_SCHEMA = (
 	'telephone_number:STRING,'
 	'who_hangs_up:STRING,'
 	'customer_identification:STRING,'
-	'month:INTEGER,'
+	'month:STRING,'
 	'screen_recording:STRING,'
 	'operation:STRING,'
 	'ring:STRING,'
@@ -97,8 +51,6 @@ TABLE_SCHEMA = (
 	'id_cliente:STRING,'
 	'cartera:STRING'
 )
-################################################################################
-
 
 ################################# PAR'DO #######################################
 
@@ -137,13 +89,11 @@ class formatearData(beam.DoFn):
 				}
 		return [tupla]
 
-################################################################################
-
-
 ############################ CODIGO DE EJECUCION ###################################
-def run(data):
 
-	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
+def run(output,KEY_REPORT):
+
+	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -153,21 +103,18 @@ def run(data):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "15",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
     ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText("/media/BI_Archivos/GOOGLE/Telefonia/cdr.txt")
-	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("//192.168.20.87/BI_Archivos/GOOGLE/Telefonia/cdr.txt") #local debug
-	lines | 'Escribir en Archivo' >> WriteToText(gcs_path + "/cdr/" + fecha, file_name_suffix='.txt',shard_name_template='')
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(output)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
+	
 	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia.cdr", 
-		schema=TABLE_SCHEMA,
+		gcs_project + ":telefonia." + KEY_REPORT, 
+		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-		)
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+
 	jobObject = pipeline.run()
 	return ("Proceso de transformacion y cargue, completado")
-
-#################################################################################

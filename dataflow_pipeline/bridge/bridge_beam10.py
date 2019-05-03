@@ -1,5 +1,4 @@
 from __future__ import print_function, absolute_import
-
 import logging
 import re
 import json
@@ -7,11 +6,10 @@ import requests
 import uuid
 import time
 import os
+import socket
 import argparse
 import uuid
 import datetime
-import socket
-
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
@@ -22,60 +20,55 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-#coding: utf-8 
-
 TABLE_SCHEMA = (
-	'Id_Gestion:STRING, '
-	'Id_Casual:STRING, '
-	'Fecha_Seguimiento:STRING, '
-    'Id_Usuario:STRING, '
-    'Id_Docdeu:STRING, '
-	'Id_Abogado:STRING'
-)
+			'Nit:STRING,'
+			'Tipo_Contacto:STRING,'
+			'Mes:STRING'
+			)
 
 class formatearData(beam.DoFn):
-
+	
 	def process(self, element):
-		# print(element)
 		arrayCSV = element.split('|')
 
-		tupla= {'Id_Gestion':arrayCSV[0],
-				'Id_Casual':arrayCSV[1],
-				'Fecha_Seguimiento':arrayCSV[2],
-				'Id_Usuario':arrayCSV[3],
-				'Id_Docdeu':arrayCSV[4],
-				'Id_Abogado':arrayCSV[5]
+		tupla= {
+				'Nit': arrayCSV[0],
+				'Tipo_Contacto': arrayCSV[1],
+				'Mes': arrayCSV[2]
 				}
-
+		
 		return [tupla]
-	
-def run():
 
-	gcs_path = "gs://ct-leonisa" #Definicion de la raiz del bucket
+############################ CODIGO DE EJECUCION ###################################
+def run(table, TABLE_DB):
+
+	gcs_path = 'gs://ct-bridge' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
+	FECHA_CARGUE = str(datetime.date.today())
 
-	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
-	pipeline =  beam.Pipeline(runner=mi_runer, argv=[
+	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
+	pipeline =  beam.Pipeline(runner=mi_runner, argv=[
         "--project", gcs_project,
         "--staging_location", ("%s/dataflow_files/staging_location" % gcs_path),
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-	])
+    ])
 
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/Seguimiento/Leonisa_inf_seg_" + ".csv")
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/" + FECHA_CARGUE + "_" + TABLE_DB +".csv")
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Seguimiento/Avon_inf_seg_2",file_name_suffix='.csv',shard_name_template='')
-	
-	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
-        gcs_project + ":leonisa.seguimiento",
-        schema=TABLE_SCHEMA,
-        create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-        write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/" + "REWORK",file_name_suffix='.csv',shard_name_template='')
+
+	transformed | 'Escritura a BigQuery Bridge' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Contactabilidad."+ table, 
+		schema=TABLE_SCHEMA, 
+		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
-	# jobID = jobObject.job_id()
+	return ("Proceso de transformacion y cargue, completado")
 
-	return ("Corrio sin problema")
+
+################################################################################

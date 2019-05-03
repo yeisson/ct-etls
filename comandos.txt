@@ -31,8 +31,8 @@ windows cmd instalacion desde cero:
 5) correr flask:
 
 set FLASK_APP=main.py
- set FLASK_DEBUG=1
- python -m flask run
+set FLASK_DEBUG=1
+python -m flask run
 
 
  windows cmd cuando ya se tenga env:

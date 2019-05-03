@@ -26,6 +26,7 @@ from procesos.Telefonia.cdr import cdr_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
+from procesos.avalcreditos import avalcreditos_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -43,6 +44,7 @@ app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')
 app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
+app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

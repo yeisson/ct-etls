@@ -29,6 +29,11 @@ from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
 from procesos.avalcreditos import avalcreditos_api
+from procesos.fanalca_agendamientos import fanalca_agendamientos_api
+from procesos.avon_2 import avon_2_api
+from procesos.agaval import agaval_api
+from procesos.crediorbe import crediorbe_api
+from procesos.adeinco_juridico import adeinco_juridico_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -53,6 +58,12 @@ app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_casti
 app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
 app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
+app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamientos')
+app.register_blueprint(avon_2_api, url_prefix='/avon_2')
+app.register_blueprint(agaval_api, url_prefix='/agaval')
+app.register_blueprint(crediorbe_api, url_prefix='/crediorbe')
+app.register_blueprint(adeinco_juridico_api, url_prefix='/adeinco_juridico')
+
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

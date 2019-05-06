@@ -127,7 +127,7 @@ def prejuridico():
     try:
         # conn.execute_query("SELECT * FROM " + TABLE_DB + " WHERE Fecha = " + "CAST('"+ Fecha + "'AS DATE)")
 
-        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = CAST('2019-02-01' AS DATE)")
+        # conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha >= CAST('2019-05-04' AS DATE)")
         conn.execute_query("SELECT Id_Docdeu,A.Nit,Factura,Fecha_Factura,Campana,Ano,Zona,Unidad,Seccion,[Past Due],Ultim_Num_InVoice,Valor_Factura,Saldo,N_Vencidas,Num_Campanas,estado,Valor_PD1,CT,A.Fecha,A.Usuario,asignacion,Ciclo,Vlr_redimir,dia,Dia_Estrategia,Origen,marca,Fecha_Visita,Nombres,Apellidos,Territorio,[Est.Disp] FROM " + TABLE_DB +" A left join avon.dbo.Tb_Nit B on A.Nit = B.Nit WHERE A.Fecha = " + "CAST('"+ Fecha + "'AS DATE)")  
 
         cloud_storage_rows = ""
@@ -182,11 +182,11 @@ def prejuridico():
         except:
             print("no se pudo eliminar porque no existe una tabla llamada asi")
 
-        time.sleep(20)
+        # time.sleep(20)
         
         flowAnswer = avon_prejuridico_beam.run()
 
-        time.sleep(600)
+        # time.sleep(600)
     # Poner la ruta en storage cloud en una variable importada para posteriormente eliminarla 
         storage_client = storage.Client()
         bucket = storage_client.get_bucket('ct-avon')
@@ -232,6 +232,7 @@ def seguimiento():
         text_row += str(row['Valor_Obligacion']).encode('utf-8') + "|"
         text_row += str(row['Id_Docdeu']).encode('utf-8') + "|"
 
+    #by rave
         if NOTA is None:
             text_row += "" + "|"
         if NOTA.find("|") >= 0:

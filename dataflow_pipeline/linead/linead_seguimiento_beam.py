@@ -25,28 +25,21 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'Cedula_ciudadania:STRING, '
-	'Apellidos:STRING, '
-	'Nombres:STRING, '
-	'Numero_Obligacion:STRING, '
-	'Zona:STRING, '
-	'Estado:STRING, '
-	'Id_Gestion:STRING, '
-	'nombre_gestion:STRING, '
-	'Id_causal:STRING, '
-	'nombre_causal:STRING, '
-	'Fecha_Seguimiento:STRING, '
-	'Id_Usuario:STRING, '
-	'Id_Abogado:STRING '
+	'nit:STRING, '
+	'codigo_de_gestion:STRING, '
+	'fecha_gestion:STRING, '
+	'fecha_compromiso:STRING, '
+	'gestor:STRING, '
+	'valor_compromiso:TIME, '
+	'codigo_empresa:STRING '
 )
-
 # ?
 class formatearData(beam.DoFn):
 
 	def __init__(self, mifecha):
 		super(formatearData, self).__init__()
 		self.mifecha = mifecha
-
+	
 	def process(self, element):
 		# print(element)
 		arrayCSV = element.split('|')
@@ -54,27 +47,23 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'Cedula_ciudadania': arrayCSV[0],
-				'Apellidos': arrayCSV[1],
-				'Nombres': arrayCSV[2],
-				'Numero_Obligacion': arrayCSV[3],
-				'Zona': arrayCSV[4],
-				'Estado': arrayCSV[5],
-				'Id_Gestion': arrayCSV[6],
-				'nombre_gestion': arrayCSV[7],
-				'Id_causal': arrayCSV[8],
-				'nombre_causal': arrayCSV[9],
-				'Fecha_Seguimiento': arrayCSV[10],
-				'Id_Usuario': arrayCSV[11],
-				'Id_Abogado': arrayCSV[12]
+				'Nit': arrayCSV[0],
+				'codigo_de_gestion': arrayCSV[1],
+				'fecha_gestion': arrayCSV[2],
+				'fecha_compromiso': arrayCSV[3],
+				'gestor': arrayCSV[4],
+				'valor_compromiso': arrayCSV[5],
+				'codigo_empresa': arrayCSV[6]
 
 				}
-
+		
 		return [tupla]
+
+
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-leonisa" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-linead" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -90,8 +79,8 @@ def run(archivo, mifecha):
         # "--autoscaling_algorithm", "NONE"		
 	])
 	
-	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-leonisa/info-segumiento/LEONISA_INF_SEG_20181206 1100.csv", skip_header_lines=1)
-	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-leonisa/info-segumiento/LEONISA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
+	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181206 1100.csv", skip_header_lines=1)
+	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
@@ -99,10 +88,10 @@ def run(archivo, mifecha):
 	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
 
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
-	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-leonisa/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
+	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery linea_directa' >> beam.io.WriteToBigQuery(
-		gcs_project + ":leonisa.seguimiento", 
+		gcs_project + ":linea_directa.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
@@ -115,4 +104,6 @@ def run(archivo, mifecha):
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
+
+
 

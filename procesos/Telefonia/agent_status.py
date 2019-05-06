@@ -1,22 +1,6 @@
-####################################################################################################
-##                               REPORTE DE TELEFONIA = AGENT STATUS TIME                         ##
-####################################################################################################
-
-
-
-######################## INDICE ##############################
-
-# FILA.7..................... INDICE
-# FILA.18.................... LIBRERIAS
-# FILA.45.................... VARIABLES GLOBALES
-# FILA.67.................... CODIGO DE EJECUCION
-
-##############################################################
-
-
-########################### LIBRERIAS #####################################
 from flask import Blueprint
 from flask import jsonify
+from flask import request
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 from google.cloud import datastore
@@ -33,18 +17,15 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
-import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam  #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
-#############################################################################
+#############################3 DEFINICION DE VARIABLES ###########################
 
-
-
-########################### DEFINICION DE VARIABLES ###########################
-
+zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
 hoy = datetime.datetime.now()
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
+ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
 ano = str(hoy.year)
 hour1 = "060000"
 hour2 = "235959"
@@ -63,19 +44,35 @@ GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "agent_status" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "cbps_satustime" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
+ext = ".csv"
+ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
+
 
 ########################### CODIGO #####################################################################################
 
-@agent_status_api.route("/" + KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@agent_status_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
+
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
-    ext = ".csv"
+    output = gcs_path + "/" + sub_path + fecha + ext
     blob = bucket.blob(sub_path + fecha + ext)
+    dateini = request.args.get('dateini')
+    dateend = request.args.get('dateend')
+
+    if dateini is None:
+        dateini = GetDate1
+    else:   
+        dateini = dateini + hour1
+
+    if dateend is None:
+        dateend = GetDate2
+    else:
+        dateend = dateend + hour2
 
     client = bigquery.Client()
     QUERY = (
@@ -85,7 +82,7 @@ def Ejecutar():
     data = ""
     
     try:
-        os.remove("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext) #Eliminar de aries
+        os.remove(ruta_completa) #Eliminar de aries
     except: 
         print("Eliminado de aries")
     
@@ -94,9 +91,9 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
+    file = open(ruta_completa,"a")
     for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
+        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
         if len(requests.get(url).content) < 40:
             continue
@@ -104,34 +101,35 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["operation"])+";"+
-                    str(rown["date"])+";"+
-                    str(rown["hour"])+";"+
-                    str(rown["id_agent"])+";"+
-                    str(rown["agent_identification"])+";"+
-                    rown["agent_name"].encode('utf-8')+";"+
-                    str(rown["CALLS"])+";"+
-                    str(rown["CALLS INBOUND"])+";"+
-                    str(rown["CALLS OUTBOUND"])+";"+
-                    str(rown["CALLS INTERNAL"])+";"+
-                    str(rown["READY TIME"])+";"+
-                    str(rown["INBOUND TIME"])+";"+
-                    str(rown["OUTBOUND TIME"])+";"+
-                    str(rown["NOT-READY TIME"])+";"+
-                    str(rown["RING TIME"])+";"+
-                    str(rown["LOGIN TIME"])+";"+
-                    str(rown["AHT"])+";"+
-                    rown["OCUPANCY"].encode('utf-8')+";"+
-                    str(rown["AUX TIME"])+";"+
-                    str(row.id_cliente)+";"+
-                    str(row.cartera) + "\n")
+                    rown["operation"].encode('utf-8')+"@"+
+                    str(rown["date"])+"@"+
+                    str(rown["hour"])+"@"+
+                    str(rown["id_agent"])+"@"+
+                    str(rown["agent_identification"])+"@"+
+                    rown["agent_name"].encode('utf-8')+"@"+
+                    str(rown["CALLS"])+"@"+
+                    str(rown["CALLS INBOUND"])+"@"+
+                    str(rown["CALLS OUTBOUND"])+"@"+
+                    str(rown["CALLS INTERNAL"])+"@"+
+                    str(rown["READY TIME"])+"@"+
+                    str(rown["INBOUND TIME"])+"@"+
+                    str(rown["OUTBOUND TIME"])+"@"+
+                    str(rown["NOT-READY TIME"])+"@"+
+                    str(rown["RING TIME"])+"@"+
+                    str(rown["LOGIN TIME"])+"@"+
+                    str(rown["AHT"])+"@"+
+                    rown["OCUPANCY"].encode('utf-8')+"@"+
+                    str(rown["AUX TIME"])+"@"+
+                    str(row.id_cliente)+"@"+
+                    row.cartera.encode('utf-8') + "\n")
 
-    file.close()
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
-    time.sleep(10)
-    ejecutar = agent_status_beam.run() #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    time.sleep(60)
+
+    blob.upload_from_filename(ruta_completa)
+    time.sleep(420)
+    ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    time.sleep(420)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
+
 
 ########################################################################################################################

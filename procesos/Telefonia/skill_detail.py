@@ -17,9 +17,10 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
-import dataflow_pipeline.telefonia.cdr_beam as cdr_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import dataflow_pipeline.telefonia.skill_detail_beam as skill_detail_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import sys
 
-cdr_api = Blueprint('cdr_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+skill_detail_api = Blueprint('skill_detail_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 
 ########################### DEFINICION DE VARIABLES ###########################
@@ -44,8 +45,8 @@ GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
-KEY_REPORT = "cdr" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-CODE_REPORT = "cbps_cdr" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+KEY_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+CODE_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
@@ -53,9 +54,10 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 
 ########################### CODIGO #####################################################################################
 
-@cdr_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@skill_detail_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
-
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
@@ -102,38 +104,29 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["id_call"].encode('utf-8'))+'|'+
-                    str(rown["type_call"].encode('utf-8'))+'|'+
-                    str(rown["talk_time"])+'|'+
-                    str(rown["id_agent"])+'|'+
-                    str(rown["agent_name"].encode('utf-8'))+'|'+
-                    str(rown["agent_identification"])+'|'+
-                    str(rown["skill"])+'|'+
-                    str(rown["date"])+'|'+
-                    str(rown["hour"])+'|'+
-                    str(rown["day_of_week"].encode('utf-8'))+'|'+
-                    str(rown["typing_code"].encode('utf-8'))+'|'+
-                    str(rown["descri_typing_code"].encode('utf-8'))+'|'+
-                    str(rown["typing_code2"].encode('utf-8'))+'|'+
-                    str(rown["descri_typing_code2"].encode('utf-8'))+'|'+
-                    str(rown["hit"].encode('utf-8'))+'|'+
-                    str(rown["telephone_destination"])+'|'+
-                    str(rown["telephone_costs"])+'|'+
-                    str(rown["telephone_number"])+'|'+
-                    str(rown["who_hangs_up"].encode('utf-8'))+'|'+
-                    str(rown["customer_identification"])+'|'+
-                    str(rown["month"])+'|'+
-                    str(rown["screen_recording"].encode('utf-8'))+'|'+
-                    str(rown["operation"].encode('utf-8'))+'|'+
-                    str(rown["ring"])+'|'+
-                    str(rown["abandon"])+'|'+
-                    str(row.id_cliente).encode('utf-8')+"|"+
-                    str(row.cartera).encode('utf-8') + "\n")
+                    rown["operation"]+"|"+
+                    rown["id_call"]+"|"+
+                    rown["type_call"]+"|"+
+                    str(rown["date"])+"|"+
+                    str(rown["id_agent"])+"|"+
+                    rown["name_agent"]+"|"+
+                    str(rown["skill"])+"|"+
+                    str(rown["wait_time"])+"|"+
+                    str(rown["calls_ans_10"])+"|"+
+                    str(rown["calls_ans_20"])+"|"+
+                    str(rown["calls_ans_30"])+"|"+
+                    str(rown["calls_ans_40"])+"|"+
+                    str(rown["calls_ans_50"])+"|"+
+                    rown["skill_result"]+"|"+
+                    str(rown["ani"])+"|"+
+                    str(rown["dnis"])+"|"+
+                    str(row.id_cliente).encode('utf-8') + "|" +
+                    row.cartera.encode('utf-8') + "\n")
     
     file.close()
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
+    blob.upload_from_filename(ruta_completa)
     time.sleep(10)
-    ejecutar = cdr_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    ejecutar = skill_detail_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)

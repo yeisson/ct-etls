@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -25,9 +26,38 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'CHASIS:STRING, '
+	'CEDULA:STRING, '
+	'NOMBRE:STRING, '
+	'PLACA:STRING, '
+	'DENOMINACION_OBJETO:STRING, '
+	'CONCESIONARIO:STRING, '
+	'ULTIMO_SERVICIO:STRING, '
+	'FECHA_2:STRING, '
+	'PROXIMO_SERVICIO:STRING, '
+	'E_MAIL:STRING, '
+	'AGENCIA:STRING, '
+	'GESTION:STRING, '
+	'CAUSAL:STRING, '
+	'SUBCAUSAL:STRING, '
+	'OBSERVACION_QUEJA:STRING, '
+	'FECHA_COMPROMISO_AGEND:STRING, '
+	'HORA_COMPROMISO_AGEND:STRING, '
+	'CONCESIONARIO_2:STRING, '
+	'AGENCIA_2:STRING, '
+	'CIUDAD:STRING, '
+	'DOCUMENTO_VISITA:STRING, '
+	'NOMBRE_VISITA:STRING, '
+	'TELEFONO_FIJO:STRING, '
+	'TELEFONO_CELULAR:STRING, '
+	'EMAIL:STRING, '
+	'CELULAR_SMS:STRING, '
+	'OBSERVACION:STRING, '
+	'FECHA_GESTION:STRING, '
+	'ASESOR:STRING, '
+	'PLACA_DIGITADA:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +73,47 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'CHASIS': arrayCSV[0],
+				'CEDULA': arrayCSV[1],
+				'NOMBRE': arrayCSV[2],
+				'PLACA': arrayCSV[3],
+				'DENOMINACION_OBJETO': arrayCSV[4],
+				'CONCESIONARIO': arrayCSV[5],
+				'ULTIMO_SERVICIO': arrayCSV[6],
+				'FECHA_2': arrayCSV[7],
+				'PROXIMO_SERVICIO': arrayCSV[8],
+				'E_MAIL': arrayCSV[9],
+				'AGENCIA': arrayCSV[10],
+				'GESTION': arrayCSV[11],
+				'CAUSAL': arrayCSV[12],
+				'SUBCAUSAL': arrayCSV[13],
+				'OBSERVACION_QUEJA': arrayCSV[14],
+				'FECHA_COMPROMISO_AGEND': arrayCSV[15],
+				'HORA_COMPROMISO_AGEND': arrayCSV[16],
+				'CONCESIONARIO_2': arrayCSV[17],
+				'AGENCIA_2': arrayCSV[18],
+				'CIUDAD': arrayCSV[19],
+				'DOCUMENTO_VISITA': arrayCSV[20],
+				'NOMBRE_VISITA': arrayCSV[21],
+				'TELEFONO_FIJO': arrayCSV[22],
+				'TELEFONO_CELULAR': arrayCSV[23],
+				'EMAIL': arrayCSV[24],
+				'CELULAR_SMS': arrayCSV[25],
+				'OBSERVACION': arrayCSV[26],
+				'FECHA_GESTION': arrayCSV[27],
+				'ASESOR': arrayCSV[28],
+				'PLACA_DIGITADA': arrayCSV[29]
+
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +140,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
+		gcs_project + ":fanalca_agendamiento.gestiones", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

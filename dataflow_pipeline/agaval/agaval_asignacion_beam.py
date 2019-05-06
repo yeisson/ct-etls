@@ -25,9 +25,26 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'NIT:STRING, '
+	'CREDITO_NRO:STRING, '
+	'NOMBRES:STRING, '
+	'GRABADOR:STRING, '
+	'ESTADO_DE_COBRO:STRING, '
+	'FECHA_ULTIMA_GESTION_PREJURIDICA:STRING, '
+	'FECHA_DE_COMPROMISO:STRING, '
+	'FECHA_ULTIMO_ABONO:STRING, '
+	'TIPO_DE_CLIENTE:STRING, '
+	'CALIFICACION_ANTERIOR:STRING, '
+	'TOTAL_A_PAGAR:STRING, '
+	'VALOR_DEL_CAPITAL:STRING, '
+	'NUMELULAR:STRING, '
+	'TELEFONO_RESIDENCIA:STRING, '
+	'DIAS_MORA:STRING, '
+	'ESTADO_CARTERA:STRING, '
+	'FECHA_DE_TRASLADO:STRING, '
+	'INICIO_CREDITO:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +60,34 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'NIT' : arrayCSV[0],
+				'CREDITO_NRO' : arrayCSV[1],
+				'NOMBRES' : arrayCSV[2],
+				'GRABADOR' : arrayCSV[3],
+				'ESTADO_DE_COBRO' : arrayCSV[4],
+				'FECHA_ULTIMA_GESTION_PREJURIDICA' : arrayCSV[5],
+				'FECHA_DE_COMPROMISO' : arrayCSV[6],
+				'FECHA_ULTIMO_ABONO' : arrayCSV[7],
+				'TIPO_DE_CLIENTE' : arrayCSV[8],
+				'CALIFICACION_ANTERIOR' : arrayCSV[9],
+				'TOTAL_A_PAGAR' : arrayCSV[10],
+				'VALOR_DEL_CAPITAL' : arrayCSV[11],
+				'NUMELULAR' : arrayCSV[12],
+				'TELEFONO_RESIDENCIA' : arrayCSV[13],
+				'DIAS_MORA' : arrayCSV[14],
+				'ESTADO_CARTERA' : arrayCSV[15],
+				'FECHA_DE_TRASLADO' : arrayCSV[16],
+				'INICIO_CREDITO' : arrayCSV[17]
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-agaval" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +114,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery Agaval' >> beam.io.WriteToBigQuery(
+		gcs_project + ":agaval.asignacion", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

@@ -25,9 +25,22 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'NOMBRE:STRING, '
+	'CHASIS:STRING, '
+	'ULTIMO_SERVICIO:STRING, '
+	'FECHA_ULTIMO_SERVICIO:STRING, '
+	'PROXIMO_SERVICIO:STRING, '
+	'PLACA:STRING, '
+	'CEDULA:STRING, '
+	'MODELO_MOTOCICLETA:STRING, '
+	'CONCESIONARIO:STRING, '
+	'AGENCIA:STRING, '
+	'CORREO:STRING, '
+	'CELULAR:STRING, '
+	'TELEFONO2:STRING, '
+	'CODIGO:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +56,31 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'NOMBRE': arrayCSV[0],
+				'CHASIS': arrayCSV[1],
+				'ULTIMO_SERVICIO': arrayCSV[2],
+				'FECHA_ULTIMO_SERVICIO': arrayCSV[3],
+				'PROXIMO_SERVICIO': arrayCSV[4],
+				'PLACA': arrayCSV[5],
+				'CEDULA': arrayCSV[6],
+				'MODELO_MOTOCICLETA': arrayCSV[7],
+				'CONCESIONARIO': arrayCSV[8],
+				'AGENCIA': arrayCSV[9],
+				'CORREO': arrayCSV[10],
+				'CELULAR': arrayCSV[11],
+				'TELEFONO2': arrayCSV[12],
+				'CODIGO': arrayCSV[13]
+
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +107,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
+		gcs_project + ":fanalca_agendamiento.asignacion", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

@@ -4,20 +4,18 @@ from flask import request
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
-import dataflow_pipeline.bridge.bridge_beam as bridge_beam
+import dataflow_pipeline.phptopython.phptopython_beam as phptopython_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
 import socket
 import _mssql
 import datetime
+import glob
 
 # coding=utf-8
 
 mirror_api = Blueprint('mirror_api', __name__)
-fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
-
-
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -48,55 +46,47 @@ def delete():
 
 
 
-#####################################################################################################################################
-#####################################################################################################################################
-######################################################## LOADs #######################################################################
-#####################################################################################################################################
-#####################################################################################################################################
+####################################################################################################################################
+####################################################################################################################################
+####################################################### LOADs #######################################################################
+####################################################################################################################################
+####################################################################################################################################
 
 
 
-# @mirror_api.route("/load", methods=['GET'])
-# def load():
+@mirror_api.route("/load", methods=['GET'])
+def load():
 
-# #Parametros GET para modificar la consulta segun los parametros entregados
-#     ruta = request.args.get('mi_archivo')
+#Parametros GET para modificar la consulta segun los parametros entregados
+    url = request.args.get('mi_archivo') # Recibe con esto / 
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = url
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bridge')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('Uploads_php/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            
+            mensaje = phptopython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
+            if mensaje == "El proceso de cargue a bigquery fue ejecutado con exito":
+                response["code"] = 200
+                response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"
+                response["status"] = True
+            os.remove(archivo)
 
 
-#     response = {}
-#     response["code"] = 400
-#     response["description"] = "No se encontraron ficheros"
-#     response["status"] = False
+    return jsonify(response), response["code"]
 
-#     local_route = fileserver_baseroute + "/" + ruta
-#     archivos = os.listdir(local_route)
-#     for archivo in archivos:
-#         if archivo.endswith(".csv"):
-#             mifecha = archivo[20:28]
-
-#             storage_client = storage.Client()
-#             bucket = storage_client.get_bucket('ct-bancolombia')
-
-#             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-#             blob = bucket.blob('info-seguimiento/' + archivo)
-#             blob.upload_from_filename(local_route + archivo)
-
-#             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-#             deleteQuery = "DELETE FROM `contento-bi.bancolombia_admin.seguimiento` WHERE fecha = '" + mifecha + "'"
-
-#             #Primero eliminamos todos los registros que contengan esa fecha
-#             client = bigquery.Client()
-#             query_job = client.query(deleteQuery)
-
-#             #result = query_job.result()
-#             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
-
-#             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-#             mensaje = bancolombia_seguimiento_beam.run('gs://ct-bancolombia/info-seguimiento/' + archivo, mifecha)
-#             if mensaje == "Corrio Full HD":
-#                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Admin/Seguimiento/Procesados/"+archivo)
-#                 response["code"] = 200
-#                 response["description"] = "Se realizo la peticion Full HD"
-#                 response["status"] = True
-
-#     return jsonify(response), response["code"]
+    

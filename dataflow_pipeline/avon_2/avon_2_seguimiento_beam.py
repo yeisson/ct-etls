@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -25,9 +26,23 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'ano:STRING, '
+	'nit:STRING, '
+	'nombres:STRING, '
+	'campana:STRING, '
+	'factura:STRING, '
+	'saldo:STRING, '
+	'n_vencidas:STRING, '
+	'pastdue:STRING, '
+	'gestion:STRING, '
+	'causal:STRING, '
+	'fecha_seguimiento:STRING, '
+	'id_usuario:STRING, '
+	'fecha_compromiso:STRING, '
+	'monto_pactado:STRING, '
+	'nota:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +58,32 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'ano': arrayCSV[0],
+				'nit': arrayCSV[1],
+				'nombres': arrayCSV[2],
+				'campana': arrayCSV[3],
+				'factura': arrayCSV[4],
+				'saldo': arrayCSV[5],
+				'n_vencidas': arrayCSV[6],
+				'pastdue': arrayCSV[7],
+				'gestion': arrayCSV[8],
+				'causal': arrayCSV[9],
+				'fecha_seguimiento': arrayCSV[10],
+				'id_usuario': arrayCSV[11],
+				'fecha_compromiso': arrayCSV[12],
+				'monto_pactado': arrayCSV[13],
+				'nota': arrayCSV[14]
+
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-avon_2" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +110,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
+		gcs_project + ":avon_phyton.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

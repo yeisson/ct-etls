@@ -1,22 +1,6 @@
-####################################################################################################
-##                               REPORTE DE TELEFONIA = LOGIN-LOGOUT                              ##
-####################################################################################################
-
-
-
-######################## INDICE ##############################
-
-# FILA.7..................... INDICE
-# FILA.18.................... LIBRERIAS
-# FILA.45.................... VARIABLES GLOBALES
-# FILA.67.................... CODIGO DE EJECUCION
-
-##############################################################
-
-
-########################### LIBRERIAS #####################################
 from flask import Blueprint
 from flask import jsonify
+from flask import request
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 from google.cloud import datastore
@@ -37,14 +21,12 @@ import dataflow_pipeline.telefonia.login_logout_beam as login_logout_beam #[[[[[
 
 login_logout_api = Blueprint('login_logout_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
-#############################################################################
-
-
 
 ########################### DEFINICION DE VARIABLES ###########################
 
+zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
 hoy = datetime.datetime.now()
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
+ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
 ano = str(hoy.year)
 hour1 = "060000"
 hour2 = "235959"
@@ -63,19 +45,35 @@ GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
 
 fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "login_logout" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 CODE_REPORT = "login_time" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
+ext = ".csv"
+ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
+
 
 ########################### CODIGO #####################################################################################
 
-@login_logout_api.route("/" + KEY_REPORT)  #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@login_logout_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
+
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
     sub_path = KEY_REPORT + '/'
-    ext = ".csv"
+    output = gcs_path + "/" + sub_path + fecha + ext
     blob = bucket.blob(sub_path + fecha + ext)
+    dateini = request.args.get('dateini')
+    dateend = request.args.get('dateend')
+
+    if dateini is None:
+        dateini = GetDate1
+    else:
+        dateini = dateini + hour1
+
+    if dateend is None:
+        dateend = GetDate2
+    else:
+        dateend = dateend + hour2
 
     client = bigquery.Client()
     QUERY = (
@@ -85,7 +83,7 @@ def Ejecutar():
     data = ""
     
     try:
-        os.remove("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext) #Eliminar de aries
+        os.remove(ruta_completa) #Eliminar de aries
     except: 
         print("Eliminado de aries")
     
@@ -94,9 +92,9 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    file = open("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext,"a")
+    file = open(ruta_completa,"a")
     for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + GetDate1 + '&date_end=' + GetDate2
+        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
         if len(requests.get(url).content) < 40:
             continue
@@ -110,15 +108,15 @@ def Ejecutar():
                     str(rown["login_date"])+"|"+
                     str(rown["logout_date"])+"|"+
                     str(rown["login_time"])+"|"+
-                    str(row.ipdial_code) + "|" +
-                    str(row.id_cliente) + "|" +
-                    str(row.cartera) + "\n")
+                    row.ipdial_code.encode('utf-8') + "|" +
+                    str(row.id_cliente).encode('utf-8') + "|" +
+                    row.cartera.encode('utf-8') + "\n")
     
     file.close()
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
-    time.sleep(600)
-    ejecutar = login_logout_beam.run() #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    time.sleep(30)
+    blob.upload_from_filename(ruta_completa)
+    time.sleep(10)
+    ejecutar = login_logout_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    time.sleep(60)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 

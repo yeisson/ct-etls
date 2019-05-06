@@ -14,7 +14,6 @@ import _mssql
 import datetime
 import sys
 
-#coding: utf-8 
 
 leonisa_api = Blueprint('leonisa_api', __name__)
 

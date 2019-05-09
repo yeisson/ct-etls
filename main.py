@@ -28,11 +28,7 @@ from procesos.leonisa import leonisa_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
-<<<<<<< HEAD
-from procesos.cesde import cesde_api
-=======
 from procesos.linead import linead_api
->>>>>>> adbc117368ec5b21e431293e354901f56a6c6293
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api

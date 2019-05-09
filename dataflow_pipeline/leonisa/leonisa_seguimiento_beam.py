@@ -22,34 +22,57 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-#coding: utf-8 
-
 TABLE_SCHEMA = (
+	'idkey:STRING, '
+	'fecha:STRING, '
+	'Cedula_ciudadania:STRING, '
+	'Apellidos:STRING, '
+	'Nombres:STRING, '
+	'Numero_Obligacion:STRING, '
+	'Zona:STRING, '
+	'Estado:STRING, '
 	'Id_Gestion:STRING, '
-	'Id_Casual:STRING, '
+	'nombre_gestion:STRING, '
+	'Id_causal:STRING, '
+	'nombre_causal:STRING, '
 	'Fecha_Seguimiento:STRING, '
-    'Id_Usuario:STRING, '
-    'Id_Docdeu:STRING, '
-	'Id_Abogado:STRING'
+	'Id_Usuario:STRING, '
+	'Id_Abogado:STRING '
 )
 
+# ?
 class formatearData(beam.DoFn):
+
+	def __init__(self, mifecha):
+		super(formatearData, self).__init__()
+		self.mifecha = mifecha
 
 	def process(self, element):
 		# print(element)
 		arrayCSV = element.split('|')
 
-		tupla= {'Id_Gestion':arrayCSV[0],
-				'Id_Casual':arrayCSV[1],
-				'Fecha_Seguimiento':arrayCSV[2],
-				'Id_Usuario':arrayCSV[3],
-				'Id_Docdeu':arrayCSV[4],
-				'Id_Abogado':arrayCSV[5]
+		tupla= {'idkey' : str(uuid.uuid4()),
+				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
+				'fecha' : self.mifecha,
+				'Cedula_ciudadania': arrayCSV[0],
+				'Apellidos': arrayCSV[1],
+				'Nombres': arrayCSV[2],
+				'Numero_Obligacion': arrayCSV[3],
+				'Zona': arrayCSV[4],
+				'Estado': arrayCSV[5],
+				'Id_Gestion': arrayCSV[6],
+				'nombre_gestion': arrayCSV[7],
+				'Id_causal': arrayCSV[8],
+				'nombre_causal': arrayCSV[9],
+				'Fecha_Seguimiento': arrayCSV[10],
+				'Id_Usuario': arrayCSV[11],
+				'Id_Abogado': arrayCSV[12]
+
 				}
 
 		return [tupla]
-	
-def run():
+
+def run(archivo, mifecha):
 
 	gcs_path = "gs://ct-leonisa" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
@@ -63,19 +86,33 @@ def run():
         "--setup_file", "./setup.py",
         "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
+        # "--num_workers", "30",
+        # "--autoscaling_algorithm", "NONE"		
 	])
-
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/Seguimiento/Leonisa_inf_seg_" + ".csv")
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
-	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Seguimiento/Avon_inf_seg_2",file_name_suffix='.csv',shard_name_template='')
 	
-	transformed | 'Escritura a BigQuery Avon' >> beam.io.WriteToBigQuery(
-        gcs_project + ":leonisa.seguimiento",
-        schema=TABLE_SCHEMA,
-        create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-        write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+	# lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-leonisa/info-segumiento/LEONISA_INF_SEG_20181206 1100.csv", skip_header_lines=1)
+	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-leonisa/info-segumiento/LEONISA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
+
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
+
+	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
+
+	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
+	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-leonisa/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
+
+	transformed | 'Escritura a BigQuery linea_directa' >> beam.io.WriteToBigQuery(
+		gcs_project + ":leonisa.seguimiento", 
+		schema=TABLE_SCHEMA, 
+		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
+		)
+
+	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
+	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
 
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
-	return ("Corrio sin problema")
+	return ("Corrio Full HD")
+

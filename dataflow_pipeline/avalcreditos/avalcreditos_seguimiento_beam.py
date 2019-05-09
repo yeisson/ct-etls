@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -25,9 +26,27 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'empresa_gestiona:STRING, '
+	'empresa_reporta:STRING, '
+	'nit:STRING, '
+	'nombre_cliente:STRING, '
+	'razon_social:STRING, '
+	'gestor:STRING, '
+	'nro_credito:STRING, '
+	'telefono:STRING, '
+	'resultado:STRING, '
+	'resena:STRING, '
+	'hora_inicial:STRING, '
+	'hora_final:STRING, '
+	'duracion:STRING, '
+	'grabacion:STRING, '
+	'edad:STRING, '
+	'valor_cobrado:STRING, '
+	'tipificacion:STRING, '
+	'ficticia:STRING, '
+	'ano_venci_cliente:STRING, '
+	'causal:STRING, '
+	'hora:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +62,36 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'empresa_gestiona' : arrayCSV[0].replace('"',''),
+				'empresa_reporta' : arrayCSV[1].replace('"',''),
+				'nit' : arrayCSV[2].replace('"',''),
+				'nombre_cliente' : arrayCSV[3].replace('"',''),
+				'razon_social' : arrayCSV[4].replace('"',''),
+				'gestor' : arrayCSV[5].replace('"',''),
+				'nro_credito' : arrayCSV[6].replace('"',''),
+				'telefono' : arrayCSV[7].replace('"',''),
+				'resultado' : arrayCSV[8].replace('"',''),
+				'resena' : arrayCSV[9].replace('"',''),
+				'hora_inicial' : arrayCSV[10].replace('"',''),
+				'hora_final' : arrayCSV[11].replace('"',''),
+				'duracion' : arrayCSV[12].replace('"',''),
+				'grabacion' : arrayCSV[13].replace('"',''),
+				'edad' : arrayCSV[14].replace('"',''),
+				'valor_cobrado' : arrayCSV[15].replace('"',''),
+				'tipificacion' : arrayCSV[16].replace('"',''),
+				'ficticia' : arrayCSV[17].replace('"',''),
+				'ano_venci_cliente' : arrayCSV[18].replace('"',''),
+				'causal' : arrayCSV[19].replace('"',''),
+				'hora' : arrayCSV[20].replace('"','')
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-avalcreditos" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +118,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery avalcreditos' >> beam.io.WriteToBigQuery(
+		gcs_project + ":avalcreditos.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

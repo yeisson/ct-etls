@@ -25,9 +25,13 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'nit:STRING, '
+	'codigo_de_gestion:STRING, '
+	'fecha_gestion:STRING, '
+	'fecha_compromiso:STRING, '
+	'gestor:STRING, '
+	'valor_compromiso:TIME, '
+	'codigo_empresa:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +47,23 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'Nit': arrayCSV[0],
+				'codigo_de_gestion': arrayCSV[1],
+				'fecha_gestion': arrayCSV[2],
+				'fecha_compromiso': arrayCSV[3],
+				'gestor': arrayCSV[4],
+				'valor_compromiso': arrayCSV[5],
+				'codigo_empresa': arrayCSV[6]
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-linead" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +90,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery linea_directa' >> beam.io.WriteToBigQuery(
+		gcs_project + ":linea_directa.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

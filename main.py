@@ -19,7 +19,6 @@ from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
 from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
-from procesos.Telefonia.skill_detail import skill_detail_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
@@ -28,7 +27,11 @@ from procesos.leonisa import leonisa_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
+<<<<<<< HEAD
 from procesos.cesde import cesde_api
+=======
+from procesos.linead import linead_api
+>>>>>>> adbc117368ec5b21e431293e354901f56a6c6293
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -43,7 +46,6 @@ app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
-app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
@@ -52,6 +54,7 @@ app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')
 app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
+app.register_blueprint(linead_api, url_prefix='/linead')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

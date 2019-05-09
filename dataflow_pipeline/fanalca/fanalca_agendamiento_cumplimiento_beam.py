@@ -25,9 +25,33 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'ZONA:STRING, '
-    'CODIGO:STRING, '
-    'BALANCE:STRING '
+	'CHASIS:STRING, '
+	'FECHA_DE_CITA_PROGRAMADA:STRING, '
+	'HORA:STRING, '
+	'LINEA:STRING, '
+	'PLACA:STRING, '
+	'SERVICIO:STRING, '
+	'CEDULA:STRING, '
+	'NOMBRE_APELLIDOS:STRING, '
+	'NUMERO_DE_CONTACTO_FIJO:STRING, '
+	'CELULAR:STRING, '
+	'CORREO:STRING, '
+	'OBSERVACIONES:STRING, '
+	'NUMERO_ENVIO_MENSAJE_DE_TEXTO:STRING, '
+	'CONCESIONARIO:STRING, '
+	'AGENCIA:STRING, '
+	'FECHA_PROGRAMACION:STRING, '
+	'MES:STRING, '
+	'ANO:STRING, '
+	'DIRECCION:STRING, '
+	'CIUDAD:STRING, '
+	'AGENTE:STRING, '
+	'OLA:STRING, '
+	'CUMPLIMIENTO_CITA:STRING, '
+	'META:STRING, '
+	'REGIONAL:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -43,16 +67,42 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'ZONA':arrayCSV[0],
-				'CODIGO':arrayCSV[1],
-				'BALANCE':arrayCSV[2]
+				'CHASIS': arrayCSV[0],
+				'FECHA_DE_CITA_PROGRAMADA': arrayCSV[1],
+				'HORA': arrayCSV[2],
+				'LINEA': arrayCSV[3],
+				'PLACA': arrayCSV[4],
+				'SERVICIO': arrayCSV[5],
+				'CEDULA': arrayCSV[6],
+				'NOMBRE_APELLIDOS': arrayCSV[7],
+				'NUMERO_DE_CONTACTO_FIJO': arrayCSV[8],
+				'CELULAR': arrayCSV[9],
+				'CORREO': arrayCSV[10],
+				'OBSERVACIONES': arrayCSV[11],
+				'NUMERO_ENVIO_MENSAJE_DE_TEXTO': arrayCSV[12],
+				'CONCESIONARIO': arrayCSV[13],
+				'AGENCIA': arrayCSV[14],
+				'FECHA_PROGRAMACION': arrayCSV[15],
+				'MES': arrayCSV[16],
+				'ANO': arrayCSV[17],
+				'DIRECCION': arrayCSV[18],
+				'CIUDAD': arrayCSV[19],
+				'AGENTE': arrayCSV[20],
+				'OLA': arrayCSV[21],
+				'CUMPLIMIENTO_CITA': arrayCSV[22],
+				'META': arrayCSV[23],
+				'REGIONAL': arrayCSV[24]
+
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-avon" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -79,8 +129,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":avon.avon_Balance", 
+	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
+		gcs_project + ":fanalca_agendamiento.cumplimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

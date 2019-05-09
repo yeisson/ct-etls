@@ -70,7 +70,7 @@ def raiz():
 @app.route("/balance", methods=['GET', 'POST'])
 def start_dataflow():
 
-    #Obtenemos los parametros
+    #Obtenemos los parametros.
     filename = request.args.get('filename', default = '', type = str)
 
     if filename == '':

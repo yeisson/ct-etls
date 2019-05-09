@@ -28,6 +28,7 @@ from procesos.leonisa import leonisa_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
+from procesos.cesde import cesde_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -54,6 +55,7 @@ app.register_blueprint(bancamia_api, url_prefix='/bancamia')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
+app.register_blueprint(cesde_api, url_prefix='/cesde')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

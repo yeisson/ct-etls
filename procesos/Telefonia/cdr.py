@@ -17,6 +17,7 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
+import sys
 import dataflow_pipeline.telefonia.cdr_beam as cdr_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 cdr_api = Blueprint('cdr_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
@@ -55,7 +56,9 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 
 @cdr_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
-
+    
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'

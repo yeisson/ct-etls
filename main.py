@@ -22,6 +22,7 @@ from procesos.Telefonia.remover import remover_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
+from procesos.avon_2 import avon_2_api
 from procesos.negociadores import negociadores_api
 from procesos.leonisa import leonisa_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
@@ -32,6 +33,7 @@ from procesos.avalcreditos import avalcreditos_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
+from procesos.cesde import cesde_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -46,6 +48,7 @@ app.register_blueprint(remover_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
+app.register_blueprint(avon_2_api, url_prefix='/avon_2')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
 app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')
@@ -56,6 +59,7 @@ app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
+app.register_blueprint(cesde_api, url_prefix='/cesde')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():
@@ -69,7 +73,7 @@ def raiz():
 @app.route("/balance", methods=['GET', 'POST'])
 def start_dataflow():
 
-    #Obtenemos los parametros
+    #Obtenemos los parametros.
     filename = request.args.get('filename', default = '', type = str)
 
     if filename == '':

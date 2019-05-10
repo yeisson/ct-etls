@@ -18,6 +18,7 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
 import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import sys
 
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
@@ -54,6 +55,9 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 
 @agent_status_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
+
+    reload(sys)
+    sys.setdefaultencoding('utf8')
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')

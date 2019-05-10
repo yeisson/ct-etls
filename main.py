@@ -28,6 +28,7 @@ from procesos.bancolombia_castigada import bancolombia_castigada_api
 from procesos.tuya import tuya_api
 from procesos.bancamia import bancamia_api
 from procesos.linead import linead_api
+from procesos.avalcreditos import avalcreditos_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -51,6 +52,7 @@ app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_casti
 app.register_blueprint(tuya_api, url_prefix='/tuya')
 app.register_blueprint(bancamia_api, url_prefix='/bancamia')
 app.register_blueprint(linead_api, url_prefix='/linead')
+app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

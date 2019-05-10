@@ -129,9 +129,9 @@ def Ejecutar():
 
 
     blob.upload_from_filename(ruta_completa)
-    time.sleep(420)
+    time.sleep(600)
     ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    time.sleep(420)
+    time.sleep(600)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
 

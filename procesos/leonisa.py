@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
@@ -6,11 +7,7 @@ from google.cloud import bigquery
 import dataflow_pipeline.leonisa.leonisa_seguimiento_beam as leonisa_seguimiento_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
-import time
 import socket
-import _mssql
-import datetime
-import sys
 
 leonisa_api = Blueprint('leonisa_api', __name__)
 
@@ -24,36 +21,37 @@ def archivos_Seguimiento_leonisa():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    # local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Leonisa/Seguimiento/"
-    # archivos = os.listdir(local_route)
-    # for archivo in archivos:
-    #     if archivo.endswith(".csv"):
-    #         mifecha = archivo[8:16]
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Leonisa/Seguimiento/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[8:16]
 
-    #         storage_client = storage.Client()
-    #         bucket = storage_client.get_bucket('ct-leonisa')
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-leonisa')
 
-    #         # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-    #         blob = bucket.blob('info-seguimiento/' + archivo)
-    #         blob.upload_from_filename(local_route + archivo)
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-seguimiento/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
 
-    #         # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-    #         deleteQuery = "DELETE FROM `contento-bi.leonisa.seguimiento` WHERE fecha = '" + mifecha + "'"
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.leonisa.seguimiento` WHERE fecha = '" + mifecha + "'"
 
-    #         #Primero eliminamos todos los registros que contengan esa fecha
-    #         client = bigquery.Client()
-    #         query_job = client.query(deleteQuery)
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
 
-    #         #result = query_job.result()
-    #         query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+            result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
-    #         # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-    #         mensaje = leonisa_seguimiento_beam.run('gs://ct-leonisa/info-seguimiento/' + archivo, mifecha)
-    #         if mensaje == "Corrio Full HD":
-    #             move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Leonisa/Seguimiento/Procesados/"+archivo)
-    #             response["code"] = 200
-    #             response["description"] = "Se realizo la peticion Full HD"
-    #             response["status"] = True
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = leonisa_seguimiento_beam.run('gs://ct-leonisa/info-seguimiento/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Leonisa/Seguimiento/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
 
-    # return jsonify(response), response["code"]
-    return "Corriendo : " 
+    # # return jsonify(response), response["code"]
+    # return "Corriendo : " 
+    return jsonify(response), response["code"]

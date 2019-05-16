@@ -17,10 +17,11 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
-import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 import sys
+import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+
 
 #############################3 DEFINICION DE VARIABLES ###########################
 
@@ -58,7 +59,6 @@ def Ejecutar():
 
     reload(sys)
     sys.setdefaultencoding('utf8')
-
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
@@ -105,35 +105,34 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    rown["operation"].encode('utf-8')+"@"+
-                    str(rown["date"])+"@"+
-                    str(rown["hour"])+"@"+
-                    str(rown["id_agent"])+"@"+
-                    str(rown["agent_identification"])+"@"+
-                    rown["agent_name"].encode('utf-8')+"@"+
-                    str(rown["CALLS"])+"@"+
-                    str(rown["CALLS INBOUND"])+"@"+
-                    str(rown["CALLS OUTBOUND"])+"@"+
-                    str(rown["CALLS INTERNAL"])+"@"+
-                    str(rown["READY TIME"])+"@"+
-                    str(rown["INBOUND TIME"])+"@"+
-                    str(rown["OUTBOUND TIME"])+"@"+
-                    str(rown["NOT-READY TIME"])+"@"+
-                    str(rown["RING TIME"])+"@"+
-                    str(rown["LOGIN TIME"])+"@"+
-                    str(rown["AHT"])+"@"+
-                    rown["OCUPANCY"].encode('utf-8')+"@"+
-                    str(rown["AUX TIME"])+"@"+
-                    str(row.id_cliente)+"@"+
-                    row.cartera.encode('utf-8') + "\n")
+                    str(rown["operation"]).encode('utf-8')+"|"+
+                    str(rown["date"])+"|"+
+                    str(rown["hour"])+"|"+
+                    str(rown["id_agent"])+"|"+
+                    str(rown["agent_identification"])+"|"+
+                    str(rown["agent_name"]).encode('utf-8')+"|"+
+                    str(rown["CALLS"])+"|"+
+                    str(rown["CALLS INBOUND"])+"|"+
+                    str(rown["CALLS OUTBOUND"])+"|"+
+                    str(rown["CALLS INTERNAL"])+"|"+
+                    str(rown["READY TIME"])+"|"+
+                    str(rown["INBOUND TIME"])+"|"+
+                    str(rown["OUTBOUND TIME"])+"|"+
+                    str(rown["NOT-READY TIME"])+"|"+
+                    str(rown["RING TIME"])+"|"+
+                    str(rown["LOGIN TIME"])+"|"+
+                    str(rown["AHT"])+"|"+
+                    str(rown["OCUPANCY"]).encode('utf-8')+"|"+
+                    str(rown["AUX TIME"])+"|"+
+                    str(row.id_cliente)+"|"+
+                    str(row.cartera).encode('utf-8') + "\n")
 
-
+    file.close()
     blob.upload_from_filename(ruta_completa)
-    time.sleep(600)
+    time.sleep(10)
     ejecutar = agent_status_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    time.sleep(600)
+    time.sleep(60)
 
     return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
-
 
 ########################################################################################################################

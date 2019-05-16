@@ -19,6 +19,7 @@ from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
 from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
+from procesos.Telefonia.skill_detail import skill_detail_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
@@ -45,6 +46,7 @@ app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
+app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')

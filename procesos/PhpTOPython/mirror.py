@@ -60,6 +60,7 @@ def load():
 #Parametros GET para modificar la consulta segun los parametros entregados
     url = request.args.get('mi_archivo') # Recibe con esto / 
 
+    
     local_route = url
     archivos = os.listdir(local_route)
     for archivo in archivos:
@@ -76,12 +77,12 @@ def load():
             
             mensaje = phptopython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
             if mensaje == "El proceso de cargue a bigquery fue ejecutado con exito":
+                response = {}
                 response["code"] = 200
                 response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"
                 response["status"] = True
-        
-        os.remove(archivo)
-
+    
+    os.remove(archivo)
 
     return jsonify(response), response["code"]
 

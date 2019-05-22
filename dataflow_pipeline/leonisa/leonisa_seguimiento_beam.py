@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -22,6 +23,7 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
+
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
@@ -36,6 +38,7 @@ TABLE_SCHEMA = (
 	'Id_causal:STRING, '
 	'nombre_causal:STRING, '
 	'Fecha_Seguimiento:STRING, '
+	'Nota:STRING, '
 	'Id_Usuario:STRING, '
 	'Id_Abogado:STRING '
 )

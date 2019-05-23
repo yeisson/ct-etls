@@ -31,7 +31,7 @@ TABLE_SCHEMA = (
 	'fecha_gestion:STRING, '
 	'fecha_compromiso:STRING, '
 	'gestor:STRING, '
-	'valor_compromiso:TIME, '
+	'valor_compromiso:STRING, '
 	'codigo_empresa:STRING '
 )
 # ?

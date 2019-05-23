@@ -54,7 +54,6 @@ class formatearData(beam.DoFn):
 				'gestor': arrayCSV[4],
 				'valor_compromiso': arrayCSV[5],
 				'codigo_empresa': arrayCSV[6]
-
 				}
 		
 		return [tupla]

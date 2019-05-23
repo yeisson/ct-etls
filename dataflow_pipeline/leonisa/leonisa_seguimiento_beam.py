@@ -38,7 +38,6 @@ TABLE_SCHEMA = (
 	'Id_causal:STRING, '
 	'nombre_causal:STRING, '
 	'Fecha_Seguimiento:STRING, '
-	'Nota:STRING, '
 	'Id_Usuario:STRING, '
 	'Id_Abogado:STRING '
 )

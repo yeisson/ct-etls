@@ -59,12 +59,8 @@ def load():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
     url = request.args.get('mi_archivo') # Recibe con esto / 
-
     response = {}
-    response["code"] = 400
-    response["description"] = "No se encontraron ficheros"
-    response["status"] = False
-
+    
     local_route = url
     archivos = os.listdir(local_route)
     for archivo in archivos:
@@ -77,15 +73,15 @@ def load():
             blob = bucket.blob('Uploads_php/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
-            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            
+
             mensaje = phptopython_beam.run('gs://ct-bridge/Uploads_php/' + archivo)
             if mensaje == "El proceso de cargue a bigquery fue ejecutado con exito":
+                
                 response["code"] = 200
                 response["description"] = "El proceso de cargue a BIGQUERY por medio del MIRROR fue ejecutado correctamente"
                 response["status"] = True
-            os.remove(archivo)
-
+            
+            os.remove(local_route + archivo)
 
     return jsonify(response), response["code"]
 

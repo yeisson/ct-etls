@@ -157,14 +157,3 @@ def archivos_Pagos():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
-
-
-@avalcreditos_api.route("/prueba_ciclo")
-def prueba_Ciclo():
-    # def saludoEntidad (x):
-	# l = []
-    for x in range(6):
-            time.sleep(1)
-            # l.append(x)
-            print(x)   
-    return (str(x-1))

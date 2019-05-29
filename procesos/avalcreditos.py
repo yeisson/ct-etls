@@ -9,6 +9,7 @@ import dataflow_pipeline.avalcreditos.avalcreditos_prejuridico_beam as avalcredi
 import dataflow_pipeline.avalcreditos.avalcreditos_pagos_beam as avalcreditos_pagos_beam
 import os
 import socket
+import time
 
 avalcreditos_api = Blueprint('avalcreditos_api', __name__)
 
@@ -60,6 +61,8 @@ def archivos_Seguimiento():
                 client_2 = bigquery.Client()
                 query_job_2 = client_2.query(deleteQuery_2)
                 query_job_2.result()
+
+                time.sleep(120)
 
                 # Inserta la información agrupada según funciones de agregación en la tabla de Seguimiento Consolidada:
                 inserteDatos = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,HORA,GRABADOR,NEGOCIADOR,ID_LIDER,LIDER,EJECUTIVO,GERENTE,TIPO_CONTACTO,RANGO_MORA,TIENDA,MACRO_PRODUCTO,PRODUCTO,META_GESTIONES,TRABAJO,GESTIONES,WPC,RPC,HIT) (SELECT * FROM `contento-bi.avalcreditos.QRY_CONSL_HORA_HORA` WHERE FECHA = '"+ mifecha +"')"
@@ -156,3 +159,14 @@ def archivos_Pagos():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
+
+
+@avalcreditos_api.route("/prueba_ciclo")
+def prueba_Ciclo():
+    # def saludoEntidad (x):
+	# l = []
+    for x in range(6):
+            time.sleep(1)
+            # l.append(x)
+            print(x)   
+    return (str(x-1))

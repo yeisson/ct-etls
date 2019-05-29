@@ -44,7 +44,7 @@ class formatearData(beam.DoFn):
 
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),	#datetime.datetime.today().strftime('%Y-%m-%d'),
@@ -57,7 +57,6 @@ class formatearData(beam.DoFn):
 				'ESTADO_DE_COBRO' : arrayCSV[5],
 				'TELEFONO' : arrayCSV[6],
 				'ESTADO_CARTERA' : arrayCSV[7]
-
 				}
 		
 		return [tupla]
@@ -94,7 +93,7 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/prejuridico/info_carga_banco_prej",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery Agaval' >> beam.io.WriteToBigQuery(
-		gcs_project + ":agaval.gestiones", 
+		gcs_project + ":agaval.seguimiento", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

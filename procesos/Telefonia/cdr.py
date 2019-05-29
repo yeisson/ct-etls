@@ -134,7 +134,7 @@ def Ejecutar():
                     str(row.cartera).encode('utf-8') + "\n")
     
     file.close()
-    blob.upload_from_filename("/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext)
+    blob.upload_from_filename(ruta_completa)
     time.sleep(10)
     ejecutar = cdr_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)

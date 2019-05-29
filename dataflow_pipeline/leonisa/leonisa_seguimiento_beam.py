@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -21,6 +22,7 @@ from apache_beam.metrics.metric import MetricsFilter
 from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
+
 
 TABLE_SCHEMA = (
 	'idkey:STRING, '

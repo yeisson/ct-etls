@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -30,7 +31,7 @@ TABLE_SCHEMA = (
 	'fecha_gestion:STRING, '
 	'fecha_compromiso:STRING, '
 	'gestor:STRING, '
-	'valor_compromiso:TIME, '
+	'valor_compromiso:STRING, '
 	'codigo_empresa:STRING '
 )
 # ?
@@ -54,7 +55,6 @@ class formatearData(beam.DoFn):
 				'gestor': arrayCSV[4],
 				'valor_compromiso': arrayCSV[5],
 				'codigo_empresa': arrayCSV[6]
-
 				}
 		
 		return [tupla]

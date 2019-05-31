@@ -38,6 +38,7 @@ TABLE_SCHEMA = (
 	'Id_causal:STRING, '
 	'nombre_causal:STRING, '
 	'Fecha_Seguimiento:STRING, '
+	'Nota:STRING, '
 	'Id_Usuario:STRING, '
 	'Id_Abogado:STRING '
 )
@@ -67,8 +68,9 @@ class formatearData(beam.DoFn):
 				'Id_causal': arrayCSV[8],
 				'nombre_causal': arrayCSV[9],
 				'Fecha_Seguimiento': arrayCSV[10],
-				'Id_Usuario': arrayCSV[11],
-				'Id_Abogado': arrayCSV[12]
+				'Nota': arrayCSV[11],
+				'Id_Usuario': arrayCSV[12],
+				'Id_Abogado': arrayCSV[13]
 
 				}
 

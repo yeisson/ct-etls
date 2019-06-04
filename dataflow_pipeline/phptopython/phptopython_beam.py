@@ -20,6 +20,10 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
+
+now = datetime.datetime.now()
+
+
 TABLE_SCHEMA = (
 	'id_cliente:STRING,'
 	'producto:STRING,'
@@ -34,9 +38,10 @@ TABLE_SCHEMA = (
 	'id_gerente:STRING,'
 	'nombre_gerente:STRING,'
 	'META:STRING,'
-	'ciudad:STRING'
+	'ciudad:STRING,'
+	'fecha_actualizacion:DATE'
 )
-# ?
+
 class formatearData(beam.DoFn):
 	
 	def process(self, element):
@@ -55,7 +60,8 @@ class formatearData(beam.DoFn):
 				'id_gerente': arrayCSV[10],
 				'nombre_gerente': arrayCSV[11],
 				'META': arrayCSV[12],
-				'ciudad': arrayCSV[13]
+				'ciudad': arrayCSV[13],
+				'fecha_actualizacion': now.strftime("%Y-%m-%d")
 				}
 		
 		return [tupla]
@@ -76,8 +82,6 @@ def run(archivo):
         "--setup_file", "./setup.py",
         "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-        # "--num_workers", "30",
-        # "--autoscaling_algorithm", "NONE"		
 	])
 	
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)

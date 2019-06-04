@@ -93,7 +93,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		

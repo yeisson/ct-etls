@@ -26,20 +26,32 @@ TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
 	'NIT:STRING, '
-	'NOMBRE:STRING, '
-	'FECHA2:STRING, '
-	'ACUERDO:STRING, '
-	'USUARIO1:STRING, '
-	'USUARIO:STRING, '
-	'FPAGO:STRING, '
-	'HORA:STRING, '
-	'VCAPITAL:STRING, '
-	'VPAGO:STRING, '
-	'OBSERVACIONES:STRING, '
-	'NRO_CREDITO:STRING, '
+	'NOMBRES:STRING, '
+	'NOOBLIGACION:STRING, '
+	'CODIGO_ANTERIOR:STRING, '
+	'CLASE_GESTION:STRING, '
+	'RESPONSABLE_COBRO:STRING, '
+	'GESTOR:STRING, '
+	'CODIGO_GESTION:STRING, '
+	'DESCRIPCION_CAUSAL:STRING, '
 	'DIAS_MORA:STRING, '
-	'CIUDAD:STRING, '
-	'TEL_CONTACTO:STRING '
+	'TELEFONO:STRING, '
+	'FECHA_GESTION:STRING, '
+	'DURACION:STRING, '
+	'HORA_DE_INICIO_DE_GRABACION:STRING, '
+	'HORA_DE_GRABACION:STRING, '
+	'VALOR_COMPROMISO:STRING, '
+	'FECHA_COMPROMISO:STRING, '
+	'CUOTAS_VENCIDAS:STRING, '
+	'DIRECCION:STRING, '
+	'FECHA_VENCIMIENTO:STRING, '
+	'CODIGO_DE_CONTACTO:STRING, '
+	'CONSDOCDEU:STRING, '
+	'NOTA:STRING, '
+	'GESTION_MOVIL:STRING, '
+	'DESCRIPCION_ZONA:STRING, '
+	'DESCRIPCION_NEGOCIO:STRING, '
+	'CARTERA:STRING '
 
 )
 # ?
@@ -51,26 +63,38 @@ class formatearData(beam.DoFn):
 
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),	#datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
 				'NIT' : arrayCSV[0],
-				'NOMBRE' : arrayCSV[1],
-				'FECHA2' : arrayCSV[2],
-				'ACUERDO' : arrayCSV[3],
-				'USUARIO1' : arrayCSV[4],
-				'USUARIO' : arrayCSV[5],
-				'FPAGO' : arrayCSV[6],
-				'HORA' : arrayCSV[7],
-				'VCAPITAL' : arrayCSV[8],
-				'VPAGO' : arrayCSV[9],
-				'OBSERVACIONES' : arrayCSV[10],
-				'NRO_CREDITO' : arrayCSV[11],
-				'DIAS_MORA' : arrayCSV[12],
-				'CIUDAD' : arrayCSV[13],
-				'TEL_CONTACTO' : arrayCSV[14]
+				'NOMBRES' : arrayCSV[1],
+				'NOOBLIGACION' : arrayCSV[2],
+				'CODIGO_ANTERIOR' : arrayCSV[3],
+				'CLASE_GESTION' : arrayCSV[4],
+				'RESPONSABLE_COBRO' : arrayCSV[5],
+				'GESTOR' : arrayCSV[6],
+				'CODIGO_GESTION' : arrayCSV[7],
+				'DESCRIPCION_CAUSAL' : arrayCSV[8],
+				'DIAS_MORA' : arrayCSV[9],
+				'TELEFONO' : arrayCSV[10],
+				'FECHA_GESTION' : arrayCSV[11],
+				'DURACION' : arrayCSV[12],
+				'HORA_DE_INICIO_DE_GRABACION' : arrayCSV[13],
+				'HORA_DE_GRABACION' : arrayCSV[14],
+				'VALOR_COMPROMISO' : arrayCSV[15],
+				'FECHA_COMPROMISO' : arrayCSV[16],
+				'CUOTAS_VENCIDAS' : arrayCSV[17],
+				'DIRECCION' : arrayCSV[18],
+				'FECHA_VENCIMIENTO' : arrayCSV[19],
+				'CODIGO_DE_CONTACTO' : arrayCSV[20],
+				'CONSDOCDEU' : arrayCSV[21],
+				'NOTA' : arrayCSV[22],
+				'GESTION_MOVIL' : arrayCSV[23],
+				'DESCRIPCION_ZONA' : arrayCSV[24],
+				'DESCRIPCION_NEGOCIO' : arrayCSV[25],
+				'CARTERA' : arrayCSV[26]
 
 				}
 		

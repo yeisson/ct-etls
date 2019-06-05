@@ -98,7 +98,7 @@ def Ejecutar():
     try:
         QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
         query_job = client.query(QUERY2)
-        rows = query_job.result()
+        rows2 = query_job.result()
     except: 
         print("Eliminado de bigquery")
 

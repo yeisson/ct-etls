@@ -95,6 +95,12 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
+
+    try:
+        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini + '"')
+    except: 
+        print("Eliminando datos de la fecha")
+
     file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend

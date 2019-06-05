@@ -1,5 +1,4 @@
 from flask import Blueprint
-
 from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
@@ -54,6 +53,8 @@ def archivos_Avon2_Seguimiento():
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
-
+                
     return jsonify(response), response["code"]
+
+
 

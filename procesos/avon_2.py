@@ -10,7 +10,6 @@ import dataflow_pipeline.avon_2.avon_2_seguimiento_beam as avon_2_seguimiento_be
 #import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
 import os
 import socket
-import time
 
 avon_2_api = Blueprint('avon_2_api', __name__)
 
@@ -19,7 +18,6 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 @avon_2_api.route("/archivos_seguimiento")
 def archivos_Avon2_Seguimiento():
 
-    inicio_de_tiempo = time.time()
     response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
@@ -55,10 +53,7 @@ def archivos_Avon2_Seguimiento():
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
-    fin_de_tiempo = time.time()
-    tiempo_transcurrido = fin_de_tiempo - inicio_de_tiempo
-
-    print (tiempo_transcurrido)
+                
     return jsonify(response), response["code"]
 
 

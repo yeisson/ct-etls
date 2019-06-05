@@ -95,11 +95,12 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        query_job = client.query(QUERY2)
+        rows = query_job.result()
     except: 
-        print("Eliminando datos de la fecha")
+        print("Eliminado de bigquery")
 
     file = open(ruta_completa,"a")
     for row in rows:

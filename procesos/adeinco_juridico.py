@@ -10,6 +10,7 @@ import dataflow_pipeline.adeinco_juridico.adeinco_juridico_recaudo_beam as adein
 #import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
 import os
 import socket
+import time
 
 adeinco_juridico_api = Blueprint('adeinco_juridico_api', __name__)
 
@@ -69,7 +70,7 @@ def archivos_Gestiones():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[27:35]
+            mifecha = archivo[12:20]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-adeinco_juridico')
@@ -95,6 +96,22 @@ def archivos_Gestiones():
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
+
+                # ----------------------------------------------------------------------------------------------------------------
+                # Elimina datos de la tabla de Seguimiento Consolidada:
+                deleteQuery_2 = "DELETE FROM `contento-bi.Contento.seguimiento_consolidado` WHERE ID_OPERACION = '11' AND FECHA = '" + mifecha + "'"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(600)
+
+                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Seguimiento Consolidada:
+                inserteDatos = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,HORA,GRABADOR,NEGOCIADOR,ID_LIDER,LIDER,EJECUTIVO,GERENTE,TIPO_CONTACTO,RANGO_MORA,TIENDA,MACRO_PRODUCTO,PRODUCTO,META_GESTIONES,TRABAJO,GESTIONES,WPC,RPC,HIT) (SELECT * FROM `contento-bi.adeinco_juridico.QRY_CONSL_HORA_HORA` WHERE FECHA = '"+ mifecha +"')"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(inserteDatos)
+                query_job_3.result()
+                # ----------------------------------------------------------------------------------------------------------------
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje

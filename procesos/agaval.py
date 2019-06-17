@@ -11,6 +11,7 @@ import dataflow_pipeline.agaval.agaval_recaudo_beam as agaval_recaudo_beam
 #import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
 import os
 import socket
+import time
 
 agaval_api = Blueprint('agaval_api', __name__)
 
@@ -103,6 +104,8 @@ def archivos_Seguimiento():
                 client_2 = bigquery.Client()
                 query_job_2 = client_2.query(deleteQuery_2)
                 query_job_2.result()
+
+                time.sleep(600)
 
                 # Inserta la información agrupada según funciones de agregación en la tabla de Seguimiento Consolidada:
                 inserteDatos = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,HORA,GRABADOR,NEGOCIADOR,ID_LIDER,LIDER,EJECUTIVO,GERENTE,TIPO_CONTACTO,RANGO_MORA,TIENDA,MACRO_PRODUCTO,PRODUCTO,META_GESTIONES,TRABAJO,GESTIONES,WPC,RPC,HIT) (SELECT * FROM `contento-bi.agaval.QRY_CONSL_HORA_HORA` WHERE FECHA = '" + mifecha + "')"

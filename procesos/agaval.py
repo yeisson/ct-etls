@@ -11,6 +11,7 @@ import dataflow_pipeline.agaval.agaval_recaudo_beam as agaval_recaudo_beam
 #import dataflow_pipeline.bancolombia.bancolombia_bm_beam as bancolombia_bm_beam
 import os
 import socket
+import time
 
 agaval_api = Blueprint('agaval_api', __name__)
 

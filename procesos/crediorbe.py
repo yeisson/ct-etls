@@ -104,7 +104,7 @@ def archivos_Gestiones():
                 query_job_2 = client_2.query(deleteQuery_2)
                 query_job_2.result()
 
-                time.sleep(10)
+                time.sleep(600)
 
                 # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Seguimiento Consolidada:
                 inserteDatos = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,HORA,GRABADOR,NEGOCIADOR,ID_LIDER,LIDER,EJECUTIVO,GERENTE,TIPO_CONTACTO,RANGO_MORA,TIENDA,MACRO_PRODUCTO,PRODUCTO,META_GESTIONES,TRABAJO,GESTIONES,WPC,RPC,HIT) (SELECT * FROM `contento-bi.crediorbe.QRY_CONSL_HORA_HORA` WHERE FECHA = '"+ mifecha +"')"

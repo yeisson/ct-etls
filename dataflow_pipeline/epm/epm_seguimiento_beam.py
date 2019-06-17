@@ -27,6 +27,7 @@ TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
 	'Ciclo:STRING, '
+	'Dias_de_mora:INTEGER, '
 	'Fecha_de_Gestion:STRING, '
 	'Resultado_de_gestion:STRING, '
 	'servicio_suscrito:STRING, '
@@ -52,15 +53,16 @@ class formatearData(beam.DoFn):
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
 				'Ciclo' : arrayCSV[0].replace('"',''),
-				'Fecha_de_Gestion' : arrayCSV[1].replace('"',''),
-				'Resultado_de_gestion' : arrayCSV[2].replace('"',''),
-				'servicio_suscrito' : arrayCSV[3].replace('"',''),
-				'suscripcion' : arrayCSV[4].replace('"',''),
-				'Tipo_de_Gestion' : arrayCSV[5].replace('"',''),
-				'Usuario_que_Graba_Gestion' : arrayCSV[6].replace('"',''),
-				'Codio_Producto' : arrayCSV[7].replace('"',''),
-				'Valor_pendiente' : arrayCSV[8].replace('"',''),
-				'Descripcion_Causal_de_Mora' : arrayCSV[9].replace('"','')
+				'Dias_de_mora' : arrayCSV[1].replace('"',''),
+				'Fecha_de_Gestion' : arrayCSV[2].replace('"',''),
+				'Resultado_de_gestion' : arrayCSV[3].replace('"',''),
+				'servicio_suscrito' : arrayCSV[4].replace('"',''),
+				'suscripcion' : arrayCSV[5].replace('"',''),
+				'Tipo_de_Gestion' : arrayCSV[6].replace('"',''),
+				'Usuario_que_Graba_Gestion' : arrayCSV[7].replace('"',''),
+				'Codio_Producto' : arrayCSV[8].replace('"',''),
+				'Valor_pendiente' : arrayCSV[9].replace('"',''),
+				'Descripcion_Causal_de_Mora' : arrayCSV[10].replace('"','')
 				}
 		
 		return [tupla]

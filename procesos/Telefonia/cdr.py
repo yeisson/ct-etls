@@ -80,7 +80,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial')
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial') #WHERE ipdial_code = "intcob-unisabaneta" 
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -94,6 +94,13 @@ def Ejecutar():
         blob.delete() #Eliminar del storage
     except: 
         print("Eliminado de storage")
+
+    try:
+        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        query_job = client.query(QUERY2)
+        rows2 = query_job.result()
+    except: 
+        print("Eliminado de bigquery")
 
     file = open(ruta_completa,"a")
     for row in rows:

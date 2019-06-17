@@ -39,7 +39,7 @@ TABLE_SCHEMA = (
 	'descri_typing_code2:STRING,'
 	'hit:STRING,'
 	'telephone_destination:STRING,'
-	'telephone_costs:INTEGER,'
+	'telephone_costs:STRING,'
 	'telephone_number:STRING,'
 	'who_hangs_up:STRING,'
 	'customer_identification:STRING,'

@@ -8,6 +8,7 @@ import dataflow_pipeline.bancolombia.bancolombia_castigada_pagos_beam as bancolo
 import dataflow_pipeline.bancolombia.bancolombia_castigada_prejuridico_beam as bancolombia_castigada_prejuridico_beam
 import os
 import socket
+import time
 
 bancolombia_castigada_api = Blueprint('bancolombia_castigada_api', __name__)
 
@@ -52,6 +53,43 @@ def archivos_Seguimiento_castigada():
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
+
+                time.sleep(240) # Le da tiempo al Storage, para que lleve la informacion a la tabla seguimiento en BigQuery.
+
+                # Inicia proceso de calculo para Best Time.
+                # ----------------------------------------------------------------------------------------------------------------
+                # Extraccion de Contactos con Titular:
+                deleteQuery_2 = "INSERT INTO `contento-bi.bancolombia_castigada.contactos_titular` (SELECT A.NIT, A.FECHA_GESTION FROM `contento-bi.bancolombia_castigada.QRY_EXTRACT_RPC` A LEFT JOIN `contento-bi.bancolombia_castigada.contactos_titular` B ON A.NIT = B.NIT AND A.FECHA_GESTION = B.FECHA_GESTION WHERE B.FECHA_GESTION IS NULL)"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(60)
+
+                # # Calculo de Mejor dia (UPDATE):
+                deleteQuery_3 = "UPDATE `contento-bi.bancolombia_castigada.best_time` BT SET BT.MEJOR_DIA = QRY.MI_DIA FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BEST_DAY_UP` QRY WHERE BT.NIT = QRY.NIT"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(deleteQuery_3)
+                query_job_3.result()
+
+                time.sleep(60)
+
+                # # Calculo de Mejor dia (INSERT):
+                deleteQuery_4 = "INSERT INTO `contento-bi.bancolombia_castigada.best_time` (NIT, MEJOR_DIA) (SELECT NIT, MI_DIA FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BEST_DAY_IN`)"
+                client_4 = bigquery.Client()
+                query_job_4 = client_4.query(deleteQuery_4)
+                query_job_4.result()
+
+                time.sleep(60)
+
+                # # Calculo de Mejor hora (UPDATE):
+                deleteQuery_5 = "UPDATE `contento-bi.bancolombia_castigada.best_time` BT SET BT.MEJOR_HORA = QRY.MI_HORA FROM (SELECT NIT, MI_HORA FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BEST_HOUR_UP`) QRY WHERE BT.NIT = QRY.NIT"
+                client_5 = bigquery.Client()
+                query_job_5 = client_5.query(deleteQuery_5)
+                query_job_5.result()
+                # ----------------------------------------------------------------------------------------------------------------
+                # Finaliza proceso de calculo para Best Time.
+
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje

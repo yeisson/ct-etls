@@ -32,7 +32,8 @@ TABLE_SCHEMA = (
 	'fecha_compromiso:STRING, '
 	'gestor:STRING, '
 	'valor_compromiso:STRING, '
-	'codigo_empresa:STRING '
+	'codigo_empresa:STRING, '
+	'dias_de_mora:INTEGER '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -54,7 +55,8 @@ class formatearData(beam.DoFn):
 				'fecha_compromiso': arrayCSV[3],
 				'gestor': arrayCSV[4],
 				'valor_compromiso': arrayCSV[5],
-				'codigo_empresa': arrayCSV[6]
+				'codigo_empresa': arrayCSV[6],
+				'dias_de_mora': arrayCSV[7]
 				}
 		
 		return [tupla]

@@ -33,7 +33,10 @@ from procesos.linead import linead_api
 from procesos.avalcreditos import avalcreditos_api
 from procesos.epm import epm_api
 from procesos.agaval import agaval_api
-# from procesos.refinancia import refinancia_api
+from procesos.crediorbe import crediorbe_api
+from procesos.adeinco_juridico import adeinco_juridico_api
+from procesos.refinancia import refinancia_api
+from procesos.cotrafa import cotrafa_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -63,7 +66,10 @@ app.register_blueprint(linead_api, url_prefix='/linead')
 app.register_blueprint(avalcreditos_api, url_prefix='/avalcreditos')
 app.register_blueprint(epm_api, url_prefix='/epm')
 app.register_blueprint(agaval_api, url_prefix='/agaval')
-# app.register_blueprint(refinancia_api, url_prefix='/refinancia')
+app.register_blueprint(crediorbe_api, url_prefix='/crediorbe')
+app.register_blueprint(adeinco_juridico_api, url_prefix='/adeinco_juridico')
+app.register_blueprint(refinancia_api, url_prefix='/refinancia')
+app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

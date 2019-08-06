@@ -1,4 +1,4 @@
-#coding: utf-8 
+# coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -26,35 +26,72 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'Zona:STRING, '
-	'Codigo_de_ciudad:STRING, '
-	'Cedula:STRING, '
-	'Codigo_interno:STRING, '
-	'Tipo_compradora:STRING, '
-	'Customer_class:STRING, '
-	'Cupo:INTEGER, '
-	'Numero_de_obligacion:STRING, '
-	'Valor_factura:STRING, '
-	'Fecha_factura:STRING, '
-	'Fecha_vencimiento:STRING, '
-	'Valor_saldo_en_cartera:STRING, '
-	'Dias_de_Vencimiento:STRING, '
-	'Campana_original:STRING, '
-	'Ultima_Campana:STRING, '
-	'Codigo:STRING, '
-	'Nombre:STRING, '
-	'Apellidos:STRING, '
-	'Telefono:STRING, '
-	'Celular:STRING, '
-	'Otro_contacto:STRING, '
-	'Correo_electronico:STRING, '
-	'Envio_de_sms:STRING, '
-	'Envio_de_sms_de_voz:STRING, '
-	'Envio_de_correo:STRING, '
-	'Direccion:STRING, '
-	'Barrio:STRING, '
-	'Ciudad:STRING, '
-	'Departamento:STRING '
+	'ZONA:STRING, '
+	'CODIGO_DE_CIUDAD:STRING, '
+	'CEDULA_CIUDADANIA:STRING, '
+	'CODIGO_INTERNO:STRING, '
+	'TIPO_COMPRADORA:STRING, '
+	'CUSTOMER_CLASS:STRING, '
+	'CUPO:INTEGER, '
+	'NUMERO_DE_OBLIGACION:STRING, '
+	'VALOR_FACTURA:STRING, '
+	'FECHA_FACTURA:STRING, '
+	'FECHA_VENCIMIENTO:STRING, '
+	'VALOR_SALDO_EN_CARTERA:STRING, '
+	'DIAS_DE_VENCIMIENTO:STRING, '
+	'CAMPANA_ORIGINAL:STRING, '
+	'ULTIMA_CAMPANA:STRING, '
+	'CODIGO:STRING, '
+	'NOMBRE1:STRING, '
+	'APELLIDOS:STRING, '
+	'TELEFONO_1:STRING, '
+	'CELULAR1:STRING, '
+	'TEL_CEL_2:STRING, '
+	'E_MAIL:STRING, '
+	'AUTORIZO_ENVIO_DE_MENSAJES_DE_TEXTO_A_MI_CELULAR_SI_NO:STRING, '
+	'AUTORIZO_CORREOS_DE_VOZ_A_MI_CELULAR_SI_NO:STRING, '
+	'AUTORIZO_ENVIO_DE_E_MAIL_SI_NO:STRING, '
+	'DIRECCION1:STRING, '
+	'BARRIO1:STRING, '
+	'CIUDAD1:STRING, '
+	'DEPARTAMENTO1:STRING, '
+	'DIRECCION2:STRING, '
+	'BARRIO2:STRING, '
+	'CIUDAD2:STRING, '
+	'DEPARTAMENTO2:STRING, '
+	'NOMBRE2:STRING, '
+	'APELLIDO1:STRING, '
+	'PARENTESCO1:STRING, '
+	'CELULAR2:STRING, '
+	'NOMBRE3:STRING, '
+	'APELLIDO2:STRING, '
+	'PARENTESCO2:STRING, '
+	'TELEFONO2:STRING, '
+	'CELULAR3:STRING, '
+	'DIRECCION3:STRING, '
+	'CIUDAD3:STRING, '
+	'DEPARTAMENTO3:STRING, '
+	'NOMBRE4:STRING, '
+	'APELLIDO3:STRING, '
+	'TELEFONO3:STRING, '
+	'CELULAR4:STRING, '
+	'DIRECCION4:STRING, '
+	'CIUDAD4:STRING, '
+	'DEPARTAMENTO4:STRING, '
+	'NOMBRE5:STRING, '
+	'APELLIDO4:STRING, '
+	'DIRECCION5:STRING, '
+	'TELEFONO4:STRING, '
+	'CELULAR5:STRING, '
+	'CIUDAD5:STRING, '
+	'DEPARTAMENTO5:STRING, '
+	'ABOGAD:STRING, '
+	'DIVSION:STRING, '
+	'PAIS:STRING, '
+	'FECHA_DE_PROXIMA_CONFERENCIA:STRING, '
+	'CODIGO_DE_GESTION:STRING, '
+	'FECHA_DE_GESTION:STRING, '
+	'FECHA_DE_PROMESA_DE_PAGO:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -65,40 +102,75 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'Zona' : arrayCSV[0].replace('"',''),
-				'Codigo_de_ciudad' : arrayCSV[1].replace('"',''),
-				'Cedula' : arrayCSV[2].replace('"',''),
-				'Codigo_interno' : arrayCSV[3].replace('"',''),
-				'Tipo_compradora' : arrayCSV[4].replace('"',''),
-				'Customer_class' : arrayCSV[5].replace('"',''),
-				'Cupo' : arrayCSV[6].replace('"',''),
-				'Numero_de_obligacion' : arrayCSV[7].replace('"',''),
-				'Valor_factura' : arrayCSV[8].replace('"',''),
-				'Fecha_factura' : arrayCSV[9].replace('"',''),
-				'Fecha_vencimiento' : arrayCSV[10].replace('"',''),
-				'Valor_saldo_en_cartera' : arrayCSV[11].replace('"',''),
-				'Dias_de_Vencimiento' : arrayCSV[12].replace('"',''),
-				'Campana_original' : arrayCSV[13].replace('"',''),
-				'Ultima_Campana' : arrayCSV[14].replace('"',''),
-				'Codigo' : arrayCSV[15].replace('"',''),
-				'Nombre' : arrayCSV[16].replace('"',''),
-				'Apellidos' : arrayCSV[17].replace('"',''),
-				'Telefono' : arrayCSV[18].replace('"',''),
-				'Celular' : arrayCSV[19].replace('"',''),
-				'Otro_contacto' : arrayCSV[20].replace('"',''),
-				'Correo_electronico' : arrayCSV[21].replace('"',''),
-				'Envio_de_sms' : arrayCSV[22].replace('"',''),
-				'Envio_de_sms_de_voz' : arrayCSV[23].replace('"',''),
-				'Envio_de_correo' : arrayCSV[24].replace('"',''),
-				'Direccion' : arrayCSV[25].replace('"',''),
-				'Barrio' : arrayCSV[26].replace('"',''),
-				'Ciudad' : arrayCSV[27].replace('"',''),
-				'Departamento' : arrayCSV[28].replace('"','')
+				'ZONA' : arrayCSV[0].replace('"',''),
+				'CODIGO_DE_CIUDAD' : arrayCSV[1].replace('"',''),
+				'CEDULA_CIUDADANIA' : arrayCSV[2].replace('"',''),
+				'CODIGO_INTERNO' : arrayCSV[3].replace('"',''),
+				'TIPO_COMPRADORA' : arrayCSV[4].replace('"',''),
+				'CUSTOMER_CLASS' : arrayCSV[5].replace('"',''),
+				'CUPO' : arrayCSV[6].replace('"',''),
+				'NUMERO_DE_OBLIGACION' : arrayCSV[7].replace('"',''),
+				'VALOR_FACTURA' : arrayCSV[8].replace('"',''),
+				'FECHA_FACTURA' : arrayCSV[9].replace('"',''),
+				'FECHA_VENCIMIENTO' : arrayCSV[10].replace('"',''),
+				'VALOR_SALDO_EN_CARTERA' : arrayCSV[11].replace('"',''),
+				'DIAS_DE_VENCIMIENTO' : arrayCSV[12].replace('"',''),
+				'CAMPANA_ORIGINAL' : arrayCSV[13].replace('"',''),
+				'ULTIMA_CAMPANA' : arrayCSV[14].replace('"',''),
+				'CODIGO' : arrayCSV[15].replace('"',''),
+				'NOMBRE1' : arrayCSV[16].replace('"',''),
+				'APELLIDOS' : arrayCSV[17].replace('"',''),
+				'TELEFONO_1' : arrayCSV[18].replace('"',''),
+				'CELULAR1' : arrayCSV[19].replace('"',''),
+				'TEL_CEL_2' : arrayCSV[20].replace('"',''),
+				'E_MAIL' : arrayCSV[21].replace('"',''),
+				'AUTORIZO_ENVIO_DE_MENSAJES_DE_TEXTO_A_MI_CELULAR_SI_NO' : arrayCSV[22].replace('"',''),
+				'AUTORIZO_CORREOS_DE_VOZ_A_MI_CELULAR_SI_NO' : arrayCSV[23].replace('"',''),
+				'AUTORIZO_ENVIO_DE_E_MAIL_SI_NO' : arrayCSV[24].replace('"',''),
+				'DIRECCION1' : arrayCSV[25].replace('"',''),
+				'BARRIO1' : arrayCSV[26].replace('"',''),
+				'CIUDAD1' : arrayCSV[27].replace('"',''),
+				'DEPARTAMENTO1' : arrayCSV[28].replace('"',''),
+				'DIRECCION2' : arrayCSV[29].replace('"',''),
+				'BARRIO2' : arrayCSV[30].replace('"',''),
+				'CIUDAD2' : arrayCSV[31].replace('"',''),
+				'DEPARTAMENTO2' : arrayCSV[32].replace('"',''),
+				'NOMBRE2' : arrayCSV[33].replace('"',''),
+				'APELLIDO1' : arrayCSV[34].replace('"',''),
+				'PARENTESCO1' : arrayCSV[35].replace('"',''),
+				'CELULAR2' : arrayCSV[36].replace('"',''),
+				'NOMBRE3' : arrayCSV[37].replace('"',''),
+				'APELLIDO2' : arrayCSV[38].replace('"',''),
+				'PARENTESCO2' : arrayCSV[39].replace('"',''),
+				'TELEFONO2' : arrayCSV[40].replace('"',''),
+				'CELULAR3' : arrayCSV[41].replace('"',''),
+				'DIRECCION3' : arrayCSV[42].replace('"',''),
+				'CIUDAD3' : arrayCSV[43].replace('"',''),
+				'DEPARTAMENTO3' : arrayCSV[44].replace('"',''),
+				'NOMBRE4' : arrayCSV[45].replace('"',''),
+				'APELLIDO3' : arrayCSV[46].replace('"',''),
+				'TELEFONO3' : arrayCSV[47].replace('"',''),
+				'CELULAR4' : arrayCSV[48].replace('"',''),
+				'DIRECCION4' : arrayCSV[49].replace('"',''),
+				'CIUDAD4' : arrayCSV[50].replace('"',''),
+				'DEPARTAMENTO4' : arrayCSV[51].replace('"',''),
+				'NOMBRE5' : arrayCSV[52].replace('"',''),
+				'APELLIDO4' : arrayCSV[53].replace('"',''),
+				'DIRECCION5' : arrayCSV[54].replace('"',''),
+				'TELEFONO4' : arrayCSV[55].replace('"',''),
+				'CELULAR5' : arrayCSV[56].replace('"',''),
+				'CIUDAD5' : arrayCSV[57].replace('"',''),
+				'DEPARTAMENTO5' : arrayCSV[58].replace('"',''),
+				'ABOGAD' : arrayCSV[59].replace('"',''),
+				'DIVSION' : arrayCSV[60].replace('"',''),
+				'PAIS' : arrayCSV[61].replace('"',''),
+				'FECHA_DE_PROXIMA_CONFERENCIA' : arrayCSV[62].replace('"','')
+				
 				}
 		
 		return [tupla]

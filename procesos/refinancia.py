@@ -70,7 +70,7 @@ def archivos_Prejuridico():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[23:3]
+            mifecha = archivo[23:31]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-refinancia')

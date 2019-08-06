@@ -29,17 +29,17 @@ zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
 hoy = datetime.datetime.now()
 ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
 ano = str(hoy.year)
-hour1 = "060000"
+hour1 = "000000"
 hour2 = "235959"
-if len(str(ayer.day)) == 1:
-    dia = "0" + str(ayer.day)
+if len(str(hoy.day)) == 1:
+    dia = "0" + str(hoy.day)
 else:
-    dia = str(ayer.day)
+    dia = str(hoy.day)
 
-if len(str(ayer.month)) == 1:
-    mes = "0"+ str(ayer.month)
+if len(str(hoy.month)) == 1:
+    mes = "0"+ str(hoy.month)
 else:
-    mes = str(ayer.month)
+    mes = str(hoy.month)
 
 GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
 GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
@@ -146,6 +146,6 @@ def Ejecutar():
     ejecutar = cdr_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
 
-    return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
-
+    return("El proceso " + KEY_REPORT + ". Fue Cargado Exitosamente en la fecha: " + fecha)
+    return(str(ayer) + " " + str(hoy))
 ########################################################################################################################

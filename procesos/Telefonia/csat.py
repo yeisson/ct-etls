@@ -25,7 +25,7 @@ csat_api = Blueprint('csat_api', __name__) #[[[[[[[[[[[[[[[[[[******************
 ########################### DEFINICION DE VARIABLES ###########################
 
 zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
-hoy = datetime.datetime.now()
+hoy = datetime.datetime.utcnow()
 ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
 ano = str(hoy.year)
 hour1 = "000000"

@@ -96,7 +96,7 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr` where cast(substr(date,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
@@ -147,5 +147,4 @@ def Ejecutar():
     time.sleep(60)
 
     return("El proceso " + KEY_REPORT + ". Fue Cargado Exitosamente en la fecha: " + fecha)
-    return(str(ayer) + " " + str(hoy))
 ########################################################################################################################

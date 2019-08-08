@@ -93,7 +93,7 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.csat` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.csat` where CAST(date AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

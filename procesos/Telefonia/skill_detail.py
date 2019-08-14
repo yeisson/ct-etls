@@ -24,27 +24,13 @@ skill_detail_api = Blueprint('skill_detail_api', __name__) #[[[[[[[[[[[[[[[[[[**
 
 
 ########################### DEFINICION DE VARIABLES ###########################
-
-zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
-hoy = datetime.datetime.now()
-ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
-ano = str(hoy.year)
-hour1 = "060000"
+fecha = time.strftime('%Y%m%d')
+hour1 = "000000"
 hour2 = "235959"
-if len(str(ayer.day)) == 1:
-    dia = "0" + str(ayer.day)
-else:
-    dia = str(ayer.day)
 
-if len(str(ayer.month)) == 1:
-    mes = "0"+ str(ayer.month)
-else:
-    mes = str(ayer.month)
+GetDate1 = time.strftime('%Y%m%d')+str(hour1)
+GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
-GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
-
-fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
@@ -94,6 +80,13 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
+    try:
+        QUERY2 = ('delete FROM `contento-bi.telefonia.skill_detail` where cast(substr(date,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        query_job = client.query(QUERY2)
+        rows2 = query_job.result()
+    except: 
+        print("Eliminado de bigquery")
+
     file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
@@ -129,6 +122,5 @@ def Ejecutar():
     ejecutar = skill_detail_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
 
-    return ("Proceso de listamiento de datos: listo ..........................................................." + ejecutar)
-
+    return("El proceso " + KEY_REPORT + ". Fue Cargado Exitosamente en la fecha: " + fecha)
 ########################################################################################################################

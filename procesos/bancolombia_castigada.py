@@ -176,5 +176,24 @@ def archivos_Prejuridico_castigada():
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
+                time.sleep(240) # Le da tiempo al Storage, para que lleve la informacion a la tabla prejuridico en BigQuery.
+
+                # Inicia proceso de calculo para Fecha de Promesa Ajustada.
+                # ----------------------------------------------------------------------------------------------------------------
+                # Busqueda de Fecha Promesa Ajustada (UPDATE):
+                deleteQuery_2 = "UPDATE `contento-bi.bancolombia_castigada.ajuste_promesas` A SET A.MAX_FECHA_PROMESA_AJUSTADA = CAST(B.FECHA_PROMESA AS DATE) FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_MAX_DATE_HIT_UP` B WHERE A.NIT = B.NIT"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(60)
+
+                # Busqueda de Fecha Promesa Ajustada (INSERT):
+                deleteQuery_3 = "INSERT INTO `contento-bi.bancolombia_castigada.ajuste_promesas` (NIT, MAX_FECHA_PROMESA_AJUSTADA)	(SELECT NIT, CAST(FECHA_PROMESA AS DATE) FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_MAX_DATE_HIT_IN`)"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(deleteQuery_3)
+                query_job_3.result()
+                # ----------------------------------------------------------------------------------------------------------------
+
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje

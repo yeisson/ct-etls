@@ -24,25 +24,9 @@ import datetime
 import time
 
 remover_api = Blueprint('remover_api', __name__)
-#############################################################################
-
-
-
 ########################### DEFINICION DE VARIABLES ###########################
+fecha = time.strftime('%Y%m%d')
 
-ayer = datetime.datetime.today() - datetime.timedelta(days = 1)
-ano = str(ayer.year)
-if len(str(ayer.day)) == 1:
-    dia = "0" + str(ayer.day)
-else:
-    dia = str(ayer.day)
-if len(str(ayer.month)) == 1:
-    mes = "0"+ str(ayer.month)
-else:
-    mes = str(ayer.month)
-
-
-fecha = str(ano)+str(mes)+str(dia)
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 KEY_REPORT = "remover"
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]

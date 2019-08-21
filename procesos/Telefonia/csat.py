@@ -17,33 +17,20 @@ import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
+import sys
 import dataflow_pipeline.telefonia.csat_beam as csat_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 csat_api = Blueprint('csat_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 
 ########################### DEFINICION DE VARIABLES ###########################
-
-zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
-hoy = datetime.datetime.utcnow()
-ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
-ano = str(hoy.year)
+fecha = time.strftime('%Y%m%d')
 hour1 = "000000"
 hour2 = "235959"
-if len(str(hoy.day)) == 1:
-    dia = "0" + str(hoy.day)
-else:
-    dia = str(hoy.day)
 
-if len(str(hoy.month)) == 1:
-    mes = "0"+ str(hoy.month)
-else:
-    mes = str(hoy.month)
+GetDate1 = time.strftime('%Y%m%d')+str(hour1)
+GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
-GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
-
-fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "csat" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "cbps_survey" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
@@ -56,6 +43,8 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 @csat_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
 
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-telefonia')
     gcs_path = 'gs://ct-telefonia'
@@ -93,7 +82,7 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.csat` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.csat` where CAST(date AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

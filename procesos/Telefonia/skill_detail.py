@@ -24,27 +24,13 @@ skill_detail_api = Blueprint('skill_detail_api', __name__) #[[[[[[[[[[[[[[[[[[**
 
 
 ########################### DEFINICION DE VARIABLES ###########################
-
-zona_horaria = (1, 2)[socket.gethostname()=="contentobi"]
-hoy = datetime.datetime.utcnow()
-ayer = datetime.datetime.today() - datetime.timedelta(days = zona_horaria)
-ano = str(hoy.year)
+fecha = time.strftime('%Y%m%d')
 hour1 = "000000"
 hour2 = "235959"
-if len(str(hoy.day)) == 1:
-    dia = "0" + str(hoy.day)
-else:
-    dia = str(hoy.day)
 
-if len(str(hoy.month)) == 1:
-    mes = "0"+ str(hoy.month)
-else:
-    mes = str(hoy.month)
+GetDate1 = time.strftime('%Y%m%d')+str(hour1)
+GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-GetDate1 = str(ano)+str(mes)+str(dia)+str(hour1)
-GetDate2 = str(ano)+str(mes)+str(dia)+str(hour2)
-
-fecha = str(ano)+str(mes)+str(dia)
 KEY_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "skill_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
@@ -95,7 +81,7 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.skill_detail` where replace(substr(date,0,10),"-","") = ' + '"' + dateini[0:8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.skill_detail` where cast(substr(date,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

@@ -37,7 +37,7 @@ TABLE_SCHEMA = (
 	'nota:STRING, '
 	'id_usuario:STRING, '
 	'fecha_compromiso:STRING, '
-	'valor_compromiso:INTEGER '
+	'valor_compromiso:STRING '
 )
 # ?
 class formatearData(beam.DoFn):

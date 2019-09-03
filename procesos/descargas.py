@@ -4,8 +4,11 @@ from flask import jsonify
 from google.cloud import bigquery
 import pandas as pd
 from pandas import DataFrame
+import socket
 
 descargas_api = Blueprint('descargas_api', __name__)
+
+fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 # ---------------------------------------------------------------------------------------
 # Procedimiento que permite descargar informacion a un archivo csv. Fruto de la ejecucion de una consulta SQL desde BigQuery.
@@ -29,7 +32,7 @@ def descargar_csv(myRoute, myQuery, myHeader):
     cabecera = myHeader
     df.colums = cabecera    # Agrega los titulos de los campos al DataFrame.
 
-    mi_ruta_descarga = myRoute
+    mi_ruta_descarga = fileserver_baseroute + myRoute
     df.to_csv(mi_ruta_descarga, encoding='utf-8')   # Ejecuta la descarga del arvhivo csv, especificando el tipo de codificacion 'utf-8'.
 
     return jsonify(response), response["code"]
@@ -44,8 +47,8 @@ def PRUEBA_3():
     response["description"] = "Listo Prueba 3"
     response["status"] = False
 
-    # Defino la ruta de descarga.
-    route = '//192.168.20.87/BI_Archivos/GOOGLE/Bancolombia_Cast/Base_marcada/Base Calculada/Bancolombia_Cast_Base_Calculada.csv'
+    # Defino la ruta de descarga (Sin incluir '//192.168.20.87').
+    route = '/BI_Archivos/GOOGLE/Bancolombia_Cast/Base_marcada/Base Calculada/Bancolombia_Cast_Base_Calculada.csv'
     # Defino la consulta SQL a ejecutar en BigQuery.
     query = 'SELECT * FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BM` LIMIT 15'
     # Defino los títulos de los campos resultantes de la ejecución del query.

@@ -208,7 +208,7 @@ def archivos_Prejuridico_castigada():
 
                 # Query de ejecución de los campos calculados:
                 # Defino la ruta de descarga.
-                route = '//192.168.20.87/BI_Archivos/GOOGLE/Bancolombia_Cast/Base_marcada/Base Calculada/Bancolombia_Cast_Base_Calculada.csv'
+                route = '/BI_Archivos/GOOGLE/Bancolombia_Cast/Base_marcada/Base Calculada/Bancolombia_Cast_Base_Calculada.csv'
                 # Defino la consulta SQL a ejecutar en BigQuery.
                 query = 'SELECT * FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BM`'
                 # Defino los títulos de los campos resultantes de la ejecución del query.

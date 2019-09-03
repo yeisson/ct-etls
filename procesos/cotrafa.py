@@ -20,7 +20,7 @@ def archivos_cotrafa_Seguimiento():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/cotrafa/seguimiento/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Cotrafa/seguimiento/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):

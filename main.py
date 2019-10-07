@@ -43,7 +43,7 @@ from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from procesos.cesde import cesde_api
 
-from WebPage.inicio import webpage_app
+# from WebPage.inicio import webpage_app
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -79,7 +79,7 @@ app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 
-app.register_blueprint(webpage_app, url_prefix='/webpage_app')
+# app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

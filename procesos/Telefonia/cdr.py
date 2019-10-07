@@ -93,8 +93,7 @@ def Ejecutar():
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
 
-        # print(datos)
-
+        
         if len(requests.get(url).content) < 40:
             continue
         else:

@@ -77,7 +77,7 @@ def Ejecutar():
         print("Eliminado de aries")
     
     try:
-        blob.delete() #Eliminar del storage
+        blob.delete() #Eliminar del storage-----
     except: 
         print("Eliminado de storage")
 

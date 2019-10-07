@@ -88,52 +88,52 @@ def Ejecutar():
     except: 
         print("Eliminado de bigquery")
 
-    file = open(ruta_completa,"a")
+    # file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
 
-        print(datos)
+        # print(datos)
 
-    #     if len(requests.get(url).content) < 40:
-    #         continue
-    #     else:
-    #         i = json.loads(datos)
-    #         for rown in i:
-    #             file.write(
-    #                 str(rown["id_call"].encode('utf-8'))+'|'+
-    #                 str(rown["type_call"].encode('utf-8'))+'|'+
-    #                 str(rown["talk_time"])+'|'+
-    #                 str(rown["id_agent"])+'|'+
-    #                 str(rown["agent_name"].encode('utf-8'))+'|'+
-    #                 str(rown["agent_identification"])+'|'+
-    #                 str(rown["skill"])+'|'+
-    #                 str(rown["date"])+'|'+
-    #                 str(rown["hour"])+'|'+
-    #                 str(rown["day_of_week"].encode('utf-8'))+'|'+
-    #                 str(rown["typing_code"].encode('utf-8'))+'|'+
-    #                 str(rown["descri_typing_code"].encode('utf-8'))+'|'+
-    #                 str(rown["typing_code2"].encode('utf-8'))+'|'+
-    #                 str(rown["descri_typing_code2"].encode('utf-8'))+'|'+
-    #                 str(rown["hit"].encode('utf-8'))+'|'+
-    #                 str(rown["telephone_destination"])+'|'+
-    #                 str(rown["telephone_costs"])+'|'+
-    #                 str(rown["telephone_number"])+'|'+
-    #                 str(rown["who_hangs_up"].encode('utf-8'))+'|'+
-    #                 str(rown["customer_identification"])+'|'+
-    #                 str(rown["month"])+'|'+
-    #                 str(rown["screen_recording"].encode('utf-8'))+'|'+
-    #                 str(rown["operation"].encode('utf-8'))+'|'+
-    #                 str(rown["ring"])+'|'+
-    #                 str(rown["abandon"])+'|'+
-    #                 str(row.id_cliente).encode('utf-8')+"|"+
-    #                 str(row.cartera).encode('utf-8') + "\n")
+        if len(requests.get(url).content) < 40:
+            continue
+        else:
+            i = json.loads(datos)
+            for rown in i:
+                file.write(
+                    str(rown["id_call"].encode('utf-8'))+'|'+
+                    str(rown["type_call"].encode('utf-8'))+'|'+
+                    str(rown["talk_time"])+'|'+
+                    str(rown["id_agent"])+'|'+
+                    str(rown["agent_name"].encode('utf-8'))+'|'+
+                    str(rown["agent_identification"])+'|'+
+                    str(rown["skill"])+'|'+
+                    str(rown["date"])+'|'+
+                    str(rown["hour"])+'|'+
+                    str(rown["day_of_week"].encode('utf-8'))+'|'+
+                    str(rown["typing_code"].encode('utf-8'))+'|'+
+                    str(rown["descri_typing_code"].encode('utf-8'))+'|'+
+                    str(rown["typing_code2"].encode('utf-8'))+'|'+
+                    str(rown["descri_typing_code2"].encode('utf-8'))+'|'+
+                    str(rown["hit"].encode('utf-8'))+'|'+
+                    str(rown["telephone_destination"])+'|'+
+                    str(rown["telephone_costs"])+'|'+
+                    str(rown["telephone_number"])+'|'+
+                    str(rown["who_hangs_up"].encode('utf-8'))+'|'+
+                    str(rown["customer_identification"])+'|'+
+                    str(rown["month"])+'|'+
+                    str(rown["screen_recording"].encode('utf-8'))+'|'+
+                    str(rown["operation"].encode('utf-8'))+'|'+
+                    str(rown["ring"])+'|'+
+                    str(rown["abandon"])+'|'+
+                    str(row.id_cliente).encode('utf-8')+"|"+
+                    str(row.cartera).encode('utf-8') + "\n")
     
-    # file.close()
-    # blob.upload_from_filename(ruta_completa)
-    # time.sleep(10)
-    # ejecutar = cdr_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    # time.sleep(60)
+    file.close()
+    blob.upload_from_filename(ruta_completa)
+    time.sleep(10)
+    ejecutar = cdr_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
+    time.sleep(60)
 
     return("El proceso " + KEY_REPORT + ". Fue Cargado Exitosamente en la fecha: " + fecha)
 ########################################################################################################################

@@ -38,6 +38,7 @@ from procesos.adeinco_juridico import adeinco_juridico_api
 from procesos.refinancia import refinancia_api
 from procesos.cotrafa import cotrafa_api
 from procesos.descargas import descargas_api
+from procesos.fanalca import fanalca_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -74,6 +75,7 @@ app.register_blueprint(adeinco_juridico_api, url_prefix='/adeinco_juridico')
 app.register_blueprint(refinancia_api, url_prefix='/refinancia')
 app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(descargas_api, url_prefix='/descargas')
+app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

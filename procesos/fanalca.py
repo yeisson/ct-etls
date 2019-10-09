@@ -98,7 +98,7 @@ def gestion_cotizaciones():
 
             try:
                 # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-                deleteQuery = "DELETE FROM `contento-bi.fanalca.gestion_cotizados_digital`"
+                deleteQuery = "DELETE FROM `contento-bi.fanalca.gestion_cotizados_digital` where 1 = 1"
             
                 #Primero eliminamos todos los registros que contengan esa fecha
                 client = bigquery.Client()

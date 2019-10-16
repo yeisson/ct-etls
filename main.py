@@ -43,6 +43,8 @@ from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from procesos.cesde import cesde_api
 
+from procesos.turnos import turnos_api
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
 app = Flask(__name__, static_url_path='/')
@@ -76,6 +78,8 @@ app.register_blueprint(descargas_api, url_prefix='/descargas')
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
+
+app.register_blueprint(turnos_api, url_prefix='/turnos')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

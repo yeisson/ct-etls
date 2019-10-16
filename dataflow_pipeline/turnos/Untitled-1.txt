@@ -1,0 +1,1105 @@
+Sub Gestiones_Alexander()
+
+Dim libroactual, librotmp As String
+Dim resultado As Range
+Dim celda As Object
+Dim Current As Worksheet
+Dim vector() As Variant
+    
+    If Workbooks.Count > 1 Then MsgBox "Para ejecutar el Informe de Gestión Operativa, es necesario cerrar los demás libros de Excel activos.   No es posible continuar.", vbCritical, "Proceso Detenido.": Exit Sub
+
+    Application.DisplayAlerts = False
+    libroactual = ThisWorkbook.Name
+    
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+    ActiveSheet.DisplayPageBreaks = False
+    
+'- Aquí se seleccionan ADEINCO -----------------------------------------------------------------------------------------------------------------------------
+    Ruta_ADEINCO = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Adeinco"
+    ChDrive Ruta_ADEINCO:       ChDir Ruta_ADEINCO
+    Ruta_ADEINCO = Application.GetOpenFilename(Title:="Seleccione Gestión de Adeinco", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_ADEINCO = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_ADEINCO, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+    
+'- Aquí se selecciona AGAVAL -----------------------------------------------------------------------------------------------------------------------------
+    
+   Ruta_AGAVAL = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Agaval"
+    ChDrive Ruta_AGAVAL:       ChDir Ruta_AGAVAL
+    Ruta_AGAVAL = Application.GetOpenFilename(Title:="Seleccione Gestión de Agaval", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_AGAVAL = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_AGAVAL, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+ 
+'- Aquí se selecciona AVALCREDITO -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_AVALCREDITO = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\AvalCredito"
+    ChDrive Ruta_AVALCREDITO:       ChDir Ruta_AVALCREDITO
+    Ruta_AVALCREDITO = Application.GetOpenFilename(Title:="Seleccione Gestión de AvalCredito", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_AVALCREDITO = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_AVALCREDITO, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+ 
+ 
+ '- Aquí se selecciona COTRAFA -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_COTRAFA = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Cotrafa"
+    ChDrive Ruta_COTRAFA:       ChDir Ruta_COTRAFA
+    Ruta_COTRAFA = Application.GetOpenFilename(Title:="Seleccione Gestión de Cotrafa", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_COTRAFA = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_COTRAFA, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+ 
+     
+ '- Aquí se selecciona CREDIORBE -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_CREDIORBE = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Crediorbe"
+    ChDrive Ruta_CREDIORBE:       ChDir Ruta_CREDIORBE
+    Ruta_CREDIORBE = Application.GetOpenFilename(Title:="Seleccione Gestión de Flamingo", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_CREDIORBE = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_CREDIORBE, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+    
+  '- Aquí se selecciona FLAMINGO -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_FLAMINGO = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Flamingo"
+    ChDrive Ruta_FLAMINGO:       ChDir Ruta_FLAMINGO
+    Ruta_FLAMINGO = Application.GetOpenFilename(Title:="Seleccione Gestión de Flamingo", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_FLAMINGO = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_FLAMINGO, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+    
+    '- Aquí se selecciona LEONISA -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_LEONISA = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Leonisa"
+    ChDrive Ruta_LEONISA:       ChDir Ruta_LEONISA
+    Ruta_LEONISA = Application.GetOpenFilename(Title:="Seleccione Gestión de Leonisa", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_LEONISA = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_LEONISA, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+      
+   '- Aquí se selecciona LINEADIRECTA -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_LINEA = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\LineaDirecta"
+    ChDrive Ruta_LINEA:       ChDir Ruta_LINEA
+    Ruta_LINEA = Application.GetOpenFilename(Title:="Seleccione Gestión de Linea Directa", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_LINEA = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_LINEA, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+    
+      '- Aquí se abre la digitación de línea directa -----------------------------------------------------------------------------------------------------------------------------
+ 
+  Ruta_DIG = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Digitación"
+     ChDrive Ruta_DIG:       ChDir Ruta_DIG
+     Ruta_DIG = Application.GetOpenFilename(Title:="Seleccione Digitación de Linea Directa", filefilter:="Excel files (*.xlsx), *.xlsx")
+     If Ruta_DIG = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+     splitList = VBA.Split(Ruta_DIG, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+     dia_hoy = recupera_fecha("" & librotmp & "")
+ 
+    
+    '- Aquí se abre la digitación de línea directa -----------------------------------------------------------------------------------------------------------------------------
+    
+      Ruta_cont = "C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Automatización Gestiones\Jerarquia"
+    ChDrive Ruta_cont:       ChDir Ruta_cont
+    Ruta_cont = Application.GetOpenFilename(Title:="Seleccione el archivo de jerarquia", filefilter:="Excel files (*.xlsx), *.xlsx")
+    If Ruta_cont = "Falso" Then MsgBox "No se ha seleccionado ningún archivo.  Ejecución detenida.", vbExclamation, "Proceso cancelado": Exit Sub
+    splitList = VBA.Split(Ruta_cont, "\"):           librotmp = splitList(UBound(splitList, 1)):         cadenatmp = cadenatmp & vbCrLf & "-  " & librotmp
+    dia_hoy = recupera_fecha("" & librotmp & "")
+    
+                
+    
+  '- Aquí se abre la digitación de línea directa -----------------------------------------------------------------------------------------------------------------------------
+    
+    If MsgBox("Estos son los archivos que se van a ejecutar, antes de continuar reviselos bien o dale en NO para ingresar la información completa:" & vbCrLf + cadenatmp + vbCrLf + vbCrLf & "Desea continuar ?", vbInformation + vbYesNo, "Checklist de gestiones") <> 7 Then
+        For Each Current In Worksheets
+            If Current.Name = "Adeinco" Or Current.Name = "Agaval" Or Current.Name = "AvalCredito" Or Current.Name = "Cotrafa" Or Current.Name = "Crediorbe" Or Current.Name = "Flamingo" Or Current.Name = "Leonisa" Or Current.Name = "Linea Directa" Or Current.Name = "Digitación" Or Current.Name = "Control" Then Current.Delete
+        Next
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Adeinco"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Agaval"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "AvalCredito"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Cotrafa"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Crediorbe"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Flamingo"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Leonisa"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Linea Directa"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Digitación"
+        Sheets.Add After:=Sheets("Consolidado"):       Sheets(ActiveSheet.Name).Name = "Control"
+    
+    Else
+        MsgBox "Se ha seleccionado 'No'.  Ejecuta nuevamente la herramienta.", vbExclamation, "Se canceló el proceso: ":     Exit Sub
+    End If
+    
+'-----------------------------------------------------------------------------------------------------------------------------------------
+        
+'- CARGA ---------------------------------------------------------------------------------------------------------------------------------
+
+ '- Aquí se selecciona Adeinco -----------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+    splitList = VBA.Split(Ruta_ADEINCO, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_ADEINCO
+    Workbooks(librotmp).Activate
+    Range("A1:AA20000").Copy
+    Workbooks(libroactual).Worksheets("Adeinco").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+    
+   
+   '- Aquí se selecciona Agaval -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_AGAVAL, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_AGAVAL
+    Workbooks(librotmp).Activate
+    Range("A1:J20000").Copy
+    Workbooks(libroactual).Worksheets("Agaval").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+    
+    '- Aquí se selecciona Avalcredito -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_AVALCREDITO, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_AVALCREDITO
+    Workbooks(librotmp).Activate
+    Range("A1:V20000").Copy
+    Workbooks(libroactual).Worksheets("AvalCredito").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+    
+   '- Aquí se selecciona Cotrafa -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_COTRAFA, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_COTRAFA
+    Workbooks(librotmp).Activate
+    Range("A1:L20000").Copy
+    Workbooks(libroactual).Worksheets("Cotrafa").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+   
+    '- Aquí se selecciona Crediorbe -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_CREDIORBE, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_CREDIORBE
+    Workbooks(librotmp).Activate
+    Range("A1:O20000").Copy
+    Workbooks(libroactual).Worksheets("Crediorbe").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+   
+   '- Aquí se selecciona Flamingo -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_FLAMINGO, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_FLAMINGO
+    Workbooks(librotmp).Activate
+    Range("A1:W20000").Copy
+    Workbooks(libroactual).Worksheets("Flamingo").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+   
+   
+   
+    '- Aquí se selecciona Leonisa -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_LEONISA, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_LEONISA
+    Workbooks(librotmp).Activate
+    Range("A1:Q20000").Copy
+    Workbooks(libroactual).Worksheets("Leonisa").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+   
+    '- Aquí se selecciona Linea Directa -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_LINEA, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_LINEA
+    Workbooks(librotmp).Activate
+    Range("A1:H20000").Copy
+    Workbooks(libroactual).Worksheets("Linea Directa").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+   
+    '- Aquí se selecciona Digitación -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_DIG, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_DIG
+    Workbooks(librotmp).Activate
+    If Workbooks(librotmp).Sheets(ActiveSheet.Name).AutoFilterMode Then Workbooks(librotmp).Sheets(ActiveSheet.Name).AutoFilterMode = 0
+    Range(Cells(1, 1), Cells(WorksheetFunction.CountA(Range("A:A")), WorksheetFunction.CountA(Range("C:C")))).Copy
+    Workbooks(libroactual).Worksheets("Digitación").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+    
+ '- Aquí se selecciona Digitación -----------------------------------------------------------------------------------------------------------------------------
+   
+   
+    splitList = VBA.Split(Ruta_cont, "\")
+    librotmp = splitList(UBound(splitList, 1))
+    Workbooks.Open Filename:=Ruta_cont
+    Workbooks(librotmp).Activate
+    If Workbooks(librotmp).Sheets(ActiveSheet.Name).AutoFilterMode Then Workbooks(librotmp).Sheets(ActiveSheet.Name).AutoFilterMode = 0
+    Range(Cells(1, 1), Cells(WorksheetFunction.CountA(Range("A:A")), WorksheetFunction.CountA(Range("C:C")))).Copy
+    Workbooks(libroactual).Worksheets("Control").Range("A1").PasteSpecial xlPasteValues
+    Workbooks(librotmp).Close SaveChanges:=False
+  
+ '-----------------------------------------------------------------------------------------------------------------------------------------
+ '- DEPURACION -------------------------------------------------------------------------------------------------------------------------------
+ 
+  '- Linea Directa -------------------------------------------------------------------------------------------------------------------------------
+   
+   
+   Application.DisplayAlerts = False
+   Workbooks(libroactual).Sheets("Linea Directa").Activate
+   Worksheets("Linea Directa").DisplayPageBreaks = False
+   ActiveSheet.Range("A1:H" & WorksheetFunction.CountA(Sheets("Linea Directa").Range("H:H"))).AutoFilter Field:=5, Criteria1:="Admon"
+   
+   With Range("E1")
+    Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+   End With
+    Selection.AutoFilter
+    Range("A2").Select
+    Range("E1").Select
+    Selection.End(xlToRight).Select
+    Range("I1").FormulaR1C1 = "DT"
+    Range("I2").FormulaR1C1 = "=VLOOKUP(RC[-8],Digitación!C1:C3,3,0)"
+    Range("I2").Select
+    Selection.AutoFill Destination:=Range("I2:I2771")
+    Range("I2:I2771").Select
+    Range("J1").Select
+    ActiveCell.FormulaR1C1 = "Borrador"
+    Range("J2").Select
+    ActiveCell.FormulaR1C1 = "=IF(RC[-1]=""#N/A"",""No"",""Borrar"")"
+    Range("J2").Select
+    Selection.AutoFill Destination:=Range("J2:J15000")
+    Range("J2:J2771").Select
+    Range("J1").Select
+    Selection.AutoFilter
+    Range("J1").Select
+    ActiveSheet.Range("$A$1:$J$15000").AutoFilter Field:=10, Criteria1:="Borrar"
+    Rows("+1").Select
+   
+   With Range("J1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+   End With
+    Range("J1").AutoFilter
+    Columns("I:J").Select
+    Selection.Delete Shift:=xlToLeft
+  
+  Columns("C:C").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Range("A2").Select
+    Columns("E:E").Select
+    Selection.Cut
+    Range("B1").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("D:D").Select
+    Selection.Cut
+    Range("C1").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último Código de Gestión"
+    Range("C2").Select
+  
+   '- Leonisa -------------------------------------------------------------------------------------------------------------------------------
+    
+    Application.DisplayAlerts = False
+    Workbooks(libroactual).Sheets("Leonisa").Activate
+    ActiveSheet.Range("A1:Q" & WorksheetFunction.CountA(Sheets("Leonisa").Range("M:M"))).AutoFilter Field:=13, Criteria1:=Array( _
+        "Admin", "alex.mejia", "Luis.Ruiz"), Operator:=xlFilterValues
+    Rows("+1").Select
+    With Range("E1")
+
+    Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+    End With
+
+    Range("A2").Select
+    Selection.AutoFilter
+    
+    Columns("K:K").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Columns("M:M").Select
+    Selection.Cut
+    Range("B1").Select
+    Selection.Insert Shift:=xlToRight
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Columns("J:J").Select
+    Selection.Cut
+    Range("C1").Select
+    Selection.Insert Shift:=xlToRight
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último Código de gestión"
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+    
+  
+  '- Flamingo -------------------------------------------------------------------------------------------------------------------------------
+   
+   Workbooks(libroactual).Sheets("Flamingo").Activate
+   Application.DisplayAlerts = False
+   ActiveSheet.Range("$A$1:$Y$10000").AutoFilter Field:=15, Criteria1:="=*M2*", _
+        Operator:=xlAnd
+    With Range("O1")
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+    End With
+    Selection.AutoFilter
+    Range("Y1").Select
+    ActiveCell.FormulaR1C1 = "Prioridad"
+    Range("Z1").Select
+    ActiveCell.FormulaR1C1 = "Borrador"
+    Range("Y2").Select
+    ActiveCell.FormulaR1C1 = "=VLOOKUP(RC[-13],Control!C1:C3,3,0)"
+    Range("Y2").Select
+    Selection.AutoFill Destination:=Range("Y2:Y10000")
+    Range("Y2:Y677").Select
+    Range("Z2").Select
+    ActiveCell.FormulaR1C1 = "=IF(RC[-20]=R[1]C[-20],""Borrar"",""No Borrar"")"
+    Range("Z2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.End(xlUp).Select
+    ActiveWindow.SmallScroll Down:=-18
+    Range("Y663").Select
+    Selection.End(xlUp).Select
+    Range("Z2").Select
+    Selection.AutoFill Destination:=Range("Z2:Z10000")
+    Range("Z2:Z10000").Select
+    
+    
+    
+    ActiveWorkbook.Worksheets("Flamingo").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Flamingo").Sort.SortFields.Add2 Key:=Range( _
+        "E2:E10000"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    ActiveWorkbook.Worksheets("Flamingo").Sort.SortFields.Add2 Key:=Range( _
+        "Y2:Y10000"), SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets("Flamingo").Sort
+        .SetRange Range("A1:Z10000")
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("X1").FormulaR1C1 = "Atajo"
+    Range("Z1").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$Z$10000").AutoFilter Field:=23, Criteria1:="Borrar"
+    
+    With Range("Z1")
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+    End With
+    
+    ActiveSheet.Range("$A$1:$Z$171").AutoFilter Field:=26
+    Range("Y:Y,Z:Z").Select
+    Range("Z1").Activate
+    Selection.Delete Shift:=xlToLeft
+    Selection.AutoFilter
+
+    Columns("G:G").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Columns("P:P").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Range("B1").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("M:M").Select
+    Selection.Cut
+    Range("C1").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+    Columns("D:X").Select
+    Range("X1").Activate
+    Selection.End(xlToLeft).Select
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último Código de Gestión"
+    Range("C2").Select
+
+    '- Agaval -------------------------------------------------------------------------------------------------------------------------------
+  
+  Workbooks(libroactual).Sheets("Agaval").Activate
+    Application.DisplayAlerts = False
+    Range("K1").Select
+    Application.CutCopyMode = False
+    ActiveCell.FormulaR1C1 = "Borrador"
+    Range("K2").Select
+    ActiveWorkbook.Worksheets("Agaval").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Agaval").Sort.SortFields.Add2 Key:=Range("D2:D10000") _
+        , SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("Agaval").Sort
+        .SetRange Range("A1:K10000")
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    ActiveCell.FormulaR1C1 = "=IF(RC[-7]=R[1]C[-7],""Borrar"",""No Borrar"")"
+    Range("K2").Select
+    Selection.AutoFill Destination:=Range("K2:K10000")
+    Range("K2:K10000").Select
+    Range("A1").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("K:K").AutoFilter Field:=11, Criteria1:="Borrar"
+     
+     With Range("A1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+     Selection.AutoFilter
+ 
+    End With
+ Columns("K:K").Select
+    Selection.Delete Shift:=xlToLeft
+  
+   Columns("E:E").Select
+    Application.CutCopyMode = False
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Columns("G:G").Select
+    Selection.Cut
+    Columns("B:B").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("H:H").Select
+    Selection.Cut
+    Columns("C:C").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último Código de Gestión"
+    ActiveWindow.LargeScroll Down:=1
+  
+    '- Crediorbe -------------------------------------------------------------------------------------------------------------------------------
+   
+   Workbooks(libroactual).Sheets("Crediorbe").Activate
+     Application.DisplayAlerts = False
+   
+   Selection.AutoFilter
+    Range("E1").Select
+    ActiveSheet.Range("$A$1:$P$10000").AutoFilter Field:=5, Criteria1:= _
+        "katherine.velencia"
+    With Range("E1")
+
+Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+End With
+    
+    Selection.AutoFilter
+  Columns("C:C").Select
+    Application.CutCopyMode = False
+    Selection.Cut
+    Columns("A:A").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("E:E").Select
+    Selection.Cut
+    Columns("B:B").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("E:E").Select
+    Selection.Cut
+    Columns("C:C").Select
+    Selection.Insert Shift:=xlToRight
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último Código de Gestión"
+    Range("C2").Select
+    Columns("D:P").Select
+    Selection.Delete Shift:=xlToLeft
+  
+
+'------AvalCrédito-----------------------------------------------------------------------------------------------------------------------------------
+    
+   Workbooks(libroactual).Sheets("AvalCredito").Activate
+     Application.DisplayAlerts = False
+    
+      Application.DisplayAlerts = False
+    Range("W1").FormulaR1C1 = "Prioridad"
+    Range("X1").Select
+    ActiveCell.FormulaR1C1 = "Duplicado"
+    Range("W2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-14],Control!C1:C3,3,0),"""")"
+    Range("W2").Select
+    Selection.AutoFill Destination:=Range("W2:W15000")
+    Range("W2:W15000").Select
+    Range("X2").Select
+    ActiveCell.FormulaR1C1 = _
+        "=IFERROR(IF(RC[-21]=R[1]C[-21],""Borrar"",""No Borrar""),"""")"
+    Range("X2").Select
+    Selection.AutoFill Destination:=Range("X2:X15000")
+    Range("X2:X15000").Select
+    Columns("W:X").Select
+    Selection.Copy
+    Application.CutCopyMode = False
+    Selection.Copy
+    Application.CutCopyMode = False
+    Selection.Copy
+    Range("W1").Select
+    Application.CutCopyMode = False
+    Selection.AutoFilter
+    Range("W1").Select
+    ActiveWorkbook.Worksheets("AvalCredito").AutoFilter.Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("AvalCredito").AutoFilter.Sort.SortFields.Add2 Key _
+        :=Range("C2:C15000"), SortOn:=xlSortOnValues, Order:=xlDescending, _
+        DataOption:=xlSortNormal
+    ActiveWorkbook.Worksheets("AvalCredito").AutoFilter.Sort.SortFields.Add2 Key _
+        :=Range("W2:W9838"), SortOn:=xlSortOnValues, Order:=xlAscending, _
+        DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("AvalCredito").AutoFilter.Sort
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    ActiveSheet.Range("$A$1:$X$15000").AutoFilter Field:=24, Criteria1:="Borrar"
+   With Range("N1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+    End With
+    
+    Selection.AutoFilter
+    Columns("W:X").Select
+    Selection.Delete Shift:=xlToLeft
+    Columns("N:N").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Columns("G:G").Select
+    Selection.Cut
+    Columns("B:B").Select
+    Selection.Insert Shift:=xlToRight
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Columns("J:J").Select
+    Selection.Cut
+    Columns("C:C").Select
+    Selection.Insert Shift:=xlToRight
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Último Código de Gestión"
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+ 
+ 
+ 
+ '------Cotrafa-----------------------------------------------------------------------------------------------------------------------------------
+   
+   Workbooks(libroactual).Sheets("Cotrafa").Activate
+   Application.DisplayAlerts = False
+    Columns("F:F").Select
+    Application.CutCopyMode = False
+    Selection.Insert Shift:=xlToRight
+    Range("F2").Select
+    ActiveCell.FormulaR1C1 = "=MID(RC[-1],4,35)"
+    Range("F2").Select
+    Selection.AutoFill Destination:=Range("F2:F10000")
+    Range("F2:F10000").Select
+    Columns("F:F").Select
+    Selection.Copy
+    Application.CutCopyMode = False
+    Selection.Copy
+    Application.CutCopyMode = False
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("E1").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Range("F1").Select
+    ActiveSheet.Paste
+    Columns("E:E").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlToLeft
+    Range("M1").Select
+    ActiveCell.FormulaR1C1 = "Prioridad"
+    Range("M2").Select
+    ActiveCell.FormulaR1C1 = "=VLOOKUP(RC[-8],Control!C1:C3,3,0)"
+    Range("M2").Select
+    Selection.AutoFill Destination:=Range("M2:M10000")
+    Range("M2:M10000").Select
+    Range("N1").Select
+    ActiveCell.FormulaR1C1 = "Duplicados"
+    Range("N2").Select
+    ActiveCell.FormulaR1C1 = "=IF(RC[-9]="""",""Borrar"",IF(RC[-13]=R[1]C[-13],""Borrar"",""No Borrar""))"
+    Range("N2").Select
+    Selection.AutoFill Destination:=Range("N2:N10000")
+    Range("N2:N10000").Select
+    Range("M2").Select
+    ActiveWorkbook.Worksheets("Cotrafa").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Cotrafa").Sort.SortFields.Add2 Key:=Range( _
+        "M2:M165"), SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:= _
+        xlSortNormal
+    ActiveWorkbook.Worksheets("Cotrafa").Sort.SortFields.Add2 Key:=Range( _
+        "A2:A10000"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets("Cotrafa").Sort
+        .SetRange Range("A1:N10000")
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    
+    
+    Range("N1").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$N$165").AutoFilter Field:=14, Criteria1:="Borrar"
+    With Range("N1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+    End With
+
+    Selection.AutoFilter
+    Columns("M:N").Select
+    Selection.Delete Shift:=xlToLeft
+
+ 
+    Columns("H:H").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Columns("J:J").Select
+    Selection.Cut
+    Columns("B:B").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("G:G").Select
+    Selection.Cut
+    Columns("C:C").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Fecha"
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Grabador"
+    Range("C1").Select
+    ActiveCell.FormulaR1C1 = "Desc Último código de gestión"
+    Range("C2").Select
+ 
+ 
+ '------Cotrafa-----------------------------------------------------------------------------------------------------------------------------------
+ 
+  Workbooks(libroactual).Sheets("Adeinco").Activate
+  
+  Columns("M:M").Select
+    Application.CutCopyMode = False
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Selection.Insert Shift:=xlToRight
+    Columns("H:H").Select
+    Selection.Cut
+    Selection.End(xlToLeft).Select
+    Range("B1").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("I:I").Select
+    Selection.Cut
+    Columns("C:C").Select
+    Selection.Insert Shift:=xlToRight
+    
+    Columns("D:D").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Delete Shift:=xlToLeft
+ 
+  
+ '- Formateo a fecha  -------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+   Workbooks(libroactual).Sheets("Linea Directa").Activate
+   Workbooks(libroactual).Sheets("Linea Directa").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+ 
+   Workbooks(libroactual).Sheets("Leonisa").Activate
+   Workbooks(libroactual).Sheets("Leonisa").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+ 
+   Workbooks(libroactual).Sheets("Flamingo").Activate
+   Workbooks(libroactual).Sheets("Flamingo").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+   
+   
+   Workbooks(libroactual).Sheets("Crediorbe").Activate
+   Workbooks(libroactual).Sheets("Crediorbe").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+   
+   Workbooks(libroactual).Sheets("Cotrafa").Activate
+   Workbooks(libroactual).Sheets("Cotrafa").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+   
+   Workbooks(libroactual).Sheets("AvalCredito").Activate
+   Workbooks(libroactual).Sheets("AvalCredito").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+ 
+   Workbooks(libroactual).Sheets("Agaval").Activate
+   Workbooks(libroactual).Sheets("Agaval").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+ 
+    Workbooks(libroactual).Sheets("Adeinco").Activate
+   Workbooks(libroactual).Sheets("Adeinco").Columns("A:A").NumberFormat = "dd/mm/yyyy"
+ 
+    
+    
+'- GUARDADO ------------------------------------------------------------------------------------------------------------------------------
+      Sheets("Linea Directa").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Linea Directa.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+
+    Sheets("Flamingo").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Flamingo.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+
+    Sheets("Leonisa").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Leonisa.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+        
+    Sheets("Crediorbe").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Crediorbe.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+    
+    Sheets("Cotrafa").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Cotrafa.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+    
+    Sheets("AvalCredito").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " AvalCredito.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+    Sheets("Agaval").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Agaval.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+    
+      
+   Sheets("Adeinco").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\Procesado\" & Format(dia_hoy, "mmmm") & " Adeinco.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+   
+   Sheets("Digitación").Move
+    ActiveWorkbook.SaveAs Filename:="C:\Users\jordan.ramirez\Documents\Informe de normalización Alexander\" & Format(dia_hoy, "mmmm") & " Digitación.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ActiveWindow.Close
+   
+       ActiveSheet.DisplayPageBreaks = True
+'    Application.DisplayStatusBar = True
+    Application.DisplayAlerts = True
+    Workbooks(libroactual).Save
+'    Unload frm_progreso
+   
+   Call ConslidateWorkbooks
+   
+  Workbooks(libroactual).Sheets("Consolidado").Activate
+    Application.DisplayAlerts = False
+    Columns("A:A").Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").FormulaR1C1 = "Nro Documento"
+    Range("E1").FormulaR1C1 = "Negociador"
+    Range("F1").FormulaR1C1 = "Team"
+    Range("G1").FormulaR1C1 = "Tipo de Gestión"
+    Range("H1").FormulaR1C1 = "Acuerdo de pago"
+    Range("I1").FormulaR1C1 = "Gestión Positiva"
+    Range("J1").FormulaR1C1 = "Contacto Directo"
+    Range("K1").FormulaR1C1 = "Fecha Gestión"
+    Range("L1").FormulaR1C1 = "Operación"
+    Range("M1").FormulaR1C1 = "Clasificación"
+    Range("N1").FormulaR1C1 = "Cédula"
+    Range("N2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-11],Planta!C4:C7,4,0),"""")"
+    Range("N2").Select
+    Selection.AutoFill Destination:=Range("N2:N6684")
+    Range("N2:N15000").Select
+    Range("E2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[9],Planta!C1:C2,2,0),"""")"
+    Range("E2").Select
+    Selection.AutoFill Destination:=Range("E2:E15000")
+    Range("E2:E15000").Select
+    Range("F2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-1],Planta!C2:C6,5,0),"""")"
+    Range("F2").Select
+    Selection.AutoFill Destination:=Range("F2:F15000")
+    Range("F2:F15000").Select
+    Range("G2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-3],Control!C1:C2,2,0),"""")"
+    Range("G2").Select
+    Selection.AutoFill Destination:=Range("G2:G15000")
+    Range("G2:G15000").Select
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-1],""Acuerdo de pago""),"""")"
+    Range("H2").Select
+    Selection.AutoFill Destination:=Range("H2:H15000")
+    Range("H2:H15000").Select
+    Range("I2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-2],""Gestión Positiva""),"""")"
+    Range("I2").Select
+    Selection.AutoFill Destination:=Range("I2:I15000")
+    Range("I2:I15000").Select
+    Range("J2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-3],""Contacto Directo""),"""")"
+    Range("J2").Select
+    Selection.AutoFill Destination:=Range("J2:J15000")
+    Range("J2:J15000").Select
+    Range("K2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(TEXT(RC[-9],""DD""),"""")"
+    Range("K2").Select
+    Selection.AutoFill Destination:=Range("K2:K15000")
+    Range("K2:K15000").Select
+    Range("L2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[2],Planta!C1:C5,5,0),"""")"
+    Range("L2").Select
+    Selection.AutoFill Destination:=Range("L2:L15000")
+    Range("L2:L15000").Select
+    Range("M2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-9],Control!C1:C2,2,0),"""")"
+    Range("M2").Select
+    Selection.AutoFill Destination:=Range("M2:M15000")
+    Range("M2:M15000").Select
+    Range("A2").Select
+    Application.CutCopyMode = False
+    ActiveCell.FormulaR1C1 = "=RC[13]"
+    Range("A2").Select
+    Selection.AutoFill Destination:=Range("A2:A15000")
+    Range("A2:A6684").Select
+    
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+    
+     Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$N$15000").AutoFilter Field:=1, Criteria1:="0"
+    With Range("A1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+    End With
+   
+   
+    
+End Sub
+   
+   
+'-----------------------------------------------------------------------------------------------------------------------------------------
+Sub ConslidateWorkbooks()
+Dim FolderPath As String
+Dim Filename As String
+Dim Sheet As Worksheet
+Application.ScreenUpdating = False
+FolderPath = Environ("userprofile") & "\Documents\Informe de normalización Alexander\Procesado\"
+Filename = Dir(FolderPath & "*.xlsx*")
+Do While Filename <> ""
+ Workbooks.Open Filename:=FolderPath & Filename, ReadOnly:=True
+ For Each Sheet In ActiveWorkbook.Sheets
+ Sheet.Copy After:=ThisWorkbook.Sheets(1)
+ Next Sheet
+ Workbooks(Filename).Close
+ Filename = Dir()
+Loop
+Application.ScreenUpdating = True
+
+Call Unir_Hojas
+End Sub
+
+
+
+Sub Unir_Hojas()
+Dim Sig As Byte, Eliminar As Boolean
+    For Sig = 2 To Worksheets.Count
+        Worksheets(Sig).UsedRange.Copy _
+        Worksheets(1).Range("a1000000").End(xlUp).Offset(1)
+    Next
+       Application.DisplayAlerts = False
+        
+    For Sig = 2 To Worksheets.Count
+        Worksheets(2).Delete
+    Next
+Application.DisplayAlerts = False
+
+  Rows("1:1").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlUp
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$C$15000").AutoFilter Field:=1, Criteria1:="=Fecha" _
+        , Operator:=xlOr, Criteria2:="=Fecha Gestion"
+    With Range("A1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+   End With
+    Selection.AutoFilter
+    
+    
+    
+    
+    
+    
+Application.ScreenUpdating = True
+Application.Calculation = xlCalculationAutomatic
+Application.EnableEvents = True
+ActiveSheet.DisplayPageBreaks = True
+Application.CutCopyMode = False
+    
+
+MsgBox "Ejecición terminada, por favor verifique el resultado." & vbCrLf + vbCrLf & "Hora de Inicio:  ", vbInformation, "Proceso Finalizado"
+
+End Sub
+ 
+    
+    
+    
+
+
+Function recupera_fecha(librotmp As String) As Date
+    librotmp = LCase(librotmp)
+    If InStr(1, librotmp, "enero", vbTextCompare) <> 0 Then mes = "01"
+    If InStr(1, librotmp, "febrero", vbTextCompare) <> 0 Then mes = "02"
+    If InStr(1, librotmp, "marzo", vbTextCompare) <> 0 Then mes = "03"
+    If InStr(1, librotmp, "abril", vbTextCompare) <> 0 Then mes = "04"
+    If InStr(1, librotmp, "mayo", vbTextCompare) <> 0 Then mes = "05"
+    If InStr(1, librotmp, "junio", vbTextCompare) <> 0 Then mes = "06"
+    If InStr(1, librotmp, "julio", vbTextCompare) <> 0 Then mes = "07"
+    If InStr(1, librotmp, "agosto", vbTextCompare) <> 0 Then mes = "08"
+    If InStr(1, librotmp, "septiembre", vbTextCompare) <> 0 Then mes = "09"
+    If InStr(1, librotmp, "octubre", vbTextCompare) <> 0 Then mes = "10"
+    If InStr(1, librotmp, "noviembre", vbTextCompare) <> 0 Then mes = "11"
+    If InStr(1, librotmp, "diciembre", vbTextCompare) <> 0 Then mes = "12"
+    For I = InStr(1, librotmp, VBA.MonthName(mes), vbTextCompare) + Len(VBA.MonthName(mes)) To Len(librotmp)
+        If IsNumeric(Mid(librotmp, I, 1)) Then dia = dia & Mid(librotmp, I, 1)
+    Next I
+    recupera_fecha = dia & "-" & mes
+End Function
+
+
+
+--------------------------------------------------------------------
+
+
+
+
+
+
+ Workbooks(libroactual).Sheets("Consolidado").Activate
+    Application.DisplayAlerts = False
+    Columns("A:A").Select
+    Selection.Insert Shift:=xlToRight
+    Range("A1").FormulaR1C1 = "Nro Documento"
+    Range("E1").FormulaR1C1 = "Negociador"
+    Range("F1").FormulaR1C1 = "Team"
+    Range("G1").FormulaR1C1 = "Tipo de Gestión"
+    Range("H1").FormulaR1C1 = "Acuerdo de pago"
+    Range("I1").FormulaR1C1 = "Gestión Positiva"
+    Range("J1").FormulaR1C1 = "Contacto Directo"
+    Range("K1").FormulaR1C1 = "Fecha Gestión"
+    Range("L1").FormulaR1C1 = "Operación"
+    Range("M1").FormulaR1C1 = "Clasificación"
+    Range("N1").FormulaR1C1 = "Cédula"
+    Range("N2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-11],Planta!C4:C7,4,0),"""")"
+    Range("N2").Select
+    Selection.AutoFill Destination:=Range("N2:N6684")
+    Range("N2:N15000").Select
+    Range("E2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[9],Planta!C1:C2,2,0),"""")"
+    Range("E2").Select
+    Selection.AutoFill Destination:=Range("E2:E15000")
+    Range("E2:E15000").Select
+    Range("F2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-1],Planta!C2:C6,5,0),"""")"
+    Range("F2").Select
+    Selection.AutoFill Destination:=Range("F2:F15000")
+    Range("F2:F15000").Select
+    Range("G2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-3],Control!C1:C2,2,0),"""")"
+    Range("G2").Select
+    Selection.AutoFill Destination:=Range("G2:G15000")
+    Range("G2:G15000").Select
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-1],""Acuerdo de pago""),"""")"
+    Range("H2").Select
+    Selection.AutoFill Destination:=Range("H2:H15000")
+    Range("H2:H15000").Select
+    Range("I2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-2],""Gestión Positiva""),"""")"
+    Range("I2").Select
+    Selection.AutoFill Destination:=Range("I2:I15000")
+    Range("I2:I15000").Select
+    Range("J2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(COUNTIF(RC[-3],""Contacto Directo""),"""")"
+    Range("J2").Select
+    Selection.AutoFill Destination:=Range("J2:J15000")
+    Range("J2:J15000").Select
+    Range("K2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(TEXT(RC[-9],""DD""),"""")"
+    Range("K2").Select
+    Selection.AutoFill Destination:=Range("K2:K15000")
+    Range("K2:K15000").Select
+    Range("L2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[2],Planta!C1:C5,5,0),"""")"
+    Range("L2").Select
+    Selection.AutoFill Destination:=Range("L2:L15000")
+    Range("L2:L15000").Select
+    Range("M2").Select
+    ActiveCell.FormulaR1C1 = "=IFERROR(VLOOKUP(RC[-9],Control!C1:C2,2,0),"""")"
+    Range("M2").Select
+    Selection.AutoFill Destination:=Range("M2:M15000")
+    Range("M2:M15000").Select
+    Range("A2").Select
+    Application.CutCopyMode = False
+    ActiveCell.FormulaR1C1 = "=RC[13]"
+    Range("A2").Select
+    Selection.AutoFill Destination:=Range("A2:A15000")
+    Range("A2:A6684").Select
+    
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+    
+     Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$N$15000").AutoFilter Field:=1, Criteria1:="0"
+    With Range("A1")
+
+     Range(Cells(Rows.Count, .Column).End(xlUp), Cells(.Row + 1, Columns.Count).End(xlToLeft)).SpecialCells(12).Delete
+
+    End With

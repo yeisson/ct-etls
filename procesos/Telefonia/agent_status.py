@@ -66,7 +66,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -77,7 +77,7 @@ def Ejecutar():
         print("Eliminado de aries")
     
     try:
-        blob.delete() #Eliminar del storage
+        blob.delete() #Eliminar del storage-----
     except: 
         print("Eliminado de storage")
 
@@ -92,6 +92,9 @@ def Ejecutar():
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
+
+        # print(url)
+
         if len(requests.get(url).content) < 40:
             continue
         else:

@@ -173,7 +173,7 @@ def gestion_ipdial():
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
-    return jsonify(response), response["code"]
+    return jsonify(response), response["code"] 
     
 
 #########################################################################################################################

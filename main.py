@@ -42,6 +42,7 @@ from procesos.fanalca import fanalca_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
+from WebPage.inicio import webpage_app
 from procesos.cesde import cesde_api
 
 from procesos.turnos import turnos_api
@@ -79,6 +80,7 @@ app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
+app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')

@@ -159,7 +159,7 @@ def procesador():
     file.close()
     blob.upload_from_filename(ruta_completa)
     ejecutar = campaign_beam.run(output)
-    # time.sleep(1)
+    time.sleep(30)
 
     return validador(ipdial_code, fecha, rand_token, id_campana)
 

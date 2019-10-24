@@ -94,7 +94,7 @@ def Ejecutar():
         datos = requests.get(url).content
 
         
-        if len(requests.get(url).content) < 40:
+        if len(requests.get(url).content) < 50:
             continue
         else:
             i = json.loads(datos)

@@ -66,6 +66,15 @@ def Ejecutar():
         datos = requests.get(url).content
         summerize = datos[1:42]
 
+        # if len(requests.get(url).content) <= 50 & row.Estado == "Activado":
+        #     QUERY = (
+        #         'UPDATE telefonia.parametros_ipdial SET Estado = "Desactivado" where token = ' + '"' + row.token + '"')
+        #     query_job = client.query(QUERY)
+
+        # elif len(requests.get(url).content) >= 50 & row.Estado == "Desactivado":
+        #     QUERY = (
+        #         'UPDATE telefonia.parametros_ipdial SET Estado = "Activado" where token = ' + '"' + row.token + '"')
+        #     query_job = client.query(QUERY)
 
         link += str(i) + "-->  " + row.ipdial_code + " - " + row.servidor + " - " + row.token + " - <b>" + row.Estado + '</b>'+ summerize +'<br>'
  

@@ -91,7 +91,7 @@ def Ejecutar():
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
-        if len(requests.get(url).content) < 40:
+        if len(requests.get(url).content) < 50:
             continue
         else:
             i = json.loads(datos)

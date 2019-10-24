@@ -20,6 +20,7 @@ from procesos.Telefonia.agent_status import agent_status_api
 from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
+from procesos.Telefonia.tester import tester_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
@@ -58,6 +59,7 @@ app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+app.register_blueprint(tester_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
@@ -77,11 +79,13 @@ app.register_blueprint(refinancia_api, url_prefix='/refinancia')
 app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(descargas_api, url_prefix='/descargas')
 app.register_blueprint(fanalca_api, url_prefix='/fanalca')
+app.register_blueprint(cesde_api, url_prefix='/cesde')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(webpage_app, url_prefix='/webpage_app')
-app.register_blueprint(cesde_api, url_prefix='/cesde')
+
+
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 

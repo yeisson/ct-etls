@@ -1,8 +1,6 @@
 from flask import Blueprint
 from flask import jsonify, current_app
 from flask import request, render_template
-from flask_bootstrap import Bootstrap
-from flask import request
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 from google.cloud import datastore
@@ -21,14 +19,11 @@ import requests
 import dataflow_pipeline.telefonia.campaign_beam as campaign_beam
 from uuid import uuid4
 
-
-
-
 # coding=utf-8
 
 webpage_app = Blueprint('webpage_app', __name__, template_folder = "templates")
 
-@webpage_app.route("/home", methods=['POST','GET'])
+@webpage_app.route("/api", methods=['POST','GET'])
 def home():
 
     client = bigquery.Client()

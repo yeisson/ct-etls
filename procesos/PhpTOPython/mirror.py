@@ -123,5 +123,3 @@ def load2():
             os.remove(local_route + archivo)
 
     return jsonify(response), response["code"]
-
-    

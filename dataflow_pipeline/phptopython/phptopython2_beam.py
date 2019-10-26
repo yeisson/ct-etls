@@ -84,7 +84,7 @@ def run(archivo):
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
 	])
 	
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	transformed | 'Escritura a BigQuery Jerarquia_Metas' >> beam.io.WriteToBigQuery(
 		gcs_project + ":Rappi.flujo_react", 

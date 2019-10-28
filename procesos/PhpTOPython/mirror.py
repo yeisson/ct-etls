@@ -97,7 +97,7 @@ def load():
 def load2():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
-    url = request.args.get('mi_archivo') # Recibe con esto / 
+    # url = request.args.get('mi_archivo') # Recibe con esto / 
     url = "/media/BI_Archivos/GOOGLE/Rappi/"
     response = {}
     

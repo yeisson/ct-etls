@@ -26,18 +26,19 @@ webpage_app = Blueprint('webpage_app', __name__, template_folder = "templates")
 @webpage_app.route("/api", methods=['POST','GET'])
 def home():
 
-    client = bigquery.Client()
-    QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial WHERE estado = "Activado" order by 4 asc') #WHERE ipdial_code = "intcob-unisabaneta"
-    query_job = client.query(QUERY)
-    rows = query_job.result()
+    # client = bigquery.Client()
+    # QUERY = (
+    #     'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial WHERE estado = "Activado" order by 4 asc') #WHERE ipdial_code = "intcob-unisabaneta"
+    # query_job = client.query(QUERY)
+    # rows = query_job.result()
 
-    datos = np.array([])
+    # datos = np.array([])
 
-    for row in rows:
-        datos = np.append(datos, row[3])
+    # for row in rows:
+    #     datos = np.append(datos, row[3])
 
-    return render_template('index.html', x = datos)
+    # return render_template('index.html', x = datos)
+    return render_template('index.html')
 
 
 

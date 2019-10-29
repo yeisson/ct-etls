@@ -25,7 +25,7 @@ now = datetime.datetime.now()
 
 
 TABLE_SCHEMA = (
-	'id_object_php,'
+	'id_object_php:STRING,'
 	'fecha_de_contacto:STRING,'
 	'id_contento:STRING,'
 	'id_lupe:STRING,'

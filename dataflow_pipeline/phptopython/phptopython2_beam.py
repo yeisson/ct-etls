@@ -25,22 +25,22 @@ now = datetime.datetime.now()
 
 
 TABLE_SCHEMA = (
-	'id_object_php:STRING,'
 	'fecha_de_contacto:STRING,'
 	'id_contento:STRING,'
 	'id_lupe:STRING,'
 	'causal:STRING,'
 	'email:STRING,'
-	'phone:STRING,'
 	'motivo_cliente_activo:STRING,'
 	'sub_motivo_cliente_activo:STRING,'
 	'motivo_cliente_no_activo:STRING,'
-	'submotivo_cliente_no_activo:STRING,'
+	'sub_motivo_cliente_no_activo:STRING,'
 	'orden:STRING,'
-	'forma_de_reacitacion:STRING,'
+	'forma_de_reactivacion:STRING,'
 	'cupon:STRING,'
 	'deuda:STRING,'
-	'monto_deuda:STRING'
+	'monto_deuda:STRING,'
+	'flujo:STRING,'
+	'usuario:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -49,22 +49,22 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split(';')
 
 		tupla= {
-				'id_object_php': arrayCSV[0],
-				'fecha_de_contacto': arrayCSV[1],
-				'id_contento': arrayCSV[2],
-				'id_lupe': arrayCSV[3],
-				'causal': arrayCSV[4],
-				'email': arrayCSV[5],
-				'phone': arrayCSV[6],
-				'motivo_cliente_activo': arrayCSV[7],
-				'sub_motivo_cliente_activo': arrayCSV[8],
-				'motivo_cliente_no_activo': arrayCSV[9],
-				'submotivo_cliente_no_activo': arrayCSV[10],
-				'orden': arrayCSV[11],
-				'forma_de_reacitacion': arrayCSV[12],
-				'cupon': arrayCSV[13],
-				'deuda': arrayCSV[14],
-				'monto_deuda': arrayCSV[15]
+				'fecha_de_contacto': arrayCSV[0],
+				'id_contento': arrayCSV[1],
+				'id_lupe': arrayCSV[2],
+				'causal': arrayCSV[3],
+				'email': arrayCSV[4],
+				'motivo_cliente_activo': arrayCSV[5],
+				'sub_motivo_cliente_activo': arrayCSV[6],
+				'motivo_cliente_no_activo': arrayCSV[7],
+				'sub_motivo_cliente_no_activo': arrayCSV[8],
+				'orden': arrayCSV[9],
+				'forma_de_reactivacion': arrayCSV[10],
+				'cupon': arrayCSV[11],
+				'deuda': arrayCSV[12],
+				'monto_deuda': arrayCSV[13],
+				'flujo': arrayCSV[14],
+				'usuario': arrayCSV[15]
 				}
 		
 		return [tupla]

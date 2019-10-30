@@ -17,6 +17,7 @@ import glob
 # coding=utf-8
 
 mirror_api = Blueprint('mirror_api', __name__)
+fecha = time.strftime('%Y-%m-%d')
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -100,6 +101,13 @@ def load2():
     # url = request.args.get('mi_archivo') # Recibe con esto / 
     url = "/media/BI_Archivos/GOOGLE/Rappi/" 
     response = {}
+
+    try:
+        QUERY2 = ('delete FROM `contento-bi.Rappi.flujo_react` where CAST(CONCAT(SUBSTR(fecha_de_contacto, 7,4),"-",SUBSTR(fecha_de_contacto, 4,2),"-",SUBSTR(fecha_de_contacto, 0,2)) AS DATE) = ' + "'" + fecha + "'")
+        query_job = client.query(QUERY2)
+        rows2 = query_job.result()
+    except: 
+        print("Eliminado de bigquery")
     
     local_route = url
     archivos = os.listdir(local_route)

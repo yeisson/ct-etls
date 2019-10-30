@@ -87,7 +87,7 @@ def run(archivo):
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
 	])
 	
-	lines = pipeline | 'Lectura de Archivo phpToPython' >> ReadFromText(archivo)
+	lines = pipeline | 'Lectura de Archivo phpToPython' >> ReadFromText(archivo, skip_header_lines=1)
 	transformed = (lines | 'Formatear Data phpToPython' >> beam.ParDo(formatearData()))
 	transformed | 'Escritura a BigQuery phpToPython' >> beam.io.WriteToBigQuery(
 		gcs_project + ":Rappi.flujo_react", 

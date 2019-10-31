@@ -79,12 +79,12 @@ def procesador():
     except: 
         print("Eliminado de storage")
 
-    # try:
-    #     QUERY2 = ('delete FROM `contento-bi.telefonia.campaign` where ipdial_code = ' + '"' + operacion + '"' + 'and fecha_cargue = '+ '"' + fecha + '"' + 'and hora = '+ '"' + hora + '"')
-    #     query_job = client.query(QUERY2)
-    #     rows2 = query_job.result()
-    # except: 
-    #     print("Eliminado de bigquery")
+    try:
+        QUERY2 = ('delete FROM `contento-bi.telefonia.campaign` where ipdial_code = ' + '"' + operacion + '"' + 'and fecha_cargue = '+ '"' + fecha + '"' + 'and id_campana = '+ '"' + id_campana + '"')
+        query_job = client.query(QUERY2)
+        rows2 = query_job.result()
+    except: 
+        print("Eliminado de bigquery")
 
 
     QUERY = (

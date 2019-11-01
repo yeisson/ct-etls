@@ -99,7 +99,9 @@ def load2():
 
 #Parametros GET para modificar la consulta segun los parametros entregados
     # url = request.args.get('mi_archivo') # Recibe con esto / 
-    url = "/media/BI_Archivos/GOOGLE/Rappi/" 
+
+    Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
+    url = "/"+ Ruta +"/BI_Archivos/GOOGLE/Rappi/" 
     response = {}
 
     try:

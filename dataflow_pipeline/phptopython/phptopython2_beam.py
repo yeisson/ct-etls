@@ -33,6 +33,7 @@ TABLE_SCHEMA = (
 	'motivo_cliente_activo:STRING,'
 	'sub_motivo_cliente_activo:STRING,'
 	'motivo_cliente_no_activo:STRING,'
+	'causal1:STRING,'
 	'sub_motivo_cliente_no_activo:STRING,'
 	'orden:STRING,'
 	'forma_de_reactivacion:STRING,'
@@ -40,7 +41,9 @@ TABLE_SCHEMA = (
 	'deuda:STRING,'
 	'monto_deuda:STRING,'
 	'flujo:STRING,'
-	'usuario:STRING'
+	'usuario:STRING,'
+	'tipificacionBack:STRING,'
+	'usuarioBack:STRING'
 )
 
 class formatearData(beam.DoFn):
@@ -57,14 +60,17 @@ class formatearData(beam.DoFn):
 				'motivo_cliente_activo': arrayCSV[5],
 				'sub_motivo_cliente_activo': arrayCSV[6],
 				'motivo_cliente_no_activo': arrayCSV[7],
-				'sub_motivo_cliente_no_activo': arrayCSV[8],
-				'orden': arrayCSV[9],
-				'forma_de_reactivacion': arrayCSV[10],
-				'cupon': arrayCSV[11],
-				'deuda': arrayCSV[12],
-				'monto_deuda': arrayCSV[13],
-				'flujo': arrayCSV[14],
-				'usuario': arrayCSV[15]
+				'causal1': arrayCSV[8],
+				'sub_motivo_cliente_no_activo': arrayCSV[9],
+				'orden': arrayCSV[10],
+				'forma_de_reactivacion': arrayCSV[11],
+				'cupon': arrayCSV[12],
+				'deuda': arrayCSV[13],
+				'monto_deuda': arrayCSV[14],
+				'flujo': arrayCSV[15],
+				'usuario': arrayCSV[16],
+				'tipificacionBack': arrayCSV[17],
+				'usuarioBack': arrayCSV[18]
 				}
 		
 		return [tupla]

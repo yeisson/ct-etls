@@ -60,6 +60,8 @@ def procesador():
     output = gcs_path + "/" + sub_path + fecha + "_" + operacion +".csv"
     tipo_campana = request.form['tipo_campana']
     id_campana = request.form['id_campana']
+    dini= request.form['dateini'].replace("-","")
+    dend= request.form['dateend'].replace("-","")
     dateinip = request.form['dateini'] + '00000000'
     dateini = dateinip.replace("-","")
     dateendp = request.form['dateend'] + '23595900'
@@ -80,7 +82,7 @@ def procesador():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.campaign` where ipdial_code = ' + '"' + operacion + '"' + 'and fecha_cargue = '+ '"' + fecha + '"' + 'and id_campana = '+ '"' + id_campana + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.campaign` where ipdial_code = ' + '"' + operacion + '"' + 'and (substr(fecha,1,8) between "' + dini + '" and "'+ dend + '")' + 'and id_campana = '+ '"' + id_campana + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

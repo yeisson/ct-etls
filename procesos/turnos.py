@@ -23,7 +23,7 @@ def archivos():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/aries/Workforce/Turnos/Bancolombia/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Bancolombia/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -49,7 +49,7 @@ def archivos():
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = turnos_visor_beam.run('gs://ct-turnos/turnos/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Workforce/Turnos/Bancolombia/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Bancolombia/Procesados/" +archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
@@ -68,7 +68,7 @@ def unificadas():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/aries/Workforce/Turnos/Unificadas/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Unificadas/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -94,7 +94,7 @@ def unificadas():
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = turnos_unificadas_beam.run('gs://ct-turnos/unificadas/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Workforce/Turnos/Unificadas/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Unificadas/Procesados/" + archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
@@ -115,7 +115,7 @@ def sac():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/aries/Workforce/Turnos/SAC/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -141,7 +141,7 @@ def sac():
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = turnos_sac_beam.run('gs://ct-turnos/sac/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/aries/Workforce/Turnos/SAC/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True

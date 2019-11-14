@@ -24,6 +24,8 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
+	'IDKEY:STRING,'
+	'FECHA:STRING,'
 	'DIA_MES:STRING, '
 	'MES:STRING, '
 	'CEDULA:STRING, '

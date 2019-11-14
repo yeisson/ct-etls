@@ -168,7 +168,7 @@ def index():
         )\
         GROUP BY id_campana')
 
-    query_job = client.query(QUERY2)
+    query_job = client.query(QUERY3)
     rows3 = query_job.result()
 
 

@@ -46,6 +46,7 @@ from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
 from procesos.cesde import cesde_api
+from procesos.rappi import rappi_api
 
 from procesos.turnos import turnos_api
 
@@ -82,6 +83,7 @@ app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(descargas_api, url_prefix='/descargas')
 app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
+app.register_blueprint(rappi_api, url_prefix='/rappi')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

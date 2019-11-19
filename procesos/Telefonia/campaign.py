@@ -53,10 +53,12 @@ def index():
         
     if dendp is None:
         dendp = fecha
-        dend = str(fecha) + '00000000'
+        dend = str(fecha) + '23595900'
     else:
         dendp = request.args.get('dateend')
         dend= str(request.args.get('dateend')) + '23595900'
+
+    
 
     ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/campaign/" + "campana_" + fecha + "_" + operacion +".csv"
     blob = bucket.blob(sub_path + fecha + "_" + operacion + ".csv")

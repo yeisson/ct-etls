@@ -28,6 +28,8 @@ fecha = time.strftime('%Y-%m-%d')
 @rappi_api.route("/" + "formulario_rappi", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
 
+    # ejemplo de consulta: http://35.239.77.81:5000/rappi/formulario_rappi?fechaInicial=2019-11-14&fechaFinal=2019-11-17
+
     reload(sys)
     sys.setdefaultencoding('utf8')
     storage_client = storage.Client()
@@ -103,8 +105,8 @@ def Ejecutar():
                 str(row["15"]).encode('utf-8') +";"+
                 str(row["16"]).encode('utf-8') +";"+
                 str(row["17"]).encode('utf-8') +";"+
-                str(row["18"]).encode('utf-8') +";"+
-                str(row["19"]).encode('utf-8') +";"+
+                str(row["18"]).replace("\r\n","").encode('utf-8') +";"+
+                str(row["19"]).replace("\r\n","").encode('utf-8') +";"+
                 str(row["20"]).encode('utf-8') +";"+
                 str(row["21"]).encode('utf-8') +";"+
                 str(row["22"]).encode('utf-8') +";"+

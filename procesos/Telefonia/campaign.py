@@ -41,25 +41,10 @@ def index():
     output = gcs_path + "/" + sub_path + fecha + "_" + operacion +".csv"
     tipo_campana = request.args.get('tipo_campana')
     id_campana = request.args.get('id_campana')
-    
+    dini= request.args.get('dateini') + '00000000'
+    dend= request.args.get('dateend') + '23595900'
     dinip= request.args.get('dateini')
     dendp= request.args.get('dateend')
-
-    if dinip is None:
-        dini = str(fecha) + '00000000'
-        dinip = str(fecha)
-    else:   
-        dini= request.args.get('dateini') + '00000000'
-        dinip= request.args.get('dateini')
-
-    if dendp is None:
-        dend = str(fecha) + '00000000'
-        dendp = str(fecha)
-    else:
-        dend= request.args.get('dateend') + '00000000'
-        dendp= request.args.get('dateend')
-
-
 
     ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/campaign/" + "campana_" + fecha + "_" + operacion +".csv"
     blob = bucket.blob(sub_path + fecha + "_" + operacion + ".csv")

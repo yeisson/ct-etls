@@ -64,12 +64,12 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
-    # try:
-    #     QUERY2 = ('delete FROM `contento-bi.telefonia.login_logout` where date = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
-    #     query_job = client.query(QUERY2)
-    #     rows2 = query_job.result()
-    # except: 
-    #     print("Eliminado de bigquery")
+    try:
+        QUERY2 = ('delete from `Rappi.flujo_react2` where substr(fecha,1,10) between ' + '"' + dateini + '"' + ' and "' + dateend + '"')
+        query_job = client.query(QUERY2)
+        rows2 = query_job.result()
+    except: 
+        print("Eliminado de bigquery")
 
 
     url = "https://webapp.contentobps.com/app/rappi/Desarrollo/back/API.php?token=HUCQHCHMENUNETUP&tipo=Encuesta&fechaInicial="+dateinip+"&fechaFinal="+dateendp

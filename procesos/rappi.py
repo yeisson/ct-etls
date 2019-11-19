@@ -96,7 +96,7 @@ def Ejecutar():
                 str(row["6"]).encode('utf-8') +";"+
                 str(row["7"]).encode('utf-8') +";"+
                 str(row["8"]).encode('utf-8') +";"+
-                str(row["9"]).replace("\r\n","").encode('utf-8') +";"+
+                ((str(row["9"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
                 str(row["10"]).encode('utf-8') +";"+
                 str(row["11"]).encode('utf-8') +";"+
                 str(row["12"]).encode('utf-8') +";"+
@@ -105,8 +105,8 @@ def Ejecutar():
                 str(row["15"]).encode('utf-8') +";"+
                 str(row["16"]).encode('utf-8') +";"+
                 str(row["17"]).encode('utf-8') +";"+
-                str(row["18"]).replace("\r\n","").encode('utf-8') +";"+
-                str(row["19"]).replace("\r\n","").encode('utf-8') +";"+
+                ((str(row["18"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
+                ((str(row["19"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
                 str(row["20"]).encode('utf-8') +";"+
                 str(row["21"]).encode('utf-8') +";"+
                 str(row["22"]).encode('utf-8') +";"+

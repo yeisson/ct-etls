@@ -34,25 +34,28 @@ def Ejecutar():
     bucket = storage_client.get_bucket('ct-rappi')
     gcs_path = 'gs://ct-rappi'
     sub_path = 'formulario_rappi_'
+    fecha = time.strftime('%Y-%m-%d')
     output = gcs_path + "/" + sub_path + fecha + ".csv"
     blob = bucket.blob(sub_path + fecha + ".csv")
     dateini = request.args.get('fechaInicial')
-    dateinip = str(dateini) + "%20" + "00:00:00"
     dateend = request.args.get('fechaFinal')
-    dateendp = str(dateend) + "%20" + "23:59:59"
     client = bigquery.Client()
     Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
     ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Rappi/"+ sub_path + fecha +".csv"
 
     if dateini is None:
         dateini = fecha
+        dateinip = str(dateini) + "%20" + "00:00:00"
     else:   
         dateini = dateini
+        dateinip = str(dateini) + "%20" + "00:00:00"
 
     if dateend is None:
         dateend = fecha
+        dateendp = str(dateend) + "%20" + "23:59:59"
     else:
         dateend = dateend
+        dateendp = str(dateend) + "%20" + "23:59:59"
     
     try:
         os.remove(ruta_completa) #Eliminar de aries
@@ -73,45 +76,46 @@ def Ejecutar():
 
 
     url = "https://webapp.contentobps.com/app/rappi/Desarrollo/back/API.php?token=HUCQHCHMENUNETUP&tipo=Encuesta&fechaInicial="+dateinip+"&fechaFinal="+dateendp
-    datos = requests.get(url).content
+    # datos = requests.get(url).content
 
-    if len(requests.get(url).content) < 50:
-        return jsonify("No hay datos entre estas fechas: " + (dateini) + " y " + (dateend))
-    else:
-        i = json.loads(datos)
-        file = open(ruta_completa,"a")
-        for row in i:
-            file.write(
-                str(row["0"]).encode('utf-8') +";"+
-                str(row["1"]).encode('utf-8') +";"+
-                str(row["2"]).encode('utf-8') +";"+
-                str(row["3"]).encode('utf-8') +";"+
-                str(row["4"]).encode('utf-8') +";"+
-                str(row["5"]).encode('utf-8') +";"+
-                str(row["6"]).encode('utf-8') +";"+
-                str(row["7"]).encode('utf-8') +";"+
-                str(row["8"]).encode('utf-8') +";"+
-                str(row["9"]).replace("\r\n","").encode('utf-8') +";"+
-                str(row["10"]).encode('utf-8') +";"+
-                str(row["11"]).encode('utf-8') +";"+
-                str(row["12"]).encode('utf-8') +";"+
-                str(row["13"]).encode('utf-8') +";"+
-                str(row["14"]).encode('utf-8') +";"+
-                str(row["15"]).encode('utf-8') +";"+
-                str(row["16"]).encode('utf-8') +";"+
-                str(row["17"]).encode('utf-8') +";"+
-                str(row["18"]).encode('utf-8') +";"+
-                str(row["19"]).encode('utf-8') +";"+
-                str(row["20"]).encode('utf-8') +";"+
-                str(row["21"]).encode('utf-8') +";"+
-                str(row["22"]).encode('utf-8') +";"+
-                str(row["23"]).encode('utf-8') +";"+
-                str(row["24"]).encode('utf-8') +"\n")
+    # if len(requests.get(url).content) < 50:
+    #     return jsonify("No hay datos entre estas fechas: " + (dateini) + " y " + (dateend))
+    # else:
+    #     i = json.loads(datos)
+    #     file = open(ruta_completa,"a")
+    #     for row in i:
+    #         file.write(
+    #             str(row["0"]).encode('utf-8') +";"+
+    #             str(row["1"]).encode('utf-8') +";"+
+    #             str(row["2"]).encode('utf-8') +";"+
+    #             str(row["3"]).encode('utf-8') +";"+
+    #             str(row["4"]).encode('utf-8') +";"+
+    #             str(row["5"]).encode('utf-8') +";"+
+    #             str(row["6"]).encode('utf-8') +";"+
+    #             str(row["7"]).encode('utf-8') +";"+
+    #             str(row["8"]).encode('utf-8') +";"+
+    #             str(row["9"]).replace("\r\n","").encode('utf-8') +";"+
+    #             str(row["10"]).encode('utf-8') +";"+
+    #             str(row["11"]).encode('utf-8') +";"+
+    #             str(row["12"]).encode('utf-8') +";"+
+    #             str(row["13"]).encode('utf-8') +";"+
+    #             str(row["14"]).encode('utf-8') +";"+
+    #             str(row["15"]).encode('utf-8') +";"+
+    #             str(row["16"]).encode('utf-8') +";"+
+    #             str(row["17"]).encode('utf-8') +";"+
+    #             str(row["18"]).encode('utf-8') +";"+
+    #             str(row["19"]).encode('utf-8') +";"+
+    #             str(row["20"]).encode('utf-8') +";"+
+    #             str(row["21"]).encode('utf-8') +";"+
+    #             str(row["22"]).encode('utf-8') +";"+
+    #             str(row["23"]).encode('utf-8') +";"+
+    #             str(row["24"]).encode('utf-8') +"\n")
     
-        file.close()
-        blob.upload_from_filename(ruta_completa)
-        time.sleep(10)
-        ejecutar = rappi_beam.run(output) 
-        time.sleep(60)
+    #     file.close()
+    #     blob.upload_from_filename(ruta_completa)
+    #     time.sleep(10)
+    #     ejecutar = rappi_beam.run(output) 
+    #     time.sleep(60)
 
+    return (url)
     return ("creo el archivo relajado")

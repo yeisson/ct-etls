@@ -114,7 +114,6 @@ class formatearData(beam.DoFn):
 
 
 def run(archivo, mifecha):
-
 	gcs_path = "gs://ct-sensus" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
@@ -148,7 +147,6 @@ def run(archivo, mifecha):
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
-
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
 	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
 

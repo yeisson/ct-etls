@@ -24,7 +24,6 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-     
     'IDKEY:STRING, ' 
 	'FECHA:STRING, ' 
 	'EMPRESA:STRING, '
@@ -74,17 +73,7 @@ TABLE_SCHEMA = (
 	'C2:STRING, '
 	'C3:STRING, '
 	'C4:STRING '
-
-
-
-
-
-
-
-
-
-
-)
+	)
 # ?
 class formatearData(beam.DoFn):
 

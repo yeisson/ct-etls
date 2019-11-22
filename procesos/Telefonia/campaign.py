@@ -99,111 +99,114 @@ def index():
         url = 'http://' + servidor + '/ipdialbox/api_campaing.php?token=' + token + '&action=detail_json&type_campaing=' + tipo_campana + '&campaing='+ id_campana + '&date_ini=' + dini + '&date_end=' + dend
         datos = requests.get(url).content
 
-        i = json.loads(datos)
-        for rown in i:
-            file.write(
-                str(rown[0]['nombre_cliente']) +";"+ 
-                str(rown[0]['apellido_cliente']).decode('utf-8') +";"+
-                str(rown[0]['tipo_doc']).encode('utf-8') +";"+
-                str(rown[0]['id_cliente']).encode('utf-8') +";"+
-                str(rown[0]['sexo']).encode('utf-8') +";"+
-                str(rown[0]['pais']).encode('utf-8') +";"+
-                str(rown[0]['departamento']).encode('utf-8') +";"+
-                str(rown[0]['ciudad']).encode('utf-8') +";"+
-                str(rown[0]['zona']).encode('utf-8') +";"+
-                str(rown[0]['direccion']).encode('utf-8') +";"+
-                str(rown[0]['opt1']).encode('utf-8') +";"+
-                str(rown[0]['opt2']).encode('utf-8') +";"+
-                str(rown[0]['opt3']).encode('utf-8') +";"+
-                str(rown[0]['opt4']).encode('utf-8') +";"+
-                str(rown[0]['opt5']).encode('utf-8') +";"+
-                str(rown[0]['opt6']).encode('utf-8') +";"+
-                str(rown[0]['opt7']).encode('utf-8') +";"+
-                str(rown[0]['opt8']).encode('utf-8') +";"+
-                str(rown[0]['opt9']).encode('utf-8') +";"+
-                str(rown[0]['opt10']).encode('utf-8') +";"+
-                str(rown[0]['opt11']).encode('utf-8') +";"+
-                str(rown[0]['opt12']).encode('utf-8') +";"+
-                str(rown[0]['tel1']).encode('utf-8') +";"+
-                str(rown[0]['tel2']).encode('utf-8') +";"+
-                str(rown[0]['tel3']).encode('utf-8') +";"+
-                str(rown[0]['tel4']).encode('utf-8') +";"+
-                str(rown[0]['tel5']).encode('utf-8') +";"+
-                str(rown[0]['tel6']).encode('utf-8') +";"+
-                str(rown[0]['tel7']).encode('utf-8') +";"+
-                str(rown[0]['tel8']).encode('utf-8') +";"+
-                str(rown[0]['tel9']).encode('utf-8') +";"+
-                str(rown[0]['tel10']).encode('utf-8') +";"+
-                str(rown[0]['tel_extra']).encode('utf-8') +";"+
-                str(rown[0]['id_agent']).encode('utf-8') +";"+
-                str(rown[0]['fecha']).encode('utf-8') +";"+
-                str(rown[0]['llamadas']).encode('utf-8') +";"+
-                str(rown[0]['id_call']).encode('utf-8') +";"+
-                str(rown[0]['rellamada']).encode('utf-8') +";"+
-                str(rown[0]['resultado']).encode('utf-8') +";"+
-                str(rown[0]['cod_rslt1']).encode('utf-8') +";"+
-                str(rown[0]['cod_rslt2']).encode('utf-8') +";"+
-                str(rown[0]['rellamada_count']).encode('utf-8') +";"+
-                str(row.id_cliente)+";"+
-                str(row.ipdial_code)+";"+
-                str(rand_token)+";"+
-                str(hora)+";"+
-                str(id_campana)+";"+
-                str(fecha) + "\n")
+        if len(requests.get(url).content) < 50:
+            continue
+        else:
+            i = json.loads(datos)
+            for rown in i:
+                file.write(
+                    str(rown[0]['nombre_cliente']) +";"+ 
+                    str(rown[0]['apellido_cliente']).decode('utf-8') +";"+
+                    str(rown[0]['tipo_doc']).encode('utf-8') +";"+
+                    str(rown[0]['id_cliente']).encode('utf-8') +";"+
+                    str(rown[0]['sexo']).encode('utf-8') +";"+
+                    str(rown[0]['pais']).encode('utf-8') +";"+
+                    str(rown[0]['departamento']).encode('utf-8') +";"+
+                    str(rown[0]['ciudad']).encode('utf-8') +";"+
+                    str(rown[0]['zona']).encode('utf-8') +";"+
+                    str(rown[0]['direccion']).encode('utf-8') +";"+
+                    str(rown[0]['opt1']).encode('utf-8') +";"+
+                    str(rown[0]['opt2']).encode('utf-8') +";"+
+                    str(rown[0]['opt3']).encode('utf-8') +";"+
+                    str(rown[0]['opt4']).encode('utf-8') +";"+
+                    str(rown[0]['opt5']).encode('utf-8') +";"+
+                    str(rown[0]['opt6']).encode('utf-8') +";"+
+                    str(rown[0]['opt7']).encode('utf-8') +";"+
+                    str(rown[0]['opt8']).encode('utf-8') +";"+
+                    str(rown[0]['opt9']).encode('utf-8') +";"+
+                    str(rown[0]['opt10']).encode('utf-8') +";"+
+                    str(rown[0]['opt11']).encode('utf-8') +";"+
+                    str(rown[0]['opt12']).encode('utf-8') +";"+
+                    str(rown[0]['tel1']).encode('utf-8') +";"+
+                    str(rown[0]['tel2']).encode('utf-8') +";"+
+                    str(rown[0]['tel3']).encode('utf-8') +";"+
+                    str(rown[0]['tel4']).encode('utf-8') +";"+
+                    str(rown[0]['tel5']).encode('utf-8') +";"+
+                    str(rown[0]['tel6']).encode('utf-8') +";"+
+                    str(rown[0]['tel7']).encode('utf-8') +";"+
+                    str(rown[0]['tel8']).encode('utf-8') +";"+
+                    str(rown[0]['tel9']).encode('utf-8') +";"+
+                    str(rown[0]['tel10']).encode('utf-8') +";"+
+                    str(rown[0]['tel_extra']).encode('utf-8') +";"+
+                    str(rown[0]['id_agent']).encode('utf-8') +";"+
+                    str(rown[0]['fecha']).encode('utf-8') +";"+
+                    str(rown[0]['llamadas']).encode('utf-8') +";"+
+                    str(rown[0]['id_call']).encode('utf-8') +";"+
+                    str(rown[0]['rellamada']).encode('utf-8') +";"+
+                    str(rown[0]['resultado']).encode('utf-8') +";"+
+                    str(rown[0]['cod_rslt1']).encode('utf-8') +";"+
+                    str(rown[0]['cod_rslt2']).encode('utf-8') +";"+
+                    str(rown[0]['rellamada_count']).encode('utf-8') +";"+
+                    str(row.id_cliente)+";"+
+                    str(row.ipdial_code)+";"+
+                    str(rand_token)+";"+
+                    str(hora)+";"+
+                    str(id_campana)+";"+
+                    str(fecha) + "\n")
 
-    print url
-    file.close()
-    blob.upload_from_filename(ruta_completa)
-    ejecutar = campaign_beam.run(output)
-    time.sleep(180)
+        print url
+        file.close()
+        blob.upload_from_filename(ruta_completa)
+        ejecutar = campaign_beam.run(output)
+        time.sleep(180)
 
-    QUERY3 = (
-        'SELECT id_campana,\
-            SUM(answer) AS answer,\
-            SUM(clean) AS clean,\
-            SUM(answer_machine) AS answer_machine,\
-            SUM(no_answer) AS no_answer,\
-            SUM(abandon) AS abandon,\
-            SUM(failed) AS failed,\
-            SUM(busy) AS busy\
-        FROM(\
-        SELECT \
-            distinct(id_campana),\
-            CASE WHEN resultado = "ANSWER" THEN sum(1) ELSE 0 END AS answer,\
-            CASE WHEN resultado = "CLEAN" THEN sum(1) ELSE 0 END AS clean,\
-            CASE WHEN resultado = "ANSWER-MACHINE" THEN sum(1) ELSE 0 END AS answer_machine,\
-            CASE WHEN resultado = "NO-ANSWER" THEN sum(1) ELSE 0 END AS no_answer,\
-            CASE WHEN resultado = "ABANDON" THEN sum(1) ELSE 0 END AS abandon,\
-            CASE WHEN resultado = "FAILED" THEN sum(1) ELSE 0 END AS failed,\
-            CASE WHEN resultado = "BUSY" THEN sum(1) ELSE 0 END AS busy\
-        FROM `telefonia.campaign`\
-        where ipdial_code = '+ "'" + ipdial_code + "'"  +" and rand_token = '" + str(rand_token) +  "'"'\
-        GROUP BY id_campana, resultado\
-        )\
-        GROUP BY id_campana')
+        QUERY3 = (
+            'SELECT id_campana,\
+                SUM(answer) AS answer,\
+                SUM(clean) AS clean,\
+                SUM(answer_machine) AS answer_machine,\
+                SUM(no_answer) AS no_answer,\
+                SUM(abandon) AS abandon,\
+                SUM(failed) AS failed,\
+                SUM(busy) AS busy\
+            FROM(\
+            SELECT \
+                distinct(id_campana),\
+                CASE WHEN resultado = "ANSWER" THEN sum(1) ELSE 0 END AS answer,\
+                CASE WHEN resultado = "CLEAN" THEN sum(1) ELSE 0 END AS clean,\
+                CASE WHEN resultado = "ANSWER-MACHINE" THEN sum(1) ELSE 0 END AS answer_machine,\
+                CASE WHEN resultado = "NO-ANSWER" THEN sum(1) ELSE 0 END AS no_answer,\
+                CASE WHEN resultado = "ABANDON" THEN sum(1) ELSE 0 END AS abandon,\
+                CASE WHEN resultado = "FAILED" THEN sum(1) ELSE 0 END AS failed,\
+                CASE WHEN resultado = "BUSY" THEN sum(1) ELSE 0 END AS busy\
+            FROM `telefonia.campaign`\
+            where ipdial_code = '+ "'" + ipdial_code + "'"  +" and rand_token = '" + str(rand_token) +  "'"'\
+            GROUP BY id_campana, resultado\
+            )\
+            GROUP BY id_campana')
 
-    query_job = client.query(QUERY3)
-    rows3 = query_job.result()
+        query_job = client.query(QUERY3)
+        rows3 = query_job.result()
 
 
-    id_campanat = np.array([])
-    answer = np.array([])
-    clean = np.array([])
-    answer_machine = np.array([])
-    no_answer = np.array([])
-    abandon = np.array([])
-    failed = np.array([])
-    busy = np.array([])
+        id_campanat = np.array([])
+        answer = np.array([])
+        clean = np.array([])
+        answer_machine = np.array([])
+        no_answer = np.array([])
+        abandon = np.array([])
+        failed = np.array([])
+        busy = np.array([])
 
-    for row in rows3:
-        id_campanat = np.append(id_campanat, row[0])
-        answer = np.append(answer, row[1])
-        clean = np.append(clean, row[2])
-        answer_machine = np.append(answer_machine, row[3])
-        no_answer = np.append(no_answer, row[4])
-        abandon = np.append(abandon, row[5])
-        failed = np.append(failed, row[6])
-        busy = np.append(busy, row[7])
+        for row in rows3:
+            id_campanat = np.append(id_campanat, row[0])
+            answer = np.append(answer, row[1])
+            clean = np.append(clean, row[2])
+            answer_machine = np.append(answer_machine, row[3])
+            no_answer = np.append(no_answer, row[4])
+            abandon = np.append(abandon, row[5])
+            failed = np.append(failed, row[6])
+            busy = np.append(busy, row[7])
         
 
     return render_template('salidaapi.html', campaign = id_campanat, a = answer, b = clean, c = answer_machine, d = no_answer, e = abandon, f = failed, g = busy)

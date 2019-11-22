@@ -100,7 +100,7 @@ def index():
         datos = requests.get(url).content
 
         if len(requests.get(url).content) < 50:
-            continue
+            return("No existen datos para esta url= " + url)
         else:
             i = json.loads(datos)
             for rown in i:

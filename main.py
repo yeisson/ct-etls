@@ -47,6 +47,7 @@ from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
 from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
+from procesos.sensus import sensus_api
 
 from procesos.turnos import turnos_api
 
@@ -92,6 +93,8 @@ app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
+app.register_blueprint(sensus_api, url_prefix='/sensus')
+
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

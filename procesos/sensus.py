@@ -5,7 +5,6 @@ from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.sensus.sensus_seguimiento_beam as sensus_seguimiento_beam
 import dataflow_pipeline.sensus.sensus_metas_beam as sensus_metas_beam
-import dataflow_pipeline.sensus.sensus_test_beam as sensus_test_beam
 import dataflow_pipeline.sensus.sensus_adh_beam as sensus_adh_beam
 import os
 import socket

@@ -32,24 +32,25 @@ TABLE_SCHEMA = (
 	'idAgente:STRING,'
 	'correo:STRING,'
 	'telMarcado:STRING,'
-	'ultimoPedidoMayora28Dias:STRING,'
+	'ultimoPedido28Dias:STRING,'
 	'motivoRegreso:STRING,'
-	'subMotivoRegreso:STRING,'
-	'causalRegreso:STRING,'
-	'subcodigoTipificacion:STRING,'
-	'codigoTipificacionE:STRING,'
-	'SubcodigoTipificacionE:STRING,'
-	'presentaDeuda:STRING,'
-	'deudaMayorMenor:STRING,'
-	'culpaRappi:STRING,'
-	'motivoChurn:STRING,'
-	'subMotivoChurn:STRING,'
-	'tipoReactivacion:STRING,'
-	'idPedido:STRING,'
-	'NecesitaAyudaSAC:STRING,'
-	'DescripcionProblema:STRING,'
-	'cupon:STRING'
-)
+	'comentarioTipificacion:STRING,'
+	'Motivo:STRING,'
+	'SubMotivio:STRING,'
+	'Causal:STRING,'
+	'Codigo:STRING,'
+	'SubCodigo:STRING,'
+	'Deuda:STRING,'
+	'Deuda_Mayor:STRING,'
+	'Deuda_Contra:STRING,'
+	'MotivoChurcn:STRING,'
+	'SubMotivoChurcn:STRING,'
+	'Tipo_Reactivacion:STRING,'
+	'Id_Pedido:STRING,'
+	'Ayuda:STRING,'
+	'Descrip_Ayuda:STRING,'
+	'Cupon:STRING'
+	)
 
 class formatearData(beam.DoFn):
 	
@@ -63,23 +64,24 @@ class formatearData(beam.DoFn):
 				'idAgente': arrayCSV[4],
 				'correo': arrayCSV[5],
 				'telMarcado': arrayCSV[6],
-				'ultimoPedidoMayora28Dias': arrayCSV[7],
+				'ultimoPedido28Dias': arrayCSV[7],
 				'motivoRegreso': arrayCSV[8],
-				'subMotivoRegreso': arrayCSV[9],
-				'causalRegreso': arrayCSV[10],
-				'subcodigoTipificacion': arrayCSV[11],
-				'codigoTipificacionE': arrayCSV[12],
-				'SubcodigoTipificacionE': arrayCSV[13],
-				'presentaDeuda': arrayCSV[14],
-				'deudaMayorMenor': arrayCSV[15],
-				'culpaRappi': arrayCSV[16],
-				'motivoChurn': arrayCSV[17],
-				'subMotivoChurn': arrayCSV[18],
-				'tipoReactivacion': arrayCSV[19],
-				'idPedido': arrayCSV[20],
-				'NecesitaAyudaSAC': arrayCSV[21],
-				'DescripcionProblema': arrayCSV[22],
-				'cupon': arrayCSV[23]
+				'comentarioTipificacion': arrayCSV[9],
+				'Motivo': arrayCSV[10],
+				'SubMotivio': arrayCSV[11],
+				'Causal': arrayCSV[12],
+				'Codigo': arrayCSV[13],
+				'SubCodigo': arrayCSV[14],
+				'Deuda': arrayCSV[15],
+				'Deuda_Mayor': arrayCSV[16],
+				'Deuda_Contra': arrayCSV[17],
+				'MotivoChurcn': arrayCSV[18],
+				'SubMotivoChurcn': arrayCSV[19],
+				'Tipo_Reactivacion': arrayCSV[20],
+				'Id_Pedido': arrayCSV[21],
+				'Ayuda': arrayCSV[22],
+				'Descrip_Ayuda': arrayCSV[23],
+				'Cupon': arrayCSV[24]
 				}
 		
 		return [tupla]

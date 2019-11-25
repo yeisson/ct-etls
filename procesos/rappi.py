@@ -87,31 +87,31 @@ def Ejecutar():
         file = open(ruta_completa,"a")
         for row in i:
             file.write(
-                str(row["0"]).encode('utf-8') +";"+
-                str(row["1"]).encode('utf-8') +";"+
-                str(row["2"]).encode('utf-8') +";"+
-                str(row["3"]).encode('utf-8') +";"+
-                str(row["4"]).encode('utf-8') +";"+
-                str(row["5"]).encode('utf-8') +";"+
-                str(row["6"]).encode('utf-8') +";"+
-                str(row["7"]).encode('utf-8') +";"+
-                str(row["8"]).encode('utf-8') +";"+
-                ((str(row["9"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
-                str(row["10"]).encode('utf-8') +";"+
-                str(row["11"]).encode('utf-8') +";"+
-                str(row["12"]).encode('utf-8') +";"+
-                str(row["13"]).encode('utf-8') +";"+
-                str(row["14"]).encode('utf-8') +";"+
-                str(row["15"]).encode('utf-8') +";"+
-                str(row["16"]).encode('utf-8') +";"+
-                str(row["17"]).encode('utf-8') +";"+
-                ((str(row["18"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
-                ((str(row["19"]).replace("\r\n","").replace("\n","")).replace("\r","")).encode('utf-8') +";"+
-                str(row["20"]).encode('utf-8') +";"+
-                str(row["21"]).encode('utf-8') +";"+
-                str(row["22"]).encode('utf-8') +";"+
-                str(row["23"]).encode('utf-8') +";"+
-                str(row["24"]).encode('utf-8') +"\n")
+                ((str(row['id']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['fecha']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['accion']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['idLupe']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['idAgente']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['correo']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['telMarcado']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['ultimoPedido28Dias']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['motivoRegreso']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['comentarioTipificacion']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Motivo']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['SubMotivio']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Causal']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Codigo']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['SubCodigo']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Deuda']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Deuda_Mayor']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Deuda_Contra']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['MotivoChurcn']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['SubMotivoChurcn']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Tipo_Reactivacion']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Id_Pedido']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Ayuda']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Descrip_Ayuda']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+';'+
+                ((str(row['Cupon']).replace('\r\n','').replace('\n','')).replace('\r','')).encode('utf-8')+"\n")
     
         file.close()
         blob.upload_from_filename(ruta_completa)

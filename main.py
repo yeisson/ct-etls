@@ -49,7 +49,7 @@ from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
 
 from procesos.turnos import turnos_api
-##from procesos.sensus import sensus_api
+from procesos.sensus import sensus_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -93,7 +93,7 @@ app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
-##app.register_blueprint(sensus_api, url_prefix='/sensus')
+app.register_blueprint(sensus_api, url_prefix='/sensus')
 
 
 @app.route("/", methods=['GET', 'POST'])

@@ -62,7 +62,7 @@ def index():
     
 
     ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/campaign/" + "campana_" + fecha + "_" + operacion + "_" + id_campana +".csv"
-    blob = bucket.blob(sub_path + fecha + "_" + operacion + ".csv")
+    blob = bucket.blob(sub_path + fecha + "_" + operacion + "_" + id_campana + ".csv")
     rand_token = uuid4()
 
     try:

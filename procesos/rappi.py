@@ -20,6 +20,7 @@ import datetime
 import time
 import sys
 import dataflow_pipeline.rappi.rappi_beam as rappi_beam
+import dataflow_pipeline.rappi.rappi2_beam as rappi2_beam
 
 rappi_api = Blueprint('rappi_api', __name__)
 fecha = time.strftime('%Y-%m-%d')
@@ -200,7 +201,7 @@ def Ejecutar2():
         file.close()
         blob.upload_from_filename(ruta_completa)
         time.sleep(10)
-        ejecutar = rappi_beam.run(output) 
+        ejecutar = rappi2_beam.run(output) 
         time.sleep(60)
 
     # return (url)

@@ -38,9 +38,10 @@ def index():
     gcs_path = 'gs://ct-telefonia'
     sub_path = 'campaign/'    
     operacion = request.args.get('operacion')
-    output = gcs_path + "/" + sub_path + fecha + "_" + operacion +".csv"
-    tipo_campana = request.args.get('tipo_campana')
     id_campana = request.args.get('id_campana')
+    output = gcs_path + "/" + sub_path + fecha + "_" + operacion + "_" + id_campana + ".csv"
+    tipo_campana = request.args.get('tipo_campana')
+    
     dinip= request.args.get('dateini')
     dendp= request.args.get('dateend')
 
@@ -60,7 +61,7 @@ def index():
 
     
 
-    ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/campaign/" + "campana_" + fecha + "_" + operacion +".csv"
+    ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/campaign/" + "campana_" + fecha + "_" + operacion + "_" + id_campana +".csv"
     blob = bucket.blob(sub_path + fecha + "_" + operacion + ".csv")
     rand_token = uuid4()
 

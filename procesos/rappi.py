@@ -136,15 +136,15 @@ def Ejecutar2():
     storage_client = storage.Client()
     bucket = storage_client.get_bucket('ct-rappi')
     gcs_path = 'gs://ct-rappi'
-    sub_path = 'formulario_rappi_'
+    sub_path = 'formulario_rappi_sc_'
     fecha = time.strftime('%Y-%m-%d')
-    output = gcs_path + "/" + sub_path + fecha + "_sc" + ".csv"
+    output = gcs_path + "/" + sub_path + fecha + ".csv"
     blob = bucket.blob(sub_path + fecha + ".csv")
     dateini = request.args.get('fechaInicial')
     dateend = request.args.get('fechaFinal')
     client = bigquery.Client()
     Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
-    ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Rappi/"+ sub_path + fecha + "_sc" +".csv"
+    ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Rappi/"+ sub_path + fecha +".csv"
 
     if dateini is None:
         dateini = fecha

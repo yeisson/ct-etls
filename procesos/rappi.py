@@ -126,9 +126,9 @@ def Ejecutar():
 
 
 @rappi_api.route("/" + "formulario_rappi_sc", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-def Ejecutar():
+def Ejecutar2():
 
-    # ejemplo de consulta: http://35.239.77.81:5000/rappi/formulario_rappi?fechaInicial=2019-11-14&fechaFinal=2019-11-17
+    # ejemplo de consulta: http://35.239.77.81:5000/rappi/formulario_rappi_sc?fechaInicial=2019-11-14&fechaFinal=2019-11-17
 
     reload(sys)
     sys.setdefaultencoding('utf8')

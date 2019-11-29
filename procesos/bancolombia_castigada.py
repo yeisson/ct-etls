@@ -7,11 +7,7 @@ from google.cloud import bigquery
 import dataflow_pipeline.bancolombia.bancolombia_castigada_seguimiento_beam as bancolombia_castigada_seguimiento_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_pagos_beam as bancolombia_castigada_pagos_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_prejuridico_beam as bancolombia_castigada_prejuridico_beam
-<<<<<<< HEAD
 import dataflow_pipeline.bancolombia.bancolombia_castigada_compromisos_beam as bancolombia_castigada_compromisos_beam
-=======
-import procesos.descargas as descargas
->>>>>>> 86d11d20a8449e0e720e25f5d89749a4af3c5da9
 import os
 import socket
 import time

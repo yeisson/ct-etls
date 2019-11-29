@@ -7,7 +7,11 @@ from google.cloud import bigquery
 import dataflow_pipeline.bancolombia.bancolombia_castigada_seguimiento_beam as bancolombia_castigada_seguimiento_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_pagos_beam as bancolombia_castigada_pagos_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_prejuridico_beam as bancolombia_castigada_prejuridico_beam
+<<<<<<< HEAD
+import dataflow_pipeline.bancolombia.bancolombia_castigada_compromisos_beam as bancolombia_castigada_compromisos_beam
+=======
 import procesos.descargas as descargas
+>>>>>>> 86d11d20a8449e0e720e25f5d89749a4af3c5da9
 import os
 import socket
 import time
@@ -103,6 +107,7 @@ def archivos_Seguimiento_castigada():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
+################################################################################################################################################################
 
 @bancolombia_castigada_api.route("/archivos_pagos")
 def archivos_Pagos():
@@ -145,6 +150,8 @@ def archivos_Pagos():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje    
+
+################################################################################################################################################################
 
 @bancolombia_castigada_api.route("/archivos_prejuridico")
 def archivos_Prejuridico_castigada():
@@ -218,3 +225,69 @@ def archivos_Prejuridico_castigada():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
+
+################################################################################################################################################################
+
+@bancolombia_castigada_api.route("/archivos_compromiso")
+def archivos_Compromisos():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Compromisos/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[20:28]
+            tipo =  archivo[0:19]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia_castigada')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-compromisos/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            #deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.compromisos` WHERE NOMBRE_ARCHIVO = '" + tipo + "'"
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.compromisos` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = bancolombia_castigada_compromisos_beam.run('gs://ct-bancolombia_castigada/info-compromisos/' + archivo, mifecha, tipo)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Compromisos/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+                time.sleep(200) # Le da tiempo al Storage, para que lleve la informacion a la tabla compromisos en BigQuery.
+
+                # ----------------------------------------------------------------------------------------------------------------
+                #  (DELETE):
+                deleteQuery_2 = "DELETE FROM `contento-bi.bancolombia_castigada.consolidado_compromisos` WHERE fecha = '" + mifecha + "'"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                ##time.sleep(60)
+
+                # Busqueda de Fecha Promesa Ajustada (INSERT):
+                deleteQuery_3 = "INSERT INTO `contento-bi.bancolombia_castigada.consolidado_compromisos` (FECHA, CEDULA, EQUIPO, NOMBRE_REGIONAL, DIAS_MORA, FECHA_GENERACION, CODIGO_DE_ABOGADO, FECHA_COMPROMISO, NO_DE_OBLIGACION, ESTADO, ID_GRABADOR, nombre_colaborador, nombre_lider, CDIGO_DE_GESTIN, HIT, CODIGO_CIERRE_COMPROMISO, DESCRIPCIN_CDIGO_DE_GESTIN, VALOR_PACTADO, VALOR_PAGADO, RANK) (SELECT * FROM `contento-bi.bancolombia_castigada.Informe_Compromisos`)"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(deleteQuery_3)
+                query_job_3.result()
+
+        return jsonify(response), response["code"]
+        # return "Corriendo : " + mensaje
+
+
+

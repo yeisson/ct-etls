@@ -20,6 +20,8 @@ from procesos.Telefonia.agent_status import agent_status_api
 from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
+from procesos.Telefonia.tester import tester_api
+from procesos.Telefonia.campaign import webpage_api
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
@@ -41,7 +43,12 @@ from procesos.universidad_cooperativa_col import universidad_cooperativa_col_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
+from WebPage.inicio import webpage_app
 from procesos.cesde import cesde_api
+from procesos.rappi import rappi_api
+
+from procesos.turnos import turnos_api
+from procesos.sensus import sensus_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -54,6 +61,8 @@ app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+app.register_blueprint(tester_api, url_prefix='/telefonia')
+app.register_blueprint(webpage_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
@@ -76,7 +85,13 @@ app.register_blueprint(universidad_cooperativa_col_api, url_prefix='/universidad
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
-app.register_blueprint(cesde_api, url_prefix='/cesde')
+app.register_blueprint(webpage_app, url_prefix='/webpage_app')
+
+
+
+app.register_blueprint(turnos_api, url_prefix='/turnos')
+app.register_blueprint(sensus_api, url_prefix='/sensus')
+
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

@@ -24,39 +24,36 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING,'
-	'FECHA:STRING,'
-	'DIA_MES:STRING, '
-	'MES:STRING, '
-	'CEDULA:STRING, '
-	'NOMBRE:STRING, '
-	'TEAM_LEADER:STRING, '
-	'JORNADA:STRING, '
-	'DIA:STRING, '
-	'PRETURNO:STRING, '
-	'HORA_ENTRADA:STRING, '
-	'HORA_SALIDA:STRING, '
-	'TOTAL_HORAS:STRING, '
-	'INICIO_REU:STRING, '
-	'FIN_REU:STRING, '
-	'INICIO_CAPACITACION:STRING, '
-	'FIN_CAPACITACION:STRING, '
-	'DESCANSO1:STRING, '
-	'DESCANSO2:STRING, '
-	'DESCANSO3:STRING, '
-	'HORAS_GESTION:STRING, '
-	'SEGMENTO:STRING, '
-	'TIEMPO_TOTAL_CAPACITACION:STRING, '
-	'ENTRENAMIENTO:STRING, '
-	'REUNION:STRING, '
-	'OBSERVACIONES:STRING, '
-	'HORAS_REU:STRING, '
-	'DESCANSOS:STRING, '
-	'DIFERENCIA_DESCANSO:STRING, '
-	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
-	'DIFERENCIA_DESCANSO_FINAL:STRING '
-
-
+'NOMBRE_CAMPANANA:STRING, '
+'FECHA_GESTION:STRING, '
+'NOMBRES:STRING, '
+'APELLIDOS:STRING, '
+'CODIGO:STRING, '
+'ESTADO:STRING, '
+'MOTIVO:STRING, '
+'OTRA_UNIVERSIDAD:STRING, '
+'JORNADA:STRING, '
+'CONDICION_DE_INGRESO:STRING, '
+'PROGRAMA_DE_INTERES:STRING, '
+'PAGO:STRING, '
+'CEDULA_CLIENTE:STRING, '
+'EMAIL:STRING, '
+'CELULAR:STRING, '
+'DATE_1:STRING, '
+'DATE_2:STRING, '
+'DATE_3:STRING, '
+'DATE_4:STRING, '
+'DATE_5:STRING, '
+'DATE_6:STRING, '
+'DATE_7:STRING, '
+'DATE_8:STRING, '
+'DATE_9:STRING, '
+'DATE_10:STRING, '
+'DATE_11:STRING, '
+'DATE_12:STRING, '
+'DATE_13:STRING, '
+'DATE_14:STRING, '
+'DATE_15:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -71,36 +68,38 @@ class formatearData(beam.DoFn):
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha': self.mifecha, 
-				'DIA_MES' : arrayCSV[0],
-				'MES' : arrayCSV[1],
-				'CEDULA' : arrayCSV[2],
-				'NOMBRE' : arrayCSV[3],
-				'TEAM_LEADER' : arrayCSV[4],
-				'JORNADA' : arrayCSV[5],
-				'DIA' : arrayCSV[6],
-				'PRETURNO' : arrayCSV[7],
-				'HORA_ENTRADA' : arrayCSV[8],
-				'HORA_SALIDA' : arrayCSV[9],
-				'TOTAL_HORAS' : arrayCSV[10],
-				'INICIO_REU' : arrayCSV[11],
-				'FIN_REU' : arrayCSV[12],
-				'INICIO_CAPACITACION' : arrayCSV[13],
-				'FIN_CAPACITACION' : arrayCSV[14],
-				'DESCANSO1' : arrayCSV[15],
-				'DESCANSO2' : arrayCSV[16],
-				'DESCANSO3' : arrayCSV[17],
-				'HORAS_GESTION' : arrayCSV[18],
-				'SEGMENTO' : arrayCSV[19],
-				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[20],
-				'ENTRENAMIENTO' : arrayCSV[21],
-				'REUNION' : arrayCSV[22],
-				'OBSERVACIONES' : arrayCSV[23],
-				'HORAS_REU' : arrayCSV[24],
-				'DESCANSOS' : arrayCSV[25],
-				'DIFERENCIA_DESCANSO' : arrayCSV[26],
-				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[27],
-				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[28]
+				'fecha': self.mifecha,
+				'NOMBRE_CAMPANANA' : arrayCSV[0],
+				'FECHA_GESTION' : arrayCSV[1],
+				'NOMBRES' : arrayCSV[2],
+				'APELLIDOS' : arrayCSV[3],
+				'CODIGO' : arrayCSV[4],
+				'ESTADO' : arrayCSV[5],
+				'MOTIVO' : arrayCSV[6],
+				'OTRA_UNIVERSIDAD' : arrayCSV[7],
+				'JORNADA' : arrayCSV[8],
+				'CONDICION_DE_INGRESO' : arrayCSV[9],
+				'PROGRAMA_DE_INTERES' : arrayCSV[10],
+				'PAGO' : arrayCSV[11],
+				'CEDULA_CLIENTE' : arrayCSV[12],
+				'EMAIL' : arrayCSV[13],
+				'CELULAR' : arrayCSV[14],
+				'DATE_1' : arrayCSV[15],
+				'DATE_2' : arrayCSV[16],
+				'DATE_3' : arrayCSV[17],
+				'DATE_4' : arrayCSV[18],
+				'DATE_5' : arrayCSV[19],
+				'DATE_6' : arrayCSV[20],
+				'DATE_7' : arrayCSV[21],
+				'DATE_8' : arrayCSV[22],
+				'DATE_9' : arrayCSV[23],
+				'DATE_10' : arrayCSV[24],
+				'DATE_11' : arrayCSV[25],
+				'DATE_12' : arrayCSV[26],
+				'DATE_13' : arrayCSV[27],
+				'DATE_14' : arrayCSV[28],
+				'DATE_15' : arrayCSV[29]
+
 				}
 		
 		return [tupla]
@@ -109,7 +108,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-ucc" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -136,20 +135,17 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery turnos' >> beam.io.WriteToBigQuery(
-		gcs_project + ":turnos.visor", 
+	transformed | 'Escritura a BigQuery ucc' >> beam.io.WriteToBigQuery(
+		gcs_project + ":ucc.base_campanas", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
 
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
-	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
+	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_ucc.1.txt"])
 
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
-
-
-

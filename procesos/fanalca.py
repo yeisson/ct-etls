@@ -141,7 +141,7 @@ def gestion_ipdial():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[17:23]
+            mifecha = archivo[17:25]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-fanalca')
@@ -173,7 +173,7 @@ def gestion_ipdial():
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
-    return jsonify(response), response["code"]
+    return jsonify(response), response["code"] 
     
 
 #########################################################################################################################

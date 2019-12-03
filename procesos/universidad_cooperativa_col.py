@@ -3,41 +3,42 @@ from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
-import dataflow_pipeline.turnos.turnos_visor_beam as turnos_visor_beam
-import dataflow_pipeline.turnos.turnos_unificadas_beam as turnos_unificadas_beam
-import dataflow_pipeline.turnos.turnos_sac_beam as turnos_sac_beam
+import dataflow_pipeline.ucc.ucc_mensajes_beam as ucc_mensajes_beam
+import dataflow_pipeline.ucc.ucc_agentev_beam as ucc_agentev_beam
+import dataflow_pipeline.ucc.ucc_campana_beam as ucc_campana_beam
 import os
-import socket
+import socket 
+import time
 
-turnos_api = Blueprint('turnos_api', __name__)
+universidad_cooperativa_col_api = Blueprint('universidad_cooperativa_col_api', __name__)
+# ucc_api = Blueprint('ucc_api', __name__)
 
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
- 
-############################################################################################################################################33
 
-@turnos_api.route("/archivos")
-def archivos():
+
+@universidad_cooperativa_col_api.route("/archivos_sms")
+def archivos_sms():
 
     response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Bancolombia/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Mensajes/Resultado/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[7:15]
+            mifecha = archivo[8:16]
 
             storage_client = storage.Client()
-            bucket = storage_client.get_bucket('ct-turnos')
+            bucket = storage_client.get_bucket('ct-ucc')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-            blob = bucket.blob('turnos/' + archivo)
+            blob = bucket.blob('info-sms/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-            deleteQuery = "DELETE FROM `contento-bi.turnos.visor` WHERE fecha = '" + mifecha + "'"
+            deleteQuery = "DELETE FROM `contento-bi.ucc.sms` WHERE fecha = '" + mifecha + "'"
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -47,9 +48,9 @@ def archivos():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = turnos_visor_beam.run('gs://ct-turnos/turnos/' + archivo, mifecha)
+            mensaje = ucc_mensajes_beam.run('gs://ct-ucc/info-sms/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Bancolombia/Procesados/" +archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Mensajes/Resultado/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
@@ -57,32 +58,32 @@ def archivos():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
+################################################################################################################################################
 
-###############################################################################################################################################
-
-@turnos_api.route("/unificadas")
-def unificadas():
+@universidad_cooperativa_col_api.route("/archivos_agentev")
+def archivos_agentev():
 
     response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Unificadas/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/agente_virtual/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[10:18]
+            mifecha = archivo[20:28]
+            lote =  archivo[15:19]
 
             storage_client = storage.Client()
-            bucket = storage_client.get_bucket('ct-turnos')
+            bucket = storage_client.get_bucket('ct-ucc')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-            blob = bucket.blob('unificadas/' + archivo)
+            blob = bucket.blob('info-agente_virtual/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-            deleteQuery = "DELETE FROM `contento-bi.turnos.unificadas` WHERE fecha = '" + mifecha + "'"
+            deleteQuery = "DELETE FROM `contento-bi.ucc.agente_virtual` WHERE fecha = '" + mifecha + "'"
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -92,9 +93,9 @@ def unificadas():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = turnos_unificadas_beam.run('gs://ct-turnos/unificadas/' + archivo, mifecha)
+            mensaje = ucc_agentev_beam.run('gs://ct-ucc/info-agente_virtual/' + archivo, mifecha,lote)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/Unificadas/Procesados/" + archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/agente_virtual/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
@@ -102,34 +103,31 @@ def unificadas():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
+############################################################################################################################################
 
-    ###############################################################################################################
-
-    ###############################################################################################################################################
-
-@turnos_api.route("/sac")
-def sac():
+@universidad_cooperativa_col_api.route("/archivos_campanas")
+def archivos_campanas():
 
     response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Campanas/Resultado/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[9:17]
+            mifecha = archivo[13:21]
 
             storage_client = storage.Client()
-            bucket = storage_client.get_bucket('ct-turnos')
+            bucket = storage_client.get_bucket('ct-ucc')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-            blob = bucket.blob('sac/' + archivo)
+            blob = bucket.blob('info-campanas/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-            deleteQuery = "DELETE FROM `contento-bi.turnos.sac` WHERE fecha = '" + mifecha + "'"
+            deleteQuery = "DELETE FROM `contento-bi.ucc.base_campanas` WHERE fecha = '" + mifecha + "'"
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -139,13 +137,12 @@ def sac():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = turnos_sac_beam.run('gs://ct-turnos/sac/' + archivo, mifecha)
+            mensaje = ucc_campana_beam.run('gs://ct-ucc/info-campanas/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Campanas/Resultado/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
-

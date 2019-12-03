@@ -24,46 +24,29 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING,'
-	'FECHA:STRING,'
-	'DIA_MES:STRING, '
-	'MES:STRING, '
-	'CEDULA:STRING, '
-	'NOMBRE:STRING, '
-	'TEAM_LEADER:STRING, '
-	'JORNADA:STRING, '
-	'DIA:STRING, '
-	'PRETURNO:STRING, '
-	'HORA_ENTRADA:STRING, '
-	'HORA_SALIDA:STRING, '
-	'TOTAL_HORAS:STRING, '
-	'INICIO_REU:STRING, '
-	'FIN_REU:STRING, '
-	'INICIO_CAPACITACION:STRING, '
-	'FIN_CAPACITACION:STRING, '
-	'DESCANSO1:STRING, '
-	'DESCANSO2:STRING, '
-	'DESCANSO3:STRING, '
-	'HORAS_GESTION:STRING, '
-	'SEGMENTO:STRING, '
-	'TIEMPO_TOTAL_CAPACITACION:STRING, '
-	'ENTRENAMIENTO:STRING, '
-	'REUNION:STRING, '
-	'OBSERVACIONES:STRING, '
-	'HORAS_REU:STRING, '
-	'DESCANSOS:STRING, '
-	'DIFERENCIA_DESCANSO:STRING, '
-	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
-	'DIFERENCIA_DESCANSO_FINAL:STRING '
-
+	'idkey:STRING, '
+	'fecha:STRING, '
+	'numero_de_campana:STRING, '
+	'CAMPANA:STRING, '
+	'DATETIME:STRING, '
+	'NUMBER:STRING, '
+	'TELEFONO:STRING, '
+	'ATTEMPS:STRING, '
+	'STATUS:STRING, '
+	'DISPOSITION:STRING, '
+	'DURATION:STRING, '
+	'SURVEY_ANSWER:STRING, '
+	'SURVEY_ANSWER2:STRING, '
+	'AMD_STATUS:STRING '
 
 )
 # ?
 class formatearData(beam.DoFn):
 
-	def __init__(self, mifecha):
+	def __init__(self, mifecha, lote):
 		super(formatearData, self).__init__()
 		self.mifecha = mifecha
+		self.lote = lote
 	
 	def process(self, element):
 		# print(element)
@@ -71,45 +54,29 @@ class formatearData(beam.DoFn):
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha': self.mifecha, 
-				'DIA_MES' : arrayCSV[0],
-				'MES' : arrayCSV[1],
-				'CEDULA' : arrayCSV[2],
-				'NOMBRE' : arrayCSV[3],
-				'TEAM_LEADER' : arrayCSV[4],
-				'JORNADA' : arrayCSV[5],
-				'DIA' : arrayCSV[6],
-				'PRETURNO' : arrayCSV[7],
-				'HORA_ENTRADA' : arrayCSV[8],
-				'HORA_SALIDA' : arrayCSV[9],
-				'TOTAL_HORAS' : arrayCSV[10],
-				'INICIO_REU' : arrayCSV[11],
-				'FIN_REU' : arrayCSV[12],
-				'INICIO_CAPACITACION' : arrayCSV[13],
-				'FIN_CAPACITACION' : arrayCSV[14],
-				'DESCANSO1' : arrayCSV[15],
-				'DESCANSO2' : arrayCSV[16],
-				'DESCANSO3' : arrayCSV[17],
-				'HORAS_GESTION' : arrayCSV[18],
-				'SEGMENTO' : arrayCSV[19],
-				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[20],
-				'ENTRENAMIENTO' : arrayCSV[21],
-				'REUNION' : arrayCSV[22],
-				'OBSERVACIONES' : arrayCSV[23],
-				'HORAS_REU' : arrayCSV[24],
-				'DESCANSOS' : arrayCSV[25],
-				'DIFERENCIA_DESCANSO' : arrayCSV[26],
-				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[27],
-				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[28]
+				'fecha': self.mifecha,
+				'numero_de_campana': self.lote,
+				'CAMPANA' : arrayCSV[0],
+				'DATETIME' : arrayCSV[1],
+				'NUMBER' : arrayCSV[2],
+				'TELEFONO' : arrayCSV[3],
+				'ATTEMPS' : arrayCSV[4],
+				'STATUS' : arrayCSV[5],
+				'DISPOSITION' : arrayCSV[6],
+				'DURATION' : arrayCSV[7],
+				'SURVEY_ANSWER' : arrayCSV[8],
+				'SURVEY_ANSWER2' : arrayCSV[9],
+				'AMD_STATUS' : arrayCSV[10],
+
 				}
 		
 		return [tupla]
 
 
 
-def run(archivo, mifecha):
+def run(archivo, mifecha, lote):
 
-	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-ucc" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -129,15 +96,15 @@ def run(archivo, mifecha):
 	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha, lote)))
 
 	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
 
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery turnos' >> beam.io.WriteToBigQuery(
-		gcs_project + ":turnos.visor", 
+	transformed | 'Escritura a BigQuery Ucc' >> beam.io.WriteToBigQuery(
+		gcs_project + ":ucc.agente_virtual", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
@@ -151,5 +118,4 @@ def run(archivo, mifecha):
 
 	return ("Corrio Full HD")
 
-
-
+	######################################################################################################################################################

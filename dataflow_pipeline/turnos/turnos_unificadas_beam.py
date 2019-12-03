@@ -24,6 +24,8 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
+	'IDKEY:STRING,'
+	'FECHA:STRING,'
 	'DIA_MES:STRING, '
 	'MES:STRING, '
 	'CEDULA:STRING, '
@@ -103,7 +105,7 @@ class formatearData(beam.DoFn):
 				'DESCANSOS' : arrayCSV[27],
 				'DIFERENCIA_DESCANSO' : arrayCSV[28],
 				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[29],
-				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[30],
+				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[30]
 
 
 
@@ -129,7 +131,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "10",
+        "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		

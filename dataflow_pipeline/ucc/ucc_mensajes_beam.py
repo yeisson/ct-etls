@@ -24,38 +24,41 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING,'
-	'FECHA:STRING,'
-	'DIA_MES:STRING, '
-	'MES:STRING, '
-	'CEDULA:STRING, '
-	'NOMBRE:STRING, '
-	'TEAM_LEADER:STRING, '
-	'JORNADA:STRING, '
-	'DIA:STRING, '
-	'PRETURNO:STRING, '
-	'HORA_ENTRADA:STRING, '
-	'HORA_SALIDA:STRING, '
-	'TOTAL_HORAS:STRING, '
-	'INICIO_REU:STRING, '
-	'FIN_REU:STRING, '
-	'INICIO_CAPACITACION:STRING, '
-	'FIN_CAPACITACION:STRING, '
-	'DESCANSO1:STRING, '
-	'DESCANSO2:STRING, '
-	'DESCANSO3:STRING, '
-	'HORAS_GESTION:STRING, '
-	'SEGMENTO:STRING, '
-	'TIEMPO_TOTAL_CAPACITACION:STRING, '
-	'ENTRENAMIENTO:STRING, '
-	'REUNION:STRING, '
-	'OBSERVACIONES:STRING, '
-	'HORAS_REU:STRING, '
-	'DESCANSOS:STRING, '
-	'DIFERENCIA_DESCANSO:STRING, '
-	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
-	'DIFERENCIA_DESCANSO_FINAL:STRING '
-
+	'idkey:STRING, '
+	'fecha:STRING, '
+	'CAMPANA:STRING, '
+	'NOMBRE_DE_CUENTA:STRING, '
+	'NOMBRE_DE_COMUNICACION:STRING, '
+	'PLANTILLA_DE_COMUNICACION:STRING, '
+	'DE:STRING, '
+	'A:STRING, '
+	'TELEFONO:STRING, '
+	'ID_DEL_MENSAJE:STRING, '
+	'ENVIAR_EL:STRING, '
+	'PREFIJO_DE_PAIS:STRING, '
+	'NOMBRE_DE_PAIS:STRING, '
+	'NOMBRE_DE_RED:STRING, '
+	'PRECIO_DE_COMPRA:STRING, '
+	'MONEDA_DE_COMPRA:STRING, '
+	'PRECIO_DE_VENTA:STRING, '
+	'MONEDA_DE_VENTA:STRING, '
+	'TIPO_DE_MENSAJE:STRING, '
+	'ESTADO:STRING, '
+	'RAZON:STRING, '
+	'ACCION:STRING, '
+	'GRUPO_DE_ERROR:STRING, '
+	'NOMBRE_DE_ERROR:STRING, '
+	'HECHO_EL:STRING, '
+	'TEXTO:STRING, '
+	'MESSAGE_LENGTH:STRING, '
+	'CONTEO_DE_MENSAJES:STRING, '
+	'NOMBRE_DE_SERVICIO:STRING, '
+	'NOMBRE_DE_USUARIO:STRING, '
+	'ID_DE_MENSAJE_SINCRONIZADO:STRING, '
+	'URL:STRING, '
+	'URL_TOTAL_CLICKS:STRING, '
+	'URL_FIRST_CLICK_DATE_TIME:STRING, '
+	'DATA_PAYLOAD:STRING '
 
 )
 # ?
@@ -71,36 +74,40 @@ class formatearData(beam.DoFn):
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha': self.mifecha, 
-				'DIA_MES' : arrayCSV[0],
-				'MES' : arrayCSV[1],
-				'CEDULA' : arrayCSV[2],
-				'NOMBRE' : arrayCSV[3],
-				'TEAM_LEADER' : arrayCSV[4],
-				'JORNADA' : arrayCSV[5],
-				'DIA' : arrayCSV[6],
-				'PRETURNO' : arrayCSV[7],
-				'HORA_ENTRADA' : arrayCSV[8],
-				'HORA_SALIDA' : arrayCSV[9],
-				'TOTAL_HORAS' : arrayCSV[10],
-				'INICIO_REU' : arrayCSV[11],
-				'FIN_REU' : arrayCSV[12],
-				'INICIO_CAPACITACION' : arrayCSV[13],
-				'FIN_CAPACITACION' : arrayCSV[14],
-				'DESCANSO1' : arrayCSV[15],
-				'DESCANSO2' : arrayCSV[16],
-				'DESCANSO3' : arrayCSV[17],
-				'HORAS_GESTION' : arrayCSV[18],
-				'SEGMENTO' : arrayCSV[19],
-				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[20],
-				'ENTRENAMIENTO' : arrayCSV[21],
-				'REUNION' : arrayCSV[22],
-				'OBSERVACIONES' : arrayCSV[23],
-				'HORAS_REU' : arrayCSV[24],
-				'DESCANSOS' : arrayCSV[25],
-				'DIFERENCIA_DESCANSO' : arrayCSV[26],
-				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[27],
-				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[28]
+				'fecha': self.mifecha,
+				'CAMPANA' : arrayCSV[0],
+				'NOMBRE_DE_CUENTA' : arrayCSV[1],
+				'NOMBRE_DE_COMUNICACION' : arrayCSV[2],
+				'PLANTILLA_DE_COMUNICACION' : arrayCSV[3],
+				'DE' : arrayCSV[4],
+				'A' : arrayCSV[5],
+				'TELEFONO' : arrayCSV[6],
+				'ID_DEL_MENSAJE' : arrayCSV[7],
+				'ENVIAR_EL' : arrayCSV[8],
+				'PREFIJO_DE_PAIS' : arrayCSV[9],
+				'NOMBRE_DE_PAIS' : arrayCSV[10],
+				'NOMBRE_DE_RED' : arrayCSV[11],
+				'PRECIO_DE_COMPRA' : arrayCSV[12],
+				'MONEDA_DE_COMPRA' : arrayCSV[13],
+				'PRECIO_DE_VENTA' : arrayCSV[14],
+				'MONEDA_DE_VENTA' : arrayCSV[15],
+				'TIPO_DE_MENSAJE' : arrayCSV[16],
+				'ESTADO' : arrayCSV[17],
+				'RAZON' : arrayCSV[18],
+				'ACCION' : arrayCSV[19],
+				'GRUPO_DE_ERROR' : arrayCSV[20],
+				'NOMBRE_DE_ERROR' : arrayCSV[21],
+				'HECHO_EL' : arrayCSV[22],
+				'TEXTO' : arrayCSV[23],
+				'MESSAGE_LENGTH' : arrayCSV[24],
+				'CONTEO_DE_MENSAJES' : arrayCSV[25],
+				'NOMBRE_DE_SERVICIO' : arrayCSV[26],
+				'NOMBRE_DE_USUARIO' : arrayCSV[27],
+				'ID_DE_MENSAJE_SINCRONIZADO' : arrayCSV[28],
+				'URL' : arrayCSV[29],
+				'URL_TOTAL_CLICKS' : arrayCSV[30],
+				'URL_FIRST_CLICK_DATE_TIME' : arrayCSV[31],
+				'DATA_PAYLOAD' : arrayCSV[32]
 				}
 		
 		return [tupla]
@@ -109,7 +116,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-ucc" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -136,8 +143,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery turnos' >> beam.io.WriteToBigQuery(
-		gcs_project + ":turnos.visor", 
+	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
+		gcs_project + ":ucc.sms", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
@@ -150,6 +157,3 @@ def run(archivo, mifecha):
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
-
-
-

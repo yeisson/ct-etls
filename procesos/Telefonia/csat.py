@@ -10,6 +10,7 @@ import logging
 import uuid
 import json
 import urllib3
+import urllib
 import socket
 import requests
 import os
@@ -92,7 +93,7 @@ def Ejecutar():
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
-        if len(requests.get(url).content) < 40:
+        if len(requests.get(url).content) < 50:
             continue
         else:
             i = json.loads(datos)
@@ -128,6 +129,18 @@ def Ejecutar():
     ejecutar = csat_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
     time.sleep(60)
 
-    return("El proceso " + KEY_REPORT + ". Fue Cargado Exitosamente en la fecha: " + fecha)
+    return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
 
 ########################################################################################################################
+
+@csat_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+def Ejecutar2():
+
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    ayer = yesterday.strftime("%Y%m%d")
+
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    urllib.urlopen('http://35.239.77.81:5000/telefonia/'+ KEY_REPORT + '?dateini=' + str(ayer) + '&dateend=' + str(ayer))
+
+    return ('Datos recuperados por el desperdicio hora a hora')

@@ -62,11 +62,19 @@ TABLE_SCHEMA = (
 	'ano_originacion:STRING, '
 	'ano_orig_oblig_rango:STRING, '
 	'ano_orig_cliente_rango:STRING, '
+	'creditos_en_mora:STRING, '
+	'fecha_prox_recordatorio:STRING, '
+	'fecha_de_asignacion:STRING, '
+	'ano_vencimiento_2:STRING, '
+	'capital_inicial:STRING, '
+	'total_capital_inicial:STRING, '
+	'gestor_ultima_gestion:STRING, '
+	'fecha_ult_sms:STRING, '
 	'con_celular:STRING, '
+	'empresa_que_gestiona:STRING, '
 	'cuota_vencida:STRING, '
 	'total_cuotas_vencidas:STRING, '
 	'cuotas_en_mora:STRING, '
-	'fecha_prox_acuerdo:STRING, '
 	'usuario_responsable:STRING, '
 	'valor_intereses:STRING, '
 	'empresa_que_reporta:STRING, '
@@ -85,7 +93,7 @@ TABLE_SCHEMA = (
 	'tipo_de_credito:STRING, '
 	'emails:STRING, '
 	'numobligaciongr:STRING, '
-	'fecplanpagomax:STRING, '
+	'fecha_prox_acuerdo:STRING, '
 	'telefono_1:STRING, '
 	'telefono_2:STRING, '
 	'telefono_3:STRING, '
@@ -93,6 +101,7 @@ TABLE_SCHEMA = (
 	'telefono_5:STRING, '
 	'telefono_6:STRING, '
 	'telefono_7:STRING '
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -144,37 +153,46 @@ class formatearData(beam.DoFn):
 				'ano_originacion' : arrayCSV[33].replace('"',''),
 				'ano_orig_oblig_rango' : arrayCSV[34].replace('"',''),
 				'ano_orig_cliente_rango' : arrayCSV[35].replace('"',''),
-				'con_celular' : arrayCSV[36].replace('"',''),
-				'cuota_vencida' : arrayCSV[37].replace('"',''),
-				'total_cuotas_vencidas' : arrayCSV[38].replace('"',''),
-				'cuotas_en_mora' : arrayCSV[39].replace('"',''),
-				'fecha_prox_acuerdo' : '',	#arrayCSV[40].replace('"',''),
-				'usuario_responsable' : arrayCSV[40].replace('"',''),
-				'valor_intereses' : arrayCSV[41].replace('"',''),
-				'empresa_que_reporta' : arrayCSV[42].replace('"',''),
-				'valor_aval' : arrayCSV[43].replace('"',''),
-				'valor_cuota' : arrayCSV[44].replace('"',''),
-				'valor_abonos' : arrayCSV[45].replace('"',''),
-				'ciudad_punto_de_credito' : arrayCSV[46].replace('"',''),
-				'fecha_empresa_reporta' : arrayCSV[47].replace('"',''),
-				'estado_de_la_cuota' : arrayCSV[48].replace('"',''),
-				'empresa_origen' : arrayCSV[49].replace('"',''),
-				'intereses_mora' : arrayCSV[50].replace('"',''),
-				'total_intereses_mora' : arrayCSV[51].replace('"',''),
-				'total_honorarios' : arrayCSV[52].replace('"',''),
-				'saldo_capital' : arrayCSV[53].replace('"',''),
-				'valcapitalmax' : arrayCSV[54].replace('"',''),
-				'tipo_de_credito' : arrayCSV[55].replace('"',''),
-				'emails' : arrayCSV[56].replace('"',''),
-				'numobligaciongr' : arrayCSV[57].replace('"',''),
-				'fecplanpagomax' : arrayCSV[58].replace('"',''),
-				'telefono_1' : arrayCSV[59].replace('"',''),
-				'telefono_2' : arrayCSV[60].replace('"',''),
-				'telefono_3' : arrayCSV[61].replace('"',''),
-				'telefono_4' : arrayCSV[62].replace('"',''),
-				'telefono_5' : arrayCSV[63].replace('"',''),
-				'telefono_6' : arrayCSV[64].replace('"',''),
-				'telefono_7' : arrayCSV[65].replace('"','')
+				'creditos_en_mora' : arrayCSV[36].replace('"',''),
+				'fecha_prox_recordatorio' : arrayCSV[37].replace('"',''),
+				'fecha_de_asignacion' : arrayCSV[38].replace('"',''),
+				'ano_vencimiento_2' : arrayCSV[39].replace('"',''),
+				'capital_inicial' : arrayCSV[40].replace('"',''),
+				'total_capital_inicial' : arrayCSV[41].replace('"',''),
+				'gestor_ultima_gestion' : arrayCSV[42].replace('"',''),
+				'fecha_ult_sms' : arrayCSV[43].replace('"',''),
+				'con_celular' : arrayCSV[44].replace('"',''),
+				'empresa_que_gestiona' : arrayCSV[45].replace('"',''),
+				'cuota_vencida' : arrayCSV[46].replace('"',''),
+				'total_cuotas_vencidas' : arrayCSV[47].replace('"',''),
+				'cuotas_en_mora' : arrayCSV[48].replace('"',''),
+				'usuario_responsable' : arrayCSV[49].replace('"',''),
+				'valor_intereses' : arrayCSV[50].replace('"',''),
+				'empresa_que_reporta' : arrayCSV[51].replace('"',''),
+				'valor_aval' : arrayCSV[52].replace('"',''),
+				'valor_cuota' : arrayCSV[53].replace('"',''),
+				'valor_abonos' : arrayCSV[54].replace('"',''),
+				'ciudad_punto_de_credito' : arrayCSV[55].replace('"',''),
+				'fecha_empresa_reporta' : arrayCSV[56].replace('"',''),
+				'estado_de_la_cuota' : arrayCSV[57].replace('"',''),
+				'empresa_origen' : arrayCSV[58].replace('"',''),
+				'intereses_mora' : arrayCSV[59].replace('"',''),
+				'total_intereses_mora' : arrayCSV[60].replace('"',''),
+				'total_honorarios' : arrayCSV[61].replace('"',''),
+				'saldo_capital' : arrayCSV[62].replace('"',''),
+				'valcapitalmax' : arrayCSV[63].replace('"',''),
+				'tipo_de_credito' : arrayCSV[64].replace('"',''),
+				'emails' : arrayCSV[65].replace('"',''),
+				'numobligaciongr' : arrayCSV[66].replace('"',''),
+				'fecha_prox_acuerdo' : arrayCSV[67].replace('"',''),
+				'telefono_1' : arrayCSV[68].replace('"',''),
+				'telefono_2' : arrayCSV[69].replace('"',''),
+				'telefono_3' : arrayCSV[70].replace('"',''),
+				'telefono_4' : arrayCSV[71].replace('"',''),
+				'telefono_5' : arrayCSV[72].replace('"',''),
+				'telefono_6' : arrayCSV[73].replace('"',''),
+				'telefono_7' : arrayCSV[74].replace('"','')
+
 				}
 		
 		return [tupla]

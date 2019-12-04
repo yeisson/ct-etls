@@ -34,18 +34,7 @@ TABLE_SCHEMA = (
 	'FECHA_RECAUDO:STRING, '
 	'LINEA_NEGOCIO:STRING, '
 	'COD_ABOG_PPAL:STRING, '
-	'COD_ABOG_PARA:STRING, '
-	'REGION_GESTOR:STRING, '
-	'PERFIL:STRING, '
-	'NOMBRE_ABOGADO:STRING, '
-	'DESC_PROD:STRING, '
-	'APLICATIVO:STRING, '
-	'OFIC_PREST:STRING, '
-	'REGION_OFI_PRESTAMO:STRING, '
-	'SEGMENTO:STRING, '
 	'GRUPO_FINAL:STRING, '
-	'USUARIO_TAREA:STRING, '
-	'USUARIO_TAREA_PARA:STRING, '
 	'DIAS_MORA:STRING, '
 	'FECHA_CASTIGO:STRING '
 )
@@ -71,20 +60,9 @@ class formatearData(beam.DoFn):
 				'FECHA_RECAUDO' : arrayCSV[5],
 				'LINEA_NEGOCIO' : arrayCSV[6],
 				'COD_ABOG_PPAL' : arrayCSV[7],
-				'COD_ABOG_PARA' : arrayCSV[8],
-				'REGION_GESTOR' : arrayCSV[9],
-				'PERFIL' : arrayCSV[10],
-				'NOMBRE_ABOGADO' : arrayCSV[11],
-				'DESC_PROD' : arrayCSV[12],
-				'APLICATIVO' : arrayCSV[13],
-				'OFIC_PREST' : arrayCSV[14],
-				'REGION_OFI_PRESTAMO' : arrayCSV[15],
-				'SEGMENTO' : arrayCSV[16],
-				'GRUPO_FINAL' : arrayCSV[17],
-				'USUARIO_TAREA' : arrayCSV[18],
-				'USUARIO_TAREA_PARA' : arrayCSV[19],
-				'DIAS_MORA' : arrayCSV[20],
-				'FECHA_CASTIGO' : arrayCSV[21]
+				'GRUPO_FINAL' : arrayCSV[8],
+				'DIAS_MORA' : arrayCSV[9],
+				'FECHA_CASTIGO' : arrayCSV[10]
 				}
 		
 		return [tupla]

@@ -40,6 +40,7 @@ from procesos.adeinco_juridico import adeinco_juridico_api
 from procesos.refinancia import refinancia_api
 from procesos.cotrafa import cotrafa_api
 from procesos.universidad_cooperativa_col import universidad_cooperativa_col_api
+from procesos.descargas import descargas_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -49,6 +50,7 @@ from procesos.rappi import rappi_api
 
 from procesos.turnos import turnos_api
 from procesos.sensus import sensus_api
+from procesos.presupuesto import presupuesto_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -81,6 +83,7 @@ app.register_blueprint(adeinco_juridico_api, url_prefix='/adeinco_juridico')
 app.register_blueprint(refinancia_api, url_prefix='/refinancia')
 app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(universidad_cooperativa_col_api, url_prefix='/universidad_cooperativa_col')
+app.register_blueprint(descargas_api, url_prefix='/descargas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
@@ -88,10 +91,9 @@ app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 
 
-
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
-
+app.register_blueprint(presupuesto_api, url_prefix='/presupuesto')
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

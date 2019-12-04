@@ -8,6 +8,10 @@ import dataflow_pipeline.bancolombia.bancolombia_castigada_seguimiento_beam as b
 import dataflow_pipeline.bancolombia.bancolombia_castigada_pagos_beam as bancolombia_castigada_pagos_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_prejuridico_beam as bancolombia_castigada_prejuridico_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_compromisos_beam as bancolombia_castigada_compromisos_beam
+<<<<<<< HEAD
+=======
+import procesos.descargas as descargas
+>>>>>>> c691f66417db3c520dd39f6f5ba7bcf5762a6a6e
 import os
 import socket
 import time

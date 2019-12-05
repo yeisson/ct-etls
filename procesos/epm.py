@@ -102,3 +102,44 @@ def archivos_Prejuridico():
 
 #########################################################################################################################
 
+@epm_api.route("/archivos_asignacion")
+def archivos_asignacion():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Asignacion/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[12:20]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-epm')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-prejuridico/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.epm.prejuridico` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery, para probar
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = epm_prejuridico_beam.run('gs://ct-epm/info-prejuridico/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Prejuridico/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje

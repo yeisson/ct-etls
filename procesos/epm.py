@@ -6,7 +6,7 @@ from google.cloud import bigquery
 import dataflow_pipeline.epm.epm_seguimiento_beam as epm_seguimiento_beam
 import dataflow_pipeline.epm.epm_prejuridico_beam as epm_prejuridico_beam
 import dataflow_pipeline.epm.epm_asignacion_beam as epm_asignacion_beam
-import dataflow_pipeline.epm.epm_pagos_beam as epm_pagos_beam
+import dataflow_pipeline.epm.epm_pagos_beam as epm__beam
 import os
 import socket
 
@@ -27,7 +27,7 @@ def archivos_Seguimiento():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[8:16]
+            mifecha = archivo[19:25]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-epm')

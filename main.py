@@ -41,6 +41,7 @@ from procesos.refinancia import refinancia_api
 from procesos.cotrafa import cotrafa_api
 from procesos.universidad_cooperativa_col import universidad_cooperativa_col_api
 from procesos.descargas import descargas_api
+from procesos.fanalca_agendamientos import fanalca_agendamientos_api
 from procesos.fanalca import fanalca_api
 
 from procesos.Bridge.bridge import bridge_api
@@ -86,6 +87,7 @@ app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(universidad_cooperativa_col_api, url_prefix='/universidad_cooperativa_col')
 app.register_blueprint(descargas_api, url_prefix='/descargas')
 app.register_blueprint(fanalca_api, url_prefix='/fanalca')
+app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamientos')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
 

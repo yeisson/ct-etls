@@ -25,22 +25,25 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'NOMBRE:STRING, '
-	'CHASIS:STRING, '
-	'ULTIMO_SERVICIO:STRING, '
-	'FECHA_ULTIMO_SERVICIO:STRING, '
-	'PROXIMO_SERVICIO:STRING, '
-	'PLACA:STRING, '
-	'CEDULA:STRING, '
-	'MODELO_MOTOCICLETA:STRING, '
-	'CONCESIONARIO:STRING, '
-	'AGENCIA:STRING, '
-	'CORREO:STRING, '
-	'CELULAR:STRING, '
-	'TELEFONO2:STRING, '
-	'CODIGO:STRING '
-
-
+	'Fecha_Recepcion:STRING, '
+	'Base:STRING, '
+	'Orden:STRING, '
+	'Ultimo_Servicio:STRING, '
+	'Fecha_ultimo_servicio:STRING, '
+	'Proximo_Servicio:STRING, '
+	'Fecha_Estimada:STRING, '
+	'Placa:STRING, '
+	'No_Chasis:STRING, '
+	'Cedula:STRING, '
+	'Cliente:STRING, '
+	'Telefono_1:STRING, '
+	'Telefono_2:STRING, '
+	'Denominacion_de_objeto_tecnico:STRING, '
+	'Kilometraje:STRING, '
+	'Concesionario:STRING, '
+	'Agencia:STRING, '
+	'EMAIl:STRING, '
+	'Fecha_de_Venta:STRING'
 )
 # ?
 class formatearData(beam.DoFn):
@@ -51,27 +54,29 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'NOMBRE': arrayCSV[0],
-				'CHASIS': arrayCSV[1],
-				'ULTIMO_SERVICIO': arrayCSV[2],
-				'FECHA_ULTIMO_SERVICIO': arrayCSV[3],
-				'PROXIMO_SERVICIO': arrayCSV[4],
-				'PLACA': arrayCSV[5],
-				'CEDULA': arrayCSV[6],
-				'MODELO_MOTOCICLETA': arrayCSV[7],
-				'CONCESIONARIO': arrayCSV[8],
-				'AGENCIA': arrayCSV[9],
-				'CORREO': arrayCSV[10],
-				'CELULAR': arrayCSV[11],
-				'TELEFONO2': arrayCSV[12],
-				'CODIGO': arrayCSV[13]
-
-
+				'Fecha_Recepcion': arrayCSV[0],
+				'Base': arrayCSV[1],
+				'Orden': arrayCSV[2],
+				'Ultimo_Servicio': arrayCSV[3],
+				'Fecha_ultimo_servicio': arrayCSV[4],
+				'Proximo_Servicio': arrayCSV[5],
+				'Fecha_Estimada': arrayCSV[6],
+				'Placa': arrayCSV[7],
+				'No_Chasis': arrayCSV[8],
+				'Cedula': arrayCSV[9],
+				'Cliente': arrayCSV[10],
+				'Telefono_1': arrayCSV[11],
+				'Telefono_2': arrayCSV[12],
+				'Denominacion_de_objeto_tecnico': arrayCSV[13],
+				'Kilometraje': arrayCSV[14],
+				'Concesionario': arrayCSV[15],
+				'Agencia': arrayCSV[16],
+				'EMAIl': arrayCSV[17],
+				'Fecha_de_Venta': arrayCSV[18]
 				}
 		
 		return [tupla]
@@ -90,7 +95,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		

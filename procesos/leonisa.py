@@ -10,6 +10,7 @@ import dataflow_pipeline.leonisa.leonisa_recaudo_beam as leonisa_recaudo_beam
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import socket
+import time
 
 leonisa_api = Blueprint('leonisa_api', __name__)
 
@@ -142,6 +143,23 @@ def archivos_Recaudo():
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
+
+                # ----------------------------------------------------------------------------------------------------------------
+                # Elimina datos de la tabla de Recaido Consolidado:
+                deleteQuery_2 = "DELETE FROM `contento-bi.Contento.recaudo_consolidado` WHERE ID_OPERACION = '3' AND FECHA = '" + mifecha + "'"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(600)
+
+                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Recaido Consolidado:
+                inserteDatos = "INSERT INTO `contento-bi.Contento.recaudo_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,REGION,PRODUCTO,SEGMENTO,RANGO_MORA,GRABADOR,NEGOCIADOR,LIDER,EJECUTIVO,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,VALOR_PAGADO) (SELECT * FROM `contento-bi.leonisa.VIEW_RECAUDO_LEONISA` WHERE FECHA = '"+ mifecha +"')"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(inserteDatos)
+                query_job_3.result()
+                # ----------------------------------------------------------------------------------------------------------------
+
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje

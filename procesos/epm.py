@@ -5,6 +5,8 @@ from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.epm.epm_seguimiento_beam as epm_seguimiento_beam
 import dataflow_pipeline.epm.epm_prejuridico_beam as epm_prejuridico_beam
+import dataflow_pipeline.epm.epm_asignacion_beam as epm_asignacion_beam
+import dataflow_pipeline.epm.epm_pagos_beam as epm__beam
 import os
 import socket
 
@@ -25,7 +27,7 @@ def archivos_Seguimiento():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[8:16]
+            mifecha = archivo[19:25]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-epm')
@@ -100,4 +102,89 @@ def archivos_Prejuridico():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
+#########################################################################################################################
 
+@epm_api.route("/archivos_asignacion")
+def archivos_asignacion():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Asignacion/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[10:16]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-epm')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-asignacion/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.epm.asignacion` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery, para probar
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = epm_asignacion_beam.run('gs://ct-epm/info-asignacion/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Asignacion/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje
+#########################################################################################################################
+
+@epm_api.route("/archivos_pagos")
+def archivos_pagos():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Pagos/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[13:19]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-epm')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-pagos/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.epm.pagos` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery, para probar
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = epm_pagos_beam.run('gs://ct-epm/info-pagos/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Epm/Pagos/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje

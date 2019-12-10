@@ -24,19 +24,28 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING, '
-	'FECHA:STRING, '
-	'CONSDOCDEU:STRING, '
-	'NIT:STRING, '
-	'NOMBRE:STRING, '
-	'PAGARE:STRING, '
-	'VALOR_RECAUDO:STRING, '
-	'FECHA_RECAUDO:STRING, '
-	'LINEA_NEGOCIO:STRING, '
-	'COD_ABOG_PPAL:STRING, '
-	'GRUPO_FINAL:STRING, '
-	'DIAS_MORA:STRING, '
-	'FECHA_CASTIGO:STRING '
+'idkey:STRING, '
+'fecha:STRING, '
+'CONSECUTIVO_SERVICIO:STRING, '
+'CONSECUTIVO_PAGO:STRING, '
+'CICLO:STRING, '
+'CODIGO_PRODUCTO:STRING, '
+'CODIGO_ENTIDAD_RECAUDADORA:STRING, '
+'DESCRIPCION_ENTIDAD_RECAUDADORA:STRING, '
+'NRO_CUENTA_DE_COBRO_CANCELADAS:STRING, '
+'NRO_CUPON_DE_PAGO:STRING, '
+'NRO_FACTURA:STRING, '
+'FECHA_GRABACION_EN_ADMINFO:STRING, '
+'FECHA_GRABACION_ORIGEN:STRING, '
+'FECHA_PAGO:STRING, '
+'NRO_SERVICIO_SUSCRITO:STRING, '
+'NRO_SUSCRIPCION:STRING, '
+'VALOR_PAGADO_CUPON:STRING, '
+'VALOR_PAGADO_SERVICIO_SUSCRITO:STRING, '
+'CODIGO_TRASLADO:STRING, '
+'TIPO_DOCUMENTO_PAGO:STRING, '
+'DESCRIPCION_PRODUCTO:STRING, '
+'LINEA_AGENCIA_ABOGADO:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -49,20 +58,29 @@ class formatearData(beam.DoFn):
 		# print(element)
 		arrayCSV = element.split(';')
 
-		tupla= {'IDKEY' : str(uuid.uuid4()),
+		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'FECHA': self.mifecha,
-				'CONSDOCDEU' : arrayCSV[0],
-				'NIT' : arrayCSV[1],
-				'NOMBRE' : arrayCSV[2],
-				'PAGARE' : arrayCSV[3],
-				'VALOR_RECAUDO' : arrayCSV[4],
-				'FECHA_RECAUDO' : arrayCSV[5],
-				'LINEA_NEGOCIO' : arrayCSV[6],
-				'COD_ABOG_PPAL' : arrayCSV[7],
-				'GRUPO_FINAL' : arrayCSV[8],
-				'DIAS_MORA' : arrayCSV[9],
-				'FECHA_CASTIGO' : arrayCSV[10]
+				'fecha' : self.mifecha,
+				'CONSECUTIVO_SERVICIO' : arrayCSV[0],
+				'CONSECUTIVO_PAGO' : arrayCSV[1],
+				'CICLO' : arrayCSV[2],
+				'CODIGO_PRODUCTO' : arrayCSV[3],
+				'CODIGO_ENTIDAD_RECAUDADORA' : arrayCSV[4],
+				'DESCRIPCION_ENTIDAD_RECAUDADORA' : arrayCSV[5],
+				'NRO_CUENTA_DE_COBRO_CANCELADAS' : arrayCSV[6],
+				'NRO_CUPON_DE_PAGO' : arrayCSV[7],
+				'NRO_FACTURA' : arrayCSV[8],
+				'FECHA_GRABACION_EN_ADMINFO' : arrayCSV[9],
+				'FECHA_GRABACION_ORIGEN' : arrayCSV[10],
+				'FECHA_PAGO' : arrayCSV[11],
+				'NRO_SERVICIO_SUSCRITO' : arrayCSV[12],
+				'NRO_SUSCRIPCION' : arrayCSV[13],
+				'VALOR_PAGADO_CUPON' : arrayCSV[14],
+				'VALOR_PAGADO_SERVICIO_SUSCRITO' : arrayCSV[15],
+				'CODIGO_TRASLADO' : arrayCSV[16],
+				'TIPO_DOCUMENTO_PAGO' : arrayCSV[17],
+				'DESCRIPCION_PRODUCTO' : arrayCSV[18],
+				'LINEA_AGENCIA_ABOGADO' : arrayCSV[19]
 				}
 		
 		return [tupla]
@@ -71,7 +89,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-bancolombia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-epm" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -98,8 +116,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.pagos", 
+	transformed | 'Escritura a BigQuery epm' >> beam.io.WriteToBigQuery(
+		gcs_project + ":epm.pagos", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

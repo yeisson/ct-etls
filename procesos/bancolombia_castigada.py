@@ -118,7 +118,7 @@ def archivos_Pagos():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[29:37]
+            mifecha = archivo[14:22]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-bancolombia_castigada')
@@ -286,5 +286,5 @@ def archivos_Compromisos():
         return jsonify(response), response["code"]
         # return "Corriendo : " + mensaje
 
-
+################################################################################################################################################################
 

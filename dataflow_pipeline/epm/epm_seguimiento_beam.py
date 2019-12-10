@@ -27,7 +27,7 @@ TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
 	'Ciclo:STRING, '
-	'Dias_de_mora:INTEGER, '
+	'Dias_de_mora:STRING, '
 	'Fecha_de_Gestion:STRING, '
 	'Resultado_de_gestion:STRING, '
 	'servicio_suscrito:STRING, '

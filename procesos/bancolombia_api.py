@@ -20,8 +20,16 @@ bancolombia_api2 = Blueprint('bancolombia_api2', __name__)
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
 #######################################################################################################################
-#Espiritu santo de Dios, que sean tus manos tirando este codigo. en el nombre de JESUS. amen y amen
+#Espíritu santo de DIOS, que sean tus manos tirando este código. en el nombre de JESÚS. amén y amén
 #######################################################################################################################
+
+##URL DE INVOCACIÓN:
+# http://192.168.108.2:5000/bancolombia_adm_api/api
+# PARÁMETROS:
+# limit = número(1,2,3...n) me dice cuantos datos me quiero traer
+# token = solo puede acceder al api quién tenga el TOKEN de autorización
+# dateini = fecha inicio en formato yyyymmdd
+# dateend = fecha fin en formato yyyymmdd
 
 @bancolombia_api2.route("/api", methods=['POST','GET'])
 def api():
@@ -42,11 +50,6 @@ def api():
     if ip not in ip_allowed:
         return ("La ip:" + ip + mensaje_ip_no_autorizada)
 
-    if limit is None:
-        queryt = ' FROM `bancolombia_admin.bm` where fecha = "' + str(dinip) + '" and fecha = "' + str(dendp) + '"'
-    else:
-        queryt = ' FROM `bancolombia_admin.bm` where fecha = "' + str(dinip) + '" and fecha = "' + str(dendp) + '" LIMIT ' + str(limit)
-
     if dinip is None:
         dinip = fecha
     else:
@@ -56,7 +59,12 @@ def api():
         dendp = fecha
     else:
         dendp = request.args.get('dateend')
-    
+
+    if limit is None:
+        queryt = ' FROM `bancolombia_admin.bm` where cast(fecha as int64) between ' + str(dinip) + ' and ' + str(dendp)
+    else:
+        queryt = ' FROM `bancolombia_admin.bm` where cast(fecha as int64) between ' + str(dinip) + ' and ' + str(dendp) + ' LIMIT ' + str(limit)
+
     if token <> tokenq:
         return(token_incorrecto)
     else:        
@@ -179,7 +187,7 @@ def api():
                 nivel_base, \
                 tarea, \
                 marcacion  \
-            ' + ' FROM `bancolombia_admin.bm` where fecha = "' + dinip + '" and fecha = "' + dendp + '" LIMIT ' + limit)
+            ' + queryt)
         query_job = client.query(QUERY)
         rows = query_job.result()
 

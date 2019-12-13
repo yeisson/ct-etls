@@ -34,7 +34,7 @@ def api():
     tokenq = "AFRV786989182391827898-2312"
     limit = request.args.get('limit')
     ip = request.remote_addr
-    ip_allowed = ['127.0.0.1','192.168.108.2']
+    ip_allowed = ['127.0.0.1','192.168.108.2','192.168.8.189']
     mensaje_ip_no_autorizada = " No está autorizada para ingresar a esta API"
     token_incorrecto = "Ingrese un token válido"
 

@@ -100,6 +100,22 @@ def archivos_Prejuridico():
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
+                # ----------------------------------------------------------------------------------------------------------------
+                # Elimina datos de la tabla de Recaudo Consolidado:
+                deleteQuery_2 = "DELETE FROM `contento-bi.Contento.asignacion_consolidada` WHERE ID_OPERACION = '3' AND FECHA = '" + mifecha + "'"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(240)
+
+                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Recaido Consolidado:
+                inserteDatos = "INSERT INTO `contento-bi.Contento.asignacion_consolidada` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,NOM_ABOGADO,REGION,PRODUCTO,CAL,ESTADO,SEGMENTO,RANGO_MORA,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,OBLIGACIONES,CLIENTES,VAL_OBLIGACION,VAL_VENCIDO,SALDO_ACTIVO) (SELECT * FROM `contento-bi.leonisa.VIEW_ASIGNACION_LEONISA` WHERE FECHA = '"+ mifecha +"')"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(inserteDatos)
+                query_job_3.result()
+                # ----------------------------------------------------------------------------------------------------------------                
+
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
@@ -145,7 +161,7 @@ def archivos_Recaudo():
                 response["status"] = True
 
                 # ----------------------------------------------------------------------------------------------------------------
-                # Elimina datos de la tabla de Recaido Consolidado:
+                # Elimina datos de la tabla de Recaudo Consolidado:
                 deleteQuery_2 = "DELETE FROM `contento-bi.Contento.recaudo_consolidado` WHERE ID_OPERACION = '3' AND FECHA = '" + mifecha + "'"
                 client_2 = bigquery.Client()
                 query_job_2 = client_2.query(deleteQuery_2)

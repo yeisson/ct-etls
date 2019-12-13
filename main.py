@@ -43,12 +43,14 @@ from procesos.universidad_cooperativa_col import universidad_cooperativa_col_api
 from procesos.descargas import descargas_api
 from procesos.fanalca_agendamientos import fanalca_agendamientos_api
 from procesos.fanalca import fanalca_api
+from procesos.cesde import cesde_api
+from procesos.rappi import rappi_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
-from procesos.cesde import cesde_api
-from procesos.rappi import rappi_api
+from procesos.bancolombia_api import bancolombia_api2
+
 
 from procesos.turnos import turnos_api
 from procesos.sensus import sensus_api
@@ -96,6 +98,7 @@ app.register_blueprint(rappi_api, url_prefix='/rappi')
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(webpage_app, url_prefix='/webpage_app')
+app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')

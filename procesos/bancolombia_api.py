@@ -41,7 +41,7 @@ def api():
     tokenq = "AFRV786989182391827898-2312"
     id_cliente = request.args.get('cedula')
     ip = request.remote_addr
-    ip_allowed = ['127.0.0.1','192.168.8.189','181.129.43.106']
+    ip_allowed = ['192.168.8.189','181.129.43.106','179.18.8.255']
     mensaje_ip_no_autorizada = " No está autorizada para ingresar a esta API"
     token_incorrecto = "Ingrese un token válido"
 

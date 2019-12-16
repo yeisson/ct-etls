@@ -24,25 +24,24 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 #######################################################################################################################
 
 ##URL DE INVOCACIÓN:
-# http://192.168.108.2:5000/bancolombia_adm_api/api
+# http://contentobps.contentobi.com:5000/bancolombia_adm_api/api
 # PARÁMETROS:
-# limit = número(1,2,3...n) me dice cuantos datos me quiero traer
+# cedula = número de consecutivo de deudor en ADMINFO
 # token = solo puede acceder al api quién tenga el TOKEN de autorización
-# dateini = fecha inicio en formato yyyymmdd
-# dateend = fecha fin en formato yyyymmdd
+
 
 @bancolombia_api2.route("/api", methods=['POST','GET'])
 def api():
 
     client = bigquery.Client()
     fecha = time.strftime('%Y%m%d')
-    dinip= request.args.get('dateini')
-    dendp= request.args.get('dateend')
+    # dinip= request.args.get('dateini')
+    # dendp= request.args.get('dateend')
     token= request.args.get('token')
     tokenq = "AFRV786989182391827898-2312"
-    limit = request.args.get('limit')
+    id_cliente = request.args.get('cedula')
     ip = request.remote_addr
-    ip_allowed = ['127.0.0.1','192.168.8.189']
+    ip_allowed = ['127.0.0.1','192.168.8.189','181.129.43.106']
     mensaje_ip_no_autorizada = " No está autorizada para ingresar a esta API"
     token_incorrecto = "Ingrese un token válido"
 
@@ -50,20 +49,20 @@ def api():
     if ip not in ip_allowed:
         return ("La ip:" + ip + mensaje_ip_no_autorizada)
 
-    if dinip is None:
-        dinip = fecha
-    else:
-        dinip = request.args.get('dateini')
+    # if dinip is None:
+    #     dinip = fecha
+    # else:
+    #     dinip = request.args.get('dateini')
         
-    if dendp is None:
-        dendp = fecha
-    else:
-        dendp = request.args.get('dateend')
+    # if dendp is None:
+    #     dendp = fecha
+    # else:
+    #     dendp = request.args.get('dateend')
 
-    if limit is None:
-        queryt = ' FROM `bancolombia_admin.bm` where cast(fecha as int64) between ' + str(dinip) + ' and ' + str(dendp)
+    if id_cliente is None:
+        return("Por favor ingrese una cédula")
     else:
-        queryt = ' FROM `bancolombia_admin.bm` where cast(fecha as int64) between ' + str(dinip) + ' and ' + str(dendp) + ' LIMIT ' + str(limit)
+        queryt = ' FROM `bancolombia_admin.bm` where consecutivo_documento_deudor = "' + id_cliente + '"'
 
     if token <> tokenq:
         return(token_incorrecto)
@@ -81,7 +80,7 @@ def api():
                 'consecutivo_documento_deudor': row[2],
                 'valor_cuota': row[3],
                 'clasificacion_producto': row[4],
-                'nit': row[5],
+                'nit': row[5].replace('1','4').replace('2','7').replace('3','0').replace('4','2').replace('5','9').replace('6','3').replace('7','5').replace('8','6').replace('9','1').replace('0','8'),
                 'nombres': row[6],
                 'numero_documento': row[7],
                 'tipo_producto': row[8],

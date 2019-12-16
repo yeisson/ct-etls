@@ -101,7 +101,7 @@ def archivos_Prejuridico():
                 response["status"] = True
 
                 # ----------------------------------------------------------------------------------------------------------------
-                # Elimina datos de la tabla de Recaudo Consolidado:
+                # Elimina datos de la tabla de Asignacion Consolidada:
                 deleteQuery_2 = "DELETE FROM `contento-bi.Contento.asignacion_consolidada` WHERE ID_OPERACION = '3' AND FECHA = '" + mifecha + "'"
                 client_2 = bigquery.Client()
                 query_job_2 = client_2.query(deleteQuery_2)
@@ -109,7 +109,7 @@ def archivos_Prejuridico():
 
                 time.sleep(240)
 
-                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Recaido Consolidado:
+                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Asignacion Consolidada:
                 inserteDatos = "INSERT INTO `contento-bi.Contento.asignacion_consolidada` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,NOM_ABOGADO,REGION,PRODUCTO,CAL,ESTADO,SEGMENTO,RANGO_MORA,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,OBLIGACIONES,CLIENTES,VAL_OBLIGACION,VAL_VENCIDO,SALDO_ACTIVO) (SELECT * FROM `contento-bi.leonisa.VIEW_ASIGNACION_LEONISA` WHERE FECHA = '"+ mifecha +"')"
                 client_3 = bigquery.Client()
                 query_job_3 = client_3.query(inserteDatos)
@@ -170,7 +170,7 @@ def archivos_Recaudo():
                 time.sleep(600)
 
                 # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Recaido Consolidado:
-                inserteDatos = "INSERT INTO `contento-bi.Contento.recaudo_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,REGION,PRODUCTO,SEGMENTO,RANGO_MORA,GRABADOR,NEGOCIADOR,LIDER,EJECUTIVO,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,VALOR_PAGADO, CANT_PAGOS) (SELECT * FROM `contento-bi.leonisa.VIEW_RECAUDO_LEONISA` WHERE FECHA = '"+ mifecha +"')"
+                inserteDatos = "INSERT INTO `contento-bi.Contento.recaudo_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,REGION,PRODUCTO,SEGMENTO,RANGO_MORA,GRABADOR,NEGOCIADOR,LIDER,EJECUTIVO,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,VALOR_PAGADO,CANT_PAGOS,FACTURA) (SELECT * FROM `contento-bi.leonisa.VIEW_RECAUDO_LEONISA` WHERE FECHA = '"+ mifecha +"')"
                 client_3 = bigquery.Client()
                 query_job_3 = client_3.query(inserteDatos)
                 query_job_3.result()
@@ -179,6 +179,3 @@ def archivos_Recaudo():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
-
-
-

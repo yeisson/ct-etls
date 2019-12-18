@@ -55,6 +55,22 @@ def archivos_Seguimiento_leonisa():
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
 
+                # ----------------------------------------------------------------------------------------------------------------
+                # Elimina datos de la tabla de Seguimiento Consolidado:
+                deleteQuery_2 = "DELETE FROM `contento-bi.Contento.seguimiento_consolidado` WHERE ID_OPERACION = '3' AND FECHA = '" + mifecha + "'"
+                client_2 = bigquery.Client()
+                query_job_2 = client_2.query(deleteQuery_2)
+                query_job_2.result()
+
+                time.sleep(240)
+
+                # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Seguimiento Consolidado:
+                inserteDatos = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,HORA,GRABADOR,NEGOCIADOR,ID_LIDER,LIDER,EJECUTIVO,GERENTE,TIPO_CONTACTO,RANGO_MORA,TIENDA,MACRO_PRODUCTO,PRODUCTO,META_GESTIONES,TRABAJO,GESTIONES,WPC,RPC,HIT) (SELECT * FROM `contento-bi.leonisa.QRY_CONSL_HORA_HORA` WHERE FECHA = '"+ mifecha +"')"
+                client_3 = bigquery.Client()
+                query_job_3 = client_3.query(inserteDatos)
+                query_job_3.result()
+                # ----------------------------------------------------------------------------------------------------------------                                
+
     # # return jsonify(response), response["code"]
     # return "Corriendo : " 
     return jsonify(response), response["code"]
@@ -167,7 +183,7 @@ def archivos_Recaudo():
                 query_job_2 = client_2.query(deleteQuery_2)
                 query_job_2.result()
 
-                time.sleep(600)
+                time.sleep(240)
 
                 # Inserta la informacion agrupada segun funciones de agregacion en la tabla de Recaido Consolidado:
                 inserteDatos = "INSERT INTO `contento-bi.Contento.recaudo_consolidado` (ID_OPERACION,FECHA,ANO,MES,NOMBRE_MES,DIA,FECHA_BASE,REGION,PRODUCTO,SEGMENTO,RANGO_MORA,GRABADOR,NEGOCIADOR,LIDER,EJECUTIVO,GERENTE,DIRECTOR,NOM_OPERACION,UEN,SEDE,TIPO_CARTERA,VALOR_PAGADO,CANT_PAGOS,FACTURA) (SELECT * FROM `contento-bi.leonisa.VIEW_RECAUDO_LEONISA` WHERE FECHA = '"+ mifecha +"')"

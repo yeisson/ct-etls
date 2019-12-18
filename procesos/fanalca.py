@@ -8,6 +8,9 @@ import dataflow_pipeline.fanalca.honda_digital_gestion_cotizados_beam as honda_d
 import dataflow_pipeline.fanalca.honda_digital_gestion_ipdial_beam as honda_digital_gestion_ipdial_beam
 import os
 import socket
+import datetime
+import time
+
 
 fanalca_api = Blueprint('fanalca_api', __name__)
 
@@ -82,6 +85,24 @@ def gestion_cotizaciones():
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
+
+    mes = time.strftime('%m')
+
+    if mes in ['12','10','09','08','07','06','05','01']:
+        days = 91
+    elif mes in ['11']:
+        days = 90
+    elif mes in ['03','02']:
+        days = 89
+    else:
+        days = 88
+
+    fecha = datetime.date.today() - datetime.timedelta(days = days)
+    fecha1 = time.strftime('%d.%m.%Y')
+    fecha2 = fecha.strftime('%d.%m.%Y')
+   
+
+    return (fecha1 + " _ " + fecha2 + " _ " + mes)
 
     local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Fanalca/Honda Digital/Gestion_COTIZADOS/"
     archivos = os.listdir(local_route)

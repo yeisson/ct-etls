@@ -62,7 +62,7 @@ def api():
     if id_cliente is None:
         return("Por favor ingrese una cédula")
     else:
-        queryt = ' FROM `bancolombia_admin.bm` where consecutivo_documento_deudor = "' + id_cliente + '"'
+        queryt = ' FROM `bancolombia_admin.bm` where nit = "' + id_cliente + '"'
 
     if token <> tokenq:
         return(token_incorrecto)

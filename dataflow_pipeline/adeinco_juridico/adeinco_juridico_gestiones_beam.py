@@ -50,8 +50,7 @@ TABLE_SCHEMA = (
 	'NOTA:STRING, '
 	'GESTION_MOVIL:STRING, '
 	'DESCRIPCION_ZONA:STRING, '
-	'DESCRIPCION_NEGOCIO:STRING, '
-	'CARTERA:STRING '
+	'DESCRIPCION_NEGOCIO:STRING '
 
 )
 # ?
@@ -93,9 +92,8 @@ class formatearData(beam.DoFn):
 				'NOTA' : arrayCSV[22],
 				'GESTION_MOVIL' : arrayCSV[23],
 				'DESCRIPCION_ZONA' : arrayCSV[24],
-				'DESCRIPCION_NEGOCIO' : arrayCSV[25],
-				'CARTERA' : arrayCSV[26]
-
+				'DESCRIPCION_NEGOCIO' : arrayCSV[25]
+				
 				}
 		
 		return [tupla]

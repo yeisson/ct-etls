@@ -5,7 +5,9 @@ from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.bancolombia.bancolombia_castigada_seguimiento_beam as bancolombia_castigada_seguimiento_beam
-import dataflow_pipeline.bancolombia.bancolombia_castigada_pagos_beam as bancolombia_castigada_pagos_beam
+import dataflow_pipeline.bancolombia.bancolombia_castigada_factura_beam as bancolombia_castigada_factura_beam
+import dataflow_pipeline.bancolombia.bancolombia_castigada_franjas_beam as bancolombia_castigada_franjas_beam
+import dataflow_pipeline.bancolombia.bancolombia_castigada_metas_beam as bancolombia_castigada_metas_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_prejuridico_beam as bancolombia_castigada_prejuridico_beam
 import dataflow_pipeline.bancolombia.bancolombia_castigada_compromisos_beam as bancolombia_castigada_compromisos_beam
 import procesos.descargas as descargas
@@ -106,15 +108,15 @@ def archivos_Seguimiento_castigada():
 
 ################################################################################################################################################################
 
-@bancolombia_castigada_api.route("/archivos_pagos")
-def archivos_Pagos():
+@bancolombia_castigada_api.route("/archivos_factura")
+def archivos_factura():
 
     response = {}
     response["code"] = 400
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Pagos/"
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Factura/"
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
@@ -124,11 +126,11 @@ def archivos_Pagos():
             bucket = storage_client.get_bucket('ct-bancolombia_castigada')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
-            blob = bucket.blob('info-pagos/' + archivo)
+            blob = bucket.blob('info-factura/' + archivo)
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.pagos` WHERE fecha = '" + mifecha + "'"
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.factura` WHERE fecha = '" + mifecha + "'"
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -138,9 +140,9 @@ def archivos_Pagos():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = bancolombia_castigada_pagos_beam.run('gs://ct-bancolombia_castigada/info-pagos/' + archivo, mifecha)
+            mensaje = bancolombia_castigada_factura_beam.run('gs://ct-bancolombia_castigada/info-factura/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
-                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Pagos/Procesados/"+archivo)
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Factura/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
@@ -287,4 +289,88 @@ def archivos_Compromisos():
         # return "Corriendo : " + mensaje
 
 ################################################################################################################################################################
+@bancolombia_castigada_api.route("/archivos_franjas")
+def archivos_franjas():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Franjas_sufi/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[13:21]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia_castigada')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-franjas/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.franjas` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = bancolombia_castigada_franjas_beam.run('gs://ct-bancolombia_castigada/info-franjas/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Franjas_sufi/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje    
+
+    ################################################################################################################################################################
+@bancolombia_castigada_api.route("/archivos_metas")
+def archivos_metas():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Metas/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[18:26]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-bancolombia_castigada')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-metas/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.metas` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = bancolombia_castigada_metas_beam.run('gs://ct-bancolombia_castigada/info-metas/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Metas/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje    
 

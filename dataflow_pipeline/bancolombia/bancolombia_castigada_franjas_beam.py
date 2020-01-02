@@ -26,17 +26,10 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, '
 	'FECHA:STRING, '
-	'CONSDOCDEU:STRING, '
 	'NIT:STRING, '
-	'NOMBRE:STRING, '
-	'PAGARE:STRING, '
-	'VALOR_RECAUDO:STRING, '
-	'FECHA_RECAUDO:STRING, '
-	'LINEA_NEGOCIO:STRING, '
-	'COD_ABOG_PPAL:STRING, '
-	'GRUPO_FINAL:STRING, '
-	'DIAS_MORA:STRING, '
-	'FECHA_CASTIGO:STRING '
+	'CONSECUTIVO_OBLIGACION:STRING, '
+	'ANOMESCASTIGO:STRING, '
+	'FRANJA:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -52,17 +45,10 @@ class formatearData(beam.DoFn):
 		tupla= {'IDKEY' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'FECHA': self.mifecha,
-				'CONSDOCDEU' : arrayCSV[0],
-				'NIT' : arrayCSV[1],
-				'NOMBRE' : arrayCSV[2],
-				'PAGARE' : arrayCSV[3],
-				'VALOR_RECAUDO' : arrayCSV[4],
-				'FECHA_RECAUDO' : arrayCSV[5],
-				'LINEA_NEGOCIO' : arrayCSV[6],
-				'COD_ABOG_PPAL' : arrayCSV[7],
-				'GRUPO_FINAL' : arrayCSV[8],
-				'DIAS_MORA' : arrayCSV[9],
-				'FECHA_CASTIGO' : arrayCSV[10]
+				'NIT' : arrayCSV[0],
+				'CONSECUTIVO_OBLIGACION' : arrayCSV[1],
+				'ANOMESCASTIGO' : arrayCSV[2],
+				'FRANJA' : arrayCSV[3]
 				}
 		
 		return [tupla]
@@ -71,7 +57,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-bancolombia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-bancolombia_castigada" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -99,7 +85,7 @@ def run(archivo, mifecha):
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.pagos", 
+		gcs_project + ":bancolombia_castigada.franjas", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

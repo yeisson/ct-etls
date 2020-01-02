@@ -25,6 +25,8 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 
 TABLE_SCHEMA = 	(
+				'idkey:STRING, '
+				'fecha:STRING, '
 				'CEDULA:STRING, '
 				'COD_INTERNO:STRING, '
 				'FECHA_VENCIMIENTO:STRING, '
@@ -51,7 +53,7 @@ class formatearData(beam.DoFn):
 
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= 	{'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),

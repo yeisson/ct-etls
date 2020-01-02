@@ -25,33 +25,25 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'CHASIS:STRING, '
-	'FECHA_DE_CITA_PROGRAMADA:STRING, '
-	'HORA:STRING, '
-	'LINEA:STRING, '
-	'PLACA:STRING, '
-	'SERVICIO:STRING, '
-	'CEDULA:STRING, '
-	'NOMBRE_APELLIDOS:STRING, '
-	'NUMERO_DE_CONTACTO_FIJO:STRING, '
-	'CELULAR:STRING, '
-	'CORREO:STRING, '
-	'OBSERVACIONES:STRING, '
-	'NUMERO_ENVIO_MENSAJE_DE_TEXTO:STRING, '
-	'CONCESIONARIO:STRING, '
-	'AGENCIA:STRING, '
-	'FECHA_PROGRAMACION:STRING, '
-	'MES:STRING, '
-	'ANO:STRING, '
-	'DIRECCION:STRING, '
-	'CIUDAD:STRING, '
-	'AGENTE:STRING, '
-	'OLA:STRING, '
-	'CUMPLIMIENTO_CITA:STRING, '
-	'META:STRING, '
-	'REGIONAL:STRING '
-
-
+	'Chasis:STRING, '
+	'Fecha_De_Cita_Programada:STRING, '
+	'Hora:STRING, '
+	'Linea:STRING, '
+	'Placa:STRING, '
+	'Servicio:STRING, '
+	'Cedula:STRING, '
+	'NombreYApellidos:STRING, '
+	'Numero_De_Contacto_Fijo:STRING, '
+	'Celular:STRING, '
+	'Correo:STRING, '
+	'Observaciones:STRING, '
+	'Numero_Envio_Mensaje_De_Texto:STRING, '
+	'Concesionario:STRING, '
+	'Agencia:STRING, '
+	'Fecha_Programacion:STRING, '
+	'Direccion:STRING, '
+	'Agente:STRING, '
+	'Reagenda:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -62,38 +54,29 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'CHASIS': arrayCSV[0],
-				'FECHA_DE_CITA_PROGRAMADA': arrayCSV[1],
-				'HORA': arrayCSV[2],
-				'LINEA': arrayCSV[3],
-				'PLACA': arrayCSV[4],
-				'SERVICIO': arrayCSV[5],
-				'CEDULA': arrayCSV[6],
-				'NOMBRE_APELLIDOS': arrayCSV[7],
-				'NUMERO_DE_CONTACTO_FIJO': arrayCSV[8],
-				'CELULAR': arrayCSV[9],
-				'CORREO': arrayCSV[10],
-				'OBSERVACIONES': arrayCSV[11],
-				'NUMERO_ENVIO_MENSAJE_DE_TEXTO': arrayCSV[12],
-				'CONCESIONARIO': arrayCSV[13],
-				'AGENCIA': arrayCSV[14],
-				'FECHA_PROGRAMACION': arrayCSV[15],
-				'MES': arrayCSV[16],
-				'ANO': arrayCSV[17],
-				'DIRECCION': arrayCSV[18],
-				'CIUDAD': arrayCSV[19],
-				'AGENTE': arrayCSV[20],
-				'OLA': arrayCSV[21],
-				'CUMPLIMIENTO_CITA': arrayCSV[22],
-				'META': arrayCSV[23],
-				'REGIONAL': arrayCSV[24]
-
-
+				'Chasis': arrayCSV[0],
+				'Fecha_De_Cita_Programada': arrayCSV[1],
+				'Hora': arrayCSV[2],
+				'Linea': arrayCSV[3],
+				'Placa': arrayCSV[4],
+				'Servicio': arrayCSV[5],
+				'Cedula': arrayCSV[6],
+				'NombreYApellidos': arrayCSV[7],
+				'Numero_De_Contacto_Fijo': arrayCSV[8],
+				'Celular': arrayCSV[9],
+				'Correo': arrayCSV[10],
+				'Observaciones': arrayCSV[11],
+				'Numero_Envio_Mensaje_De_Texto': arrayCSV[12],
+				'Concesionario': arrayCSV[13],
+				'Agencia': arrayCSV[14],
+				'Fecha_Programacion': arrayCSV[15],
+				'Direccion': arrayCSV[16],
+				'Agente': arrayCSV[17],
+				'Reagenda': arrayCSV[18]
 				}
 		
 		return [tupla]
@@ -112,7 +95,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		
@@ -130,7 +113,7 @@ def run(archivo, mifecha):
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
-		gcs_project + ":fanalca_agendamiento.cumplimiento", 
+		gcs_project + ":fanalca_agendamiento.agendados", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

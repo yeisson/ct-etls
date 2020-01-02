@@ -99,16 +99,16 @@ class formatearData(beam.DoFn):
 				'Numero_de_factura_ECC': arrayCSV[21],
 				'Requisitos': arrayCSV[22],
 				'Creados_el_Fecha_y_hora': arrayCSV[23],
-				'Creado_el': arrayCSV[24],
-				'Producto': arrayCSV[25],
-				'Fuentes_de_contacto': arrayCSV[26],
-				'Motivo_de_rechazo_articulo': arrayCSV[27],
-				'Campana': arrayCSV[28],
-				'Como_se_entero_de_la_motocicleta_Oferta_de_venta': arrayCSV[29],
-				'Prueba_de_Manejo_Oferta_de_venta': arrayCSV[30],
-				'Consulta_central_riesgo1': arrayCSV[31],
-				'Consulta_central_riesgo2': arrayCSV[32],
-				'Valor_Oferta_Motos_Ajustada': arrayCSV[33]
+				'Creado_el': arrayCSV[28],
+				'Producto': arrayCSV[29],
+				'Fuentes_de_contacto': arrayCSV[30],
+				'Motivo_de_rechazo_articulo': arrayCSV[31],
+				'Campana': arrayCSV[32],
+				'Como_se_entero_de_la_motocicleta_Oferta_de_venta': arrayCSV[33],
+				'Prueba_de_Manejo_Oferta_de_venta': arrayCSV[34],
+				'Consulta_central_riesgo1': arrayCSV[35],
+				'Consulta_central_riesgo2': arrayCSV[36],
+				'Valor_Oferta_Motos_Ajustada': arrayCSV[38]
 				}
 		
 		return [tupla]

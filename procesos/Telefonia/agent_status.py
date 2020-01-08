@@ -24,7 +24,7 @@ import dataflow_pipeline.telefonia.agent_status_beam as agent_status_beam #[[[[[
 agent_status_api = Blueprint('agent_status_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 
-############################# DEFINICIOnN DE VARIABLES ###########################
+############################# DEFINICION DE VARIABLES ###########################
 fecha = time.strftime('%Y%m%d')
 hour1 = "000000"
 hour2 = "235959"

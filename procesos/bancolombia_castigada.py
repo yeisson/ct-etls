@@ -20,7 +20,7 @@ from pandas import DataFrame
 # import sqlalchemy
 # import BigQueryHelper
 
-# from google.cloud import bigquery_storage_v1beta1
+## from google.cloud import bigquery_storage_v1beta1
 
 bancolombia_castigada_api = Blueprint('bancolombia_castigada_api', __name__)
 

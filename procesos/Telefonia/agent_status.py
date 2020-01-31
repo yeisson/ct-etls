@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado " and ipdial_code = "intcob-cisa-cobranza"') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""

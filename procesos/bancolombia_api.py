@@ -29,7 +29,8 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 # cedula = número de consecutivo de deudor en ADMINFO
 # token = solo puede acceder al api quién tenga el TOKEN de autorización
 
-ip_allowed = ['192.168.8.189','181.129.43.106','179.18.8.255','127.0.0.1']
+ip_allowed = ['192.168.8.189','181.129.43.106','179.18.8.255','127.0.0.1','192.168.17.93']
+
 
 
 @bancolombia_api2.route("/api", methods=['POST','GET'])

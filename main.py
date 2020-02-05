@@ -45,6 +45,8 @@ from procesos.fanalca_agendamientos import fanalca_agendamientos_api
 from procesos.fanalca import fanalca_api
 from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
+from procesos.pio import pio_contento_api
+
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -93,6 +95,7 @@ app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamientos')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
+app.register_blueprint(pio_contento_api, url_prefix='/pio')
 
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 
@@ -106,6 +109,7 @@ app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
 app.register_blueprint(presupuesto_api, url_prefix='/presupuesto')
 app.register_blueprint(dispersion_api, url_prefix='/dispersion')
+
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

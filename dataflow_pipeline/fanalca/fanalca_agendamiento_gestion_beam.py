@@ -34,7 +34,6 @@ TABLE_SCHEMA = (
 	'Result:STRING, '
 	'Campana:STRING, '
 	'Dia:STRING, '
-	'Tipo:STRING, '
 	'Mes:STRING '
 	)
 # ?
@@ -59,8 +58,7 @@ class formatearData(beam.DoFn):
 				'Result' : arrayCSV[6],
 				'Campana' : arrayCSV[7],
 				'Dia' : arrayCSV[8],
-				'Tipo' : arrayCSV[9],
-				'Mes' : arrayCSV[10]
+				'Mes' : arrayCSV[9]
 				}
 		
 		return [tupla]

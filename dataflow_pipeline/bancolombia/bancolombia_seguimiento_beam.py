@@ -70,7 +70,7 @@ class formatearData(beam.DoFn):
 				'codigo_de_gestion': arrayCSV[6],
 				't_igraba': arrayCSV[7],
 				'dias_mora': arrayCSV[8],
-				'duracion': arrayCSV[9],
+				'duracion': arrayCSV[9].replace('','0:00:00'),
 				'regional': arrayCSV[10],
 				'consecutivo_gestion': arrayCSV[11],
 				'nro_documento': arrayCSV[12],
@@ -80,7 +80,7 @@ class formatearData(beam.DoFn):
 				't_entrada': arrayCSV[16],
 				'codigo_de_cobro_anterior': arrayCSV[17],
 				'fecha_corte': arrayCSV[18],
-				'nota': arrayCSV[19]
+				'nota': arrayCSV[19].replace('|',',')
 
 				}
 		

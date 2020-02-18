@@ -1,3 +1,4 @@
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 
 import logging
@@ -23,34 +24,53 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'idkey:STRING,'
-	'fecha:STRING,'
-	'Orden:STRING,'
-	'Ultimo_Servicio:STRING,'
-	'Fecha_Ultimo_Servicio:STRING,'
-	'Proximo_Servicio:STRING,'
-	'Fecha_Estimada:STRING,'
-	'Placa:STRING,'
-	'No_Chasis:STRING,'
-	'Cedula:STRING,'
-	'Cliente:STRING,'
-	'Telefono_1:STRING,'
-	'Telefono_2:STRING,'
-	'Denominacion_De_Objeto_Tecnico:STRING,'
-	'Kilometraje:STRING,'
-	'Concesionario:STRING,'
-	'Agencia:STRING,'
-	'Email:STRING,'
-	'Fecha_De_Venta:STRING,'
-	'Fecha_Recepcion:STRING,'
-	'Base:STRING,'
-	'Ola:STRING,'
-	'Codigo:STRING,'
-	'Id:STRING,'
-	'Tipo:STRING,'
-	'Tipologia:STRING,'
-	'Prioridad:STRING,'
-	'Mes:STRING'
+		
+		'idkey:STRING, '
+		'fecha:STRING, '
+		'ANO:STRING, '
+		'MES:STRING, '
+		'NOMBRE_GERENTE:STRING, '
+		'CEDULA:STRING, '
+		'NOMBRE:STRING, '
+		'CARGO:STRING, '
+		'COMISION:STRING, '
+		'COSTO:STRING, '
+		'INGRESO:STRING, '
+		'ASEGURA:STRING, '
+		'META_ASEGURA:STRING, '
+		'OCUPACION:STRING, '
+		'META_RECAUDO:STRING, '
+		'EJECUCION_RECAUDO:STRING, '
+		'OPERACION:STRING, '
+		'CENTRO_DE_COSTOS:STRING, '
+		'CATEGORIA:STRING, '
+		'TIPO_DE_OPERACION:STRING, '
+		'CC_TEAM_LEADER:STRING, '
+		'NOMBRE_TEAM_LEADER:STRING, '
+		'CC_EJECUTIVO:STRING, '
+		'NOMBRE_EJECUTIVO:STRING, '
+		'CUMPLIMIENTO:STRING, '
+		'AHT:STRING, '
+		'ASEGURAMIENTO:STRING, '
+		'PRODUCTIVIDAD_EFECTIVIDAD:STRING, '
+		'NIVEL_DESEMPENO:STRING, '
+		'CLASIFICACION:STRING, '
+		'CLASIFICACION_BINARIZADA:STRING, '
+		'NO_CLASIFICADOS_BINARIZADO:STRING, '
+		'SOBRESALIENTE_B:STRING, '
+		'OBJETIVO_B:STRING, '
+		'FO_BINARIZADO:STRING, '
+		'DEFICIENTE_B:STRING, '
+		'CLASIFICA:STRING, '
+		'NO_CLASIFICA:STRING '
+
+
+
+
+
+
+
+
 
 )
 # ?
@@ -65,33 +85,56 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				'fecha' : self.mifecha,
-				'Orden' : arrayCSV[0],
-				'Ultimo_Servicio' : arrayCSV[1],
-				'Fecha_Ultimo_Servicio' : arrayCSV[2],
-				'Proximo_Servicio' : arrayCSV[3],
-				'Fecha_Estimada' : arrayCSV[4],
-				'Placa' : arrayCSV[5],
-				'No_Chasis' : arrayCSV[6],
-				'Cedula' : arrayCSV[7],
-				'Cliente' : arrayCSV[8],
-				'Telefono_1' : arrayCSV[9],
-				'Telefono_2' : arrayCSV[10],
-				'Denominacion_De_Objeto_Tecnico' : arrayCSV[11],
-				'Kilometraje' : arrayCSV[12],
-				'Concesionario' : arrayCSV[13],
-				'Agencia' : arrayCSV[14],
-				'Email' : arrayCSV[15],
-				'Fecha_De_Venta' : arrayCSV[16],
-				'Fecha_Recepcion' : arrayCSV[17],
-				'Base' : arrayCSV[18],
-				'Ola' : arrayCSV[19],
-				'Codigo' : arrayCSV[20],
-				'Id' : arrayCSV[21],
-				'Tipo' : arrayCSV[22],
-				'Tipologia' : arrayCSV[23],
-				'Prioridad' : arrayCSV[24],
-				'Mes' : arrayCSV[25]
+				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
+				'fecha': self.mifecha,
+				'ANO' : arrayCSV[0],
+				'MES' : arrayCSV[1],
+				'NOMBRE_GERENTE' : arrayCSV[2],
+				'CEDULA' : arrayCSV[3],
+				'NOMBRE' : arrayCSV[4],
+				'CARGO' : arrayCSV[5],
+				'COMISION' : arrayCSV[6],
+				'COSTO' : arrayCSV[7],
+				'INGRESO' : arrayCSV[8],
+				'ASEGURA' : arrayCSV[9],
+				'META_ASEGURA' : arrayCSV[10],
+				'OCUPACION' : arrayCSV[11],
+				'META_RECAUDO' : arrayCSV[12],
+				'EJECUCION_RECAUDO' : arrayCSV[13],
+				'OPERACION' : arrayCSV[14],
+				'CENTRO_DE_COSTOS' : arrayCSV[15],
+				'CATEGORIA' : arrayCSV[16],
+				'TIPO_DE_OPERACION' : arrayCSV[17],
+				'CC_TEAM_LEADER' : arrayCSV[18],
+				'NOMBRE_TEAM_LEADER' : arrayCSV[19],
+				'CC_EJECUTIVO' : arrayCSV[20],
+				'NOMBRE_EJECUTIVO' : arrayCSV[21],
+				'CUMPLIMIENTO' : arrayCSV[22],
+				'AHT' : arrayCSV[23],
+				'ASEGURAMIENTO' : arrayCSV[24],
+				'PRODUCTIVIDAD_EFECTIVIDAD' : arrayCSV[25],
+				'NIVEL_DESEMPENO' : arrayCSV[26],
+				'CLASIFICACION' : arrayCSV[27],
+				'CLASIFICACION_BINARIZADA' : arrayCSV[28],
+				'NO_CLASIFICADOS_BINARIZADO' : arrayCSV[29],
+				'SOBRESALIENTE_B' : arrayCSV[30],
+				'OBJETIVO_B' : arrayCSV[31],
+				'FO_BINARIZADO' : arrayCSV[32],
+				'DEFICIENTE_B' : arrayCSV[33],
+				'CLASIFICA' : arrayCSV[34],
+				'NO_CLASIFICA' : arrayCSV[35]
+
+
+
+
+
+
+
+
+
+
+
+
 				}
 		
 		return [tupla]
@@ -100,7 +143,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-dispersion" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -127,8 +170,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
-		gcs_project + ":fanalca_agendamiento.asignacion", 
+	transformed | 'Escritura a BigQuery base' >> beam.io.WriteToBigQuery(
+		gcs_project + ":dispersion.base", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

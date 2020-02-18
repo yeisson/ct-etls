@@ -120,7 +120,8 @@ def archivos_factura():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[14:22]
+            mifecha = archivo[17:25]
+            tipo =  archivo[0:16]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-bancolombia_castigada')
@@ -130,7 +131,8 @@ def archivos_factura():
             blob.upload_from_filename(local_route + archivo)
 
             # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
-            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.factura` WHERE fecha = '" + mifecha + "'"
+            deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.factura` WHERE NOMBRE_ARCHIVO = '" + tipo + "'"
+            #deleteQuery = "DELETE FROM `contento-bi.bancolombia_castigada.factura` WHERE fecha = '" + mifecha + "'"
 
             #Primero eliminamos todos los registros que contengan esa fecha
             client = bigquery.Client()
@@ -140,7 +142,7 @@ def archivos_factura():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = bancolombia_castigada_factura_beam.run('gs://ct-bancolombia_castigada/info-factura/' + archivo, mifecha)
+            mensaje = bancolombia_castigada_factura_beam.run('gs://ct-bancolombia_castigada/info-factura/' + archivo, mifecha, tipo)
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Factura/Procesados/"+archivo)
                 response["code"] = 200

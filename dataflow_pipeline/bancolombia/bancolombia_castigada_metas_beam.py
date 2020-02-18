@@ -26,10 +26,17 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, '
 	'FECHA:STRING, '
+	'ID_OPERACION:STRING, '
+	'NOM_OPERACION:STRING, '
+	'ANO:STRING, '
 	'MES:STRING, '
-	'GRABADOR:STRING, '
-	'NOMBRE:STRING, '
-	'META:STRING '
+	'PRODUCTO:STRING, '
+	'META_GEST_HORA:INTEGER, '
+	'META_RPC:NUMERIC, '
+	'META_WPC:NUMERIC, '
+	'META_HIT:NUMERIC, '
+	'META_RECAUDO:INTEGER, '
+	'META_FACTURA:INTEGER '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -45,10 +52,17 @@ class formatearData(beam.DoFn):
 		tupla= {'IDKEY' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'FECHA': self.mifecha,
-				'MES' : arrayCSV[0],
-				'GRABADOR' : arrayCSV[1],
-				'NOMBRE' : arrayCSV[2],
-				'META' : arrayCSV[3]
+				'ID_OPERACION' : arrayCSV[0],
+				'NOM_OPERACION' : arrayCSV[1],
+				'ANO' : arrayCSV[2],
+				'MES' : arrayCSV[3],
+				'PRODUCTO' : arrayCSV[4],
+				'META_GEST_HORA' : arrayCSV[5],
+				'META_RPC' : arrayCSV[6],
+				'META_WPC' : arrayCSV[7],
+				'META_HIT' : arrayCSV[8],
+				'META_RECAUDO' : arrayCSV[9],
+				'META_FACTURA' : arrayCSV[10]
 				}
 		
 		return [tupla]

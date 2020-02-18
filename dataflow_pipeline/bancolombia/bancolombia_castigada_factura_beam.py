@@ -26,21 +26,25 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, '
 	'FECHA:STRING, '
+	'NOMBRE_ARCHIVO:STRING, '
 	'MES_PAGO:STRING, '
+	'ANO_PAGO:STRING, '
 	'CONSECUTIVO_OBLIGACION:STRING, '
 	'NIT:STRING, '
-	'NOMBRE:STRING, '
+	'NRODOC:STRING, '
 	'VALOR_RECAUDO:INTEGER, '
-	'FECHA_RECAUDO:STRING, '
 	'NEGOCIADOR:STRING, '
-	'SEGMENTO:STRING '
+	'SEGMENTO:STRING, '
+	'PORCENTAJE_RECONOCIDO:INTEGER '
+
 )
 # ?
 class formatearData(beam.DoFn):
 
-	def __init__(self, mifecha):
+	def __init__(self, mifecha, tipo):
 		super(formatearData, self).__init__()
 		self.mifecha = mifecha
+		self.tipo = tipo
 	
 	def process(self, element):
 		# print(element)
@@ -49,21 +53,23 @@ class formatearData(beam.DoFn):
 		tupla= {'IDKEY' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'FECHA': self.mifecha,
+				'NOMBRE_ARCHIVO': self.tipo,
 				'MES_PAGO' : arrayCSV[0],
-				'CONSECUTIVO_OBLIGACION' : arrayCSV[1],
-				'NIT' : arrayCSV[2],
-				'NOMBRE' : arrayCSV[3],
-				'VALOR_RECAUDO' : arrayCSV[4],
-				'FECHA_RECAUDO' : arrayCSV[5],
+				'ANO_PAGO' : arrayCSV[1],
+				'CONSECUTIVO_OBLIGACION' : arrayCSV[2],
+				'NIT' : arrayCSV[3],
+				'NRODOC' : arrayCSV[4],
+				'VALOR_RECAUDO' : arrayCSV[5],
 				'NEGOCIADOR' : arrayCSV[6],
-				'SEGMENTO' : arrayCSV[7]
+				'SEGMENTO' : arrayCSV[7],
+				'PORCENTAJE_RECONOCIDO' : arrayCSV[8]
 				}
 		
 		return [tupla]
 
 
 
-def run(archivo, mifecha):
+def run(archivo, mifecha, tipo):
 
 	gcs_path = "gs://ct-bancolombia_castigada" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
@@ -85,7 +91,7 @@ def run(archivo, mifecha):
 	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha, tipo)))
 
 	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
 

@@ -20,14 +20,6 @@ app = Flask(__name__, static_url_path='/')
 CORS(app)
 
 
-
-
-
-
-
-
-
-
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 from procesos.Telefonia.login_logout import login_logout_api

@@ -152,13 +152,13 @@ app.register_blueprint(dispersion_api, url_prefix='/dispersion')
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
-from procesos.Contento_tech.Tof.tof import tof_api
+# from procesos.Contento_tech.Tof.tof import tof_api
 
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
 app.register_blueprint(webpage_app, url_prefix='/webpage_app')
-app.register_blueprint(tof_api, url_prefix='/tof')
+# app.register_blueprint(tof_api, url_prefix='/tof')
 
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

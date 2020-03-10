@@ -110,19 +110,19 @@ def run(archivo, mifecha):
 	#lines = pipeline | 'Lectura de Archivo' >> ReadFromText("gs://ct-bancolombia/info-segumiento/BANCOLOMBIA_INF_SEG_20181129 0800.csv", skip_header_lines=1)
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 
-	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
 
-	# # lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
+	# lines | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_prej_small", file_name_suffix='.csv',shard_name_template='')
 
-	# # transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
-	# #transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
+	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
+	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	# transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-	# 	gcs_project + ":bancolombia_admin.seguimiento", 
-	# 	schema=TABLE_SCHEMA, 
-	# 	create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-	# 	write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-	# 	)
+	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
+		gcs_project + ":bancolombia_admin.seguimiento", 
+		schema=TABLE_SCHEMA, 
+		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
+		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
+		)
 
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
 	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])

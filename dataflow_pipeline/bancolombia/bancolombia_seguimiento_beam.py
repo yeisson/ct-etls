@@ -105,7 +105,7 @@ def run(archivo, mifecha):
 	])
 	
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
-	# transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
 	# transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
 	# 	gcs_project + ":bancolombia_admin.seguimiento", 
 	# 	schema=TABLE_SCHEMA, 

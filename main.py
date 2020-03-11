@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function, absolute_import
-
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 from google.oauth2 import service_account
@@ -14,6 +14,14 @@ import requests
 import os
 import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
+app = Flask(__name__, static_url_path='/')
+CORS(app)
+
+
+# Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 from procesos.Telefonia.login_logout import login_logout_api
 from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
@@ -23,6 +31,29 @@ from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 
+app.register_blueprint(login_logout_api, url_prefix='/telefonia')
+app.register_blueprint(csat_api, url_prefix='/telefonia')
+app.register_blueprint(agent_status_api, url_prefix='/telefonia')
+app.register_blueprint(cdr_api, url_prefix='/telefonia')
+app.register_blueprint(remover_api, url_prefix='/telefonia')
+app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+app.register_blueprint(tester_api, url_prefix='/telefonia')
+app.register_blueprint(webpage_api, url_prefix='/telefonia')
+
+
+
+# Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
 from procesos.avon_2 import avon_2_api
@@ -45,31 +76,7 @@ from procesos.fanalca_agendamientos import fanalca_agendamientos_api
 from procesos.fanalca import fanalca_api
 from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
-
-from procesos.Bridge.bridge import bridge_api
-from procesos.PhpTOPython.mirror import mirror_api
-from WebPage.inicio import webpage_app
 from procesos.bancolombia_api import bancolombia_api2
-
-
-from procesos.turnos import turnos_api
-from procesos.sensus import sensus_api
-from procesos.presupuesto import presupuesto_api
-from procesos.dispersion import dispersion_api
-
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
-
-app = Flask(__name__, static_url_path='/')
-CORS(app)
-
-app.register_blueprint(login_logout_api, url_prefix='/telefonia')
-app.register_blueprint(csat_api, url_prefix='/telefonia')
-app.register_blueprint(agent_status_api, url_prefix='/telefonia')
-app.register_blueprint(cdr_api, url_prefix='/telefonia')
-app.register_blueprint(remover_api, url_prefix='/telefonia')
-app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
-app.register_blueprint(tester_api, url_prefix='/telefonia')
-app.register_blueprint(webpage_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
@@ -93,19 +100,69 @@ app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamientos')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
-
+app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 
-app.register_blueprint(bridge_api, url_prefix='/bridge')
-app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
-app.register_blueprint(webpage_app, url_prefix='/webpage_app')
-app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 
+
+# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+from procesos.turnos import turnos_api
+from procesos.sensus import sensus_api
+from procesos.presupuesto import presupuesto_api
+from procesos.dispersion import dispersion_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
 app.register_blueprint(presupuesto_api, url_prefix='/presupuesto')
 app.register_blueprint(dispersion_api, url_prefix='/dispersion')
+
+# Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+# TECH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+from procesos.Bridge.bridge import bridge_api
+from procesos.PhpTOPython.mirror import mirror_api
+from WebPage.inicio import webpage_app
+# from procesos.Contento_tech.Tof.tof import tof_api
+
+
+app.register_blueprint(bridge_api, url_prefix='/bridge')
+app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
+app.register_blueprint(webpage_app, url_prefix='/webpage_app')
+# app.register_blueprint(tof_api, url_prefix='/tof')
+
+
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():

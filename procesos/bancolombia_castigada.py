@@ -71,10 +71,14 @@ def archivos_Seguimiento_castigada():
                 # Guarda la información en Seguimiento Consolidado.
                 # ----------------------------------------------------------------------------------------------------------------
                 deleteQuery_1 = "DELETE FROM `contento-bi.Contento.seguimiento_consolidado` WHERE ID_OPERACION = '5' AND fecha = '" + mifecha + "'" 
-                insertQuery_1 = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (SELECT * FROM `contento-bi.bancolombia_castigada.QRY_CONSL_HORA_HORA` WHERE FECHA = '" + mifecha + "')"
                 client_1 = bigquery.Client()
-                query_job_1 = client_1.query(insertQuery_1)
+                query_job_1 = client_1.query(deleteQuery_1)
                 query_job_1.result()    
+                
+                insertQuery_1 = "INSERT INTO `contento-bi.Contento.seguimiento_consolidado` (SELECT * FROM `contento-bi.bancolombia_castigada.QRY_CONSL_HORA_HORA` WHERE FECHA = '" + mifecha + "')"
+                client_11 = bigquery.Client()
+                query_job_11 = client_11.query(insertQuery_1)
+                query_job_11.result()    
                 # ----------------------------------------------------------------------------------------------------------------
 
                 # Inicia proceso de calculo para Best Time.

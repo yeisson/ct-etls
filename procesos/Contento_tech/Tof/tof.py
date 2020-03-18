@@ -61,7 +61,7 @@ def tof_fanalca():
     # conn.execute_query("SELECT * FROM Fanalca_Agendamientos.dbo.Fanalca_Agendamientos WHERE CAST(Fecha_Gestion AS DATE) = '" + AHORA +"'")
 
     # Este query nos trae toda la información de la vista calculada alojada en el mssql, solo usar para actualizar todo
-    conn.execute_query("SELECT * FROM Fanalca_Agendamientos.dbo.Fanalca_Agendamientos")
+    conn.execute_query("SELECT TOP(5000)* FROM Fanalca_Agendamientos.dbo.Fanalca_Agendamientos")
 
     cloud_storage_rows = ""
     for row in conn:
@@ -79,13 +79,10 @@ def tof_fanalca():
         text_row += '' + "|" if str(row[10]).encode('utf-8') is None else str(row[10]).encode('utf-8') + "|"
         text_row += '' + "|" if str(row[11]).encode('utf-8') is None else str(row[11]).encode('utf-8') + "|"
         text_row += '' + "|" if row[12].encode('ascii', 'ignore').decode('ascii') is None else row[12].encode('ascii', 'ignore').decode('ascii') + "|"
-        text_row += '' + "|" if row[13].encode('ascii', 'ignore').decode('ascii') is None else row[13].encode('ascii', 'ignore').decode('ascii') + "|"
         text_row += '' + "|" if row[14].encode('ascii', 'ignore').decode('ascii') is None else row[14].encode('ascii', 'ignore').decode('ascii') + "|"
         text_row += '' + "|" if str(row[15]).encode('utf-8') is None else str(row[15]).encode('utf-8') + "|"
         text_row += '' + "|" if str(row[16]).encode('utf-8') is None else str(row[16]).encode('utf-8') + "|"
-        text_row += '' + "|" if str(row[17]).encode('utf-8') is None else str(row[17]).encode('utf-8') + "|"
-
-        text_row += "\n"
+        text_row += '' + "|" if str(row[17]).encode('utf-8') is None else str(row[17]).encode('utf-8') + "\n"
 
         cloud_storage_rows += text_row
 

@@ -39,7 +39,6 @@ TABLE_SCHEMA = (
 			'Causal:STRING,'
 			'Subcausal:STRING,'
 			'Queja:STRING,'
-			'Nota_Queja:STRING,'
 			'Asesor:STRING,'
 			'Fecha_Gestion:STRING,'
 			'Cumplimiento:STRING,'
@@ -68,11 +67,10 @@ class formatearData(beam.DoFn):
 				'Causal': arrayCSV[10],
 				'Subcausal': arrayCSV[11],
 				'Queja': arrayCSV[12],
-				'Nota_Queja': arrayCSV[13],
-				'Asesor': arrayCSV[14],
-				'Fecha_Gestion': arrayCSV[15],
-				'Cumplimiento': arrayCSV[16],
-				'Tecnico': arrayCSV[17]
+				'Asesor': arrayCSV[13],
+				'Fecha_Gestion': arrayCSV[14],
+				'Cumplimiento': arrayCSV[15],
+				'Tecnico': arrayCSV[16]
 
 				}
 		

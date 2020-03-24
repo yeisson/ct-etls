@@ -413,6 +413,7 @@ def archivos_masivos():
     my_pipeline = [bancolombia_castigada_predictivo_beam,bancolombia_castigada_sms_beam,bancolombia_castigada_tts_beam]
     my_dates_process = ['','','']
     my_files = [[],[],[]]   # Almacena las fechas de los archivos.
+    my_query = ['QRY_MASIVO_PREDICTIVO','QRY_MASIVO_SMS','QRY_MASIVO_TTS']
 
     # Hace limpieza de las 3 tablas completamente una sola vez, y no por cada archivo. Esto para prevenir el streaming buffer.
     for i in [0, 1, 2]:
@@ -471,7 +472,7 @@ def archivos_masivos():
                     time.sleep(30) # Le da tiempo al Storage, para que lleve la informacion a la tabla seguimiento en BigQuery.
 
                     # Guarda la información ya procesada en Tabla General Masivos.                                          
-                    insertQuery_1 = "INSERT INTO `contento-bi.bancolombia_castigada.masivos` (SELECT '" + mifecha + "','" + tipo[i] + "', LISTO FROM `contento-bi.bancolombia_castigada.QRY_MASIVO_PREDICTIVO`)"
+                    insertQuery_1 = "INSERT INTO `contento-bi.bancolombia_castigada.masivos` (SELECT '" + mifecha + "','" + tipo[i] + "', LISTO FROM `contento-bi.bancolombia_castigada." + my_query[i] + "`)"
                     client_11 = bigquery.Client()
                     query_job_11 = client_11.query(insertQuery_1)
                     query_job_11.result()

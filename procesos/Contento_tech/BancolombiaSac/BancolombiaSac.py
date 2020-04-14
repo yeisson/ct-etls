@@ -50,7 +50,7 @@ def bancosac():
         print("Eliminado de storage")
 
     try:
-        QUERY = ("delete FROM `contento-bi.Contento_Tech.Gestiones_BancoSAC` where Fecha_Cargue = '" + AHORA + "'")
+        QUERY = ("delete FROM `contento-bi.Contento_Tech.Gestiones_BancoSAC` where SUBSTR(Fecha_Gestion,0,10) = '" + AHORA + "'")
         query_job = client.query(QUERY)
         rows2 = query_job.result()
     except: 

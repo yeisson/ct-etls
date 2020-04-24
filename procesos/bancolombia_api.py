@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+#######################################################################################################################
+#Espíritu santo de DIOS, que sean tus manos tirando este código. en el nombre de JESÚS. amén y amén
+#######################################################################################################################
 
 from flask import Blueprint
 from flask import jsonify
@@ -19,9 +22,6 @@ bancolombia_api2 = Blueprint('bancolombia_api2', __name__)
 
 fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="contentobi"]
 
-#######################################################################################################################
-#Espíritu santo de DIOS, que sean tus manos tirando este código. en el nombre de JESÚS. amén y amén
-#######################################################################################################################
 
 ##URL DE INVOCACIÓN:
 # http://contentobps.contentobi.com:5000/bancolombia_adm_api/api
@@ -29,17 +29,20 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 # cedula = número de consecutivo de deudor en ADMINFO
 # token = solo puede acceder al api quién tenga el TOKEN de autorización
 
-ip_allowed = ['192.168.8.189','181.129.43.106','179.18.8.255','127.0.0.1','192.168.17.93']
-
-
+ip_allowed = []
+client = bigquery.Client()
+QUERY = ('SELECT * FROM `Contento_Tech.ip_allowed`')
+query_job = client.query(QUERY)
+rows = query_job.result()
+for row in rows:
+    ip_allowed.append(row[1])
+print ip_allowed
 
 @bancolombia_api2.route("/api", methods=['POST','GET'])
 def api():
 
     client = bigquery.Client()
     fecha = time.strftime('%Y%m%d')
-    # dinip= request.args.get('dateini')
-    # dendp= request.args.get('dateend')
     token= request.args.get('token')
     tokenq = "AFRV786989182391827898-2312"
     id_cliente = request.args.get('cedula')
@@ -49,7 +52,7 @@ def api():
 
 
     if ip not in ip_allowed:
-        return ("La ip:" + ip + mensaje_ip_no_autorizada)
+        return ("La ip: " + ip + mensaje_ip_no_autorizada)
 
     if id_cliente is None:
         return("Por favor ingrese una cédula")

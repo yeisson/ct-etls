@@ -54,17 +54,9 @@ def api():
     if id_cliente is None:
         return("Por favor ingrese una cédula")
     else:
-        queryt = "FROM \
-                (SELECT FECHA, NIT, NOMBRES, CIUDAD, consecutivo_documento_deudor, numero_documento, valor_obligacion, valor_vencido,\
-                        dias_mora, valor_cuota, ultima_fecha_pago, ciclo, \
-                        (SELECT MAX(FECHA_NUEVA) \
-                        FROM \
-                            (SELECT *, PARSE_DATE('%Y%m%d', FECHA) FECHA_NUEVA  FROM `bancolombia_admin.bm`)\
-                        ) FECHA_MAYOR\
-                FROM `bancolombia_admin.bm` \
-                )\
-                WHERE PARSE_DATE('%Y%m%d', FECHA) = FECHA_MAYOR AND NIT = '" + id_cliente + "' \
-                ORDER BY 1,2 DESC"
+        queryt = "FROM `contento-bi.bancolombia_admin.vista_escritorio_unico` \
+                    WHERE NIT = '" + id_cliente + "' \
+                    ORDER BY 1,2 DESC"
 
     if token <> tokenq:
         return(token_incorrecto)
@@ -78,18 +70,22 @@ def api():
         for row in rows:
             i = i+1
             items.append({
-                'fecha': row[0],
-                'nit': row[1],
-                'nombres': row[2],
-                'ciudad': row[3],
-                'consecutivo_documento_deudor': row[4],
-                'numero_documento': row[5],
-                'valor_obligacion': row[6],
-                'valor_vencido': row[7],
-                'dias_mora': row[8],
-                'valor_cuota': row[9],
-                'ultima_fecha_pago': row[10],
-                'ciclo': row[11],
+                'nit': row[0],
+                'nombres': row[1].encode('utf-8'),
+                'Ciudad': row[2],
+                'Departamento': row[3],
+                'Telefono': row[4],
+                'obligaciones': row[5],
+                'Consecutivo_Documento_Deudor': row[6],
+                'nro_tarjeta': row[7],
+                'valor_obligacion': row[8],
+                'valor_vencido': row[9],
+                'dias_mora': row[10],
+                'pago_minimo': row[11],
+                'Saldo_Capital_Dolares': row[12],
+                'Fecha_de_Pago': row[13],
+                'Valor_Pagado': row[14],
+                'ciclo': row[15],
                 '#Registro': i
                 })
 

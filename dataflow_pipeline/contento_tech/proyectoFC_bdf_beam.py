@@ -56,7 +56,7 @@ class formatearData(beam.DoFn):
 				'fecha' : self.mifecha,
 				'ANO' : arrayCSV[0],
 				'PERIODO' : arrayCSV[1],
-				'NOMBRE_PRODUCTO_MVTO' : arrayCSV[2],
+				'NOMBRE_PRODUCTO_MVTO' : arrayCSV[2].replace(';',':'),
 				'PRODUCTO' : arrayCSV[3],
 				'DOCUMENTO' : arrayCSV[4],
 				'T_DCTO' : arrayCSV[5],

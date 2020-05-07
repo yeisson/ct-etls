@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#########################################################################################################################################
+#Espiritu santo de Dios, que sean tus manos creando este codigo. En el nombre del padre todo poderoso AMEN y AMEN.
+#########################################################################################################################################
+
+
 from flask import Blueprint
 from flask import jsonify
 from shutil import copyfile, move

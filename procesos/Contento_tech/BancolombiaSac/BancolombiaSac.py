@@ -59,7 +59,7 @@ def bancosac():
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query("SELECT * FROM CORR3WHPSXV.dbo.CRM_TO_GOOGLE where CAST(Fecha_Gestion AS DATE) = '" + AHORA + "'")
+    conn.execute_query("SELECT * FROM CORR3WHPSXV.dbo.CRM_TO_GOOGLE where CAST(Fecha_Gestion AS DATE) < '" + AHORA + "'")
 
     cloud_storage_rows = ""
     for row in conn:

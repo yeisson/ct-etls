@@ -36,7 +36,6 @@ query_job = client.query(QUERY)
 rows = query_job.result()
 for row in rows:
     ip_allowed.append(row[1])
-print ip_allowed
 
 @bancolombia_api2.route("/api", methods=['POST','GET'])
 def api():

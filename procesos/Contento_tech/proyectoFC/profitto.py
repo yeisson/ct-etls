@@ -53,11 +53,13 @@ def profitto():
 
             mensaje = proyectoFC_bdc_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
+                os.remove(local_route + archivo)
                 checking += ['bdc->Procesado,']
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True
             else: checking += ['bdc->NO Procesado,']
+
 
         if archivo.startswith("bdf_"):
             mifecha = archivo[4:12]
@@ -80,6 +82,7 @@ def profitto():
 
             mensaje = proyectoFC_bdf_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
+                os.remove(local_route + archivo)
                 checking += ['bdf->Procesado,']
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
@@ -107,6 +110,7 @@ def profitto():
 
             mensaje = proyectoFC_cxp_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
+                os.remove(local_route + archivo)
                 checking += ['cxp->Procesado']
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"

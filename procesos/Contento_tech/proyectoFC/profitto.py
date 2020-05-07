@@ -23,10 +23,6 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 @profitto_api.route("/start")
 def profitto():
 
-    response = {}
-    response["code"] = 400
-    response["description"] = "No se encontraron ficheros"
-    response["status"] = False
     local_route = fileserver_baseroute + "/BI_Archivos/TECH/ProyectoFC/"
     archivos = os.listdir(local_route)
     checking = []
@@ -55,9 +51,7 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['bdc->Procesado,']
-                response["code"] = 200
-                response["description"] = "Se realizo la peticion Full HD"
-                response["status"] = True
+
             else: checking += ['bdc->NO Procesado,']
 
 
@@ -84,9 +78,6 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['bdf->Procesado,']
-                response["code"] = 200
-                response["description"] = "Se realizo la peticion Full HD"
-                response["status"] = True
             else: checking += ['bdf->NO Procesado,']
 
         if archivo.startswith("cxp_"):
@@ -112,9 +103,13 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['cxp->Procesado']
-                response["code"] = 200
-                response["description"] = "Se realizo la peticion Full HD"
-                response["status"] = True
             else: checking += ['cxp->NO Procesado,']
 
-    return jsonify(checking)
+    if not checking:
+        response = {}
+        response["code"] = 400
+        response["description"] = "No se encontraron ficheros"
+        response["status"] = False
+        return jsonify(response)
+    else:
+        return jsonify(checking)

@@ -154,3 +154,56 @@ def api2():
 
     
     return  jsonify(items)
+
+
+
+    ##URL DE INVOCACIÓN:
+    # http://contentobps.contentobi.com:5000/bancolombia_adm_api/api3
+    # PARÁMETROS:
+    # cedula = número de consecutivo de deudor en ADMINFO
+    # token = solo puede acceder al api quién tenga el TOKEN de autorización
+
+@bancolombia_api2.route("/api3", methods=['POST','GET'])
+def api3():
+
+    client = bigquery.Client()
+    fecha = time.strftime('%Y%m%d')
+    token= request.args.get('token')
+    tokenq = "AFRV5bf68a2c0ad6a7e08bd6966968ea-46de"
+    id_cliente = request.args.get('cedula')
+    ip = request.remote_addr
+    mensaje_ip_no_autorizada = " No está autorizada para ingresar a esta API"
+    token_incorrecto = "Ingrese un token válido"
+
+
+    if ip not in ip_allowed:
+        return ("La ip:" + ip + mensaje_ip_no_autorizada)
+
+    if id_cliente is None:
+        return("Por favor ingrese una cédula")
+    else:
+        queryt = "FROM \
+                    (SELECT * FROM `bancolombia_admin.vista_escritorio_unico_pagos` \
+                    WHERE NIT = " + id_cliente + ")"
+
+    if token <> tokenq:
+        return(token_incorrecto)
+    else:        
+        QUERY = ('SELECT * ' + queryt)
+        query_job = client.query(QUERY)
+        rows = query_job.result()
+
+        items = []
+        i = 0
+        for row in rows:
+            i = i+1
+            items.append({
+                'Nit': row[0],
+                'Consecutivo': row[1],
+                'Fecha_de_Pago': row[2].strftime('%Y-%m-%d'),
+                'Valor_Pagado': row[3],
+                '#Registro ': i
+                })
+
+    
+    return  jsonify(items)

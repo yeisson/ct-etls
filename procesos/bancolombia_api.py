@@ -24,7 +24,7 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 
 
 ##URL DE INVOCACIÓN:
-# http://contentobps.contentobi.com:5000/bancolombia_adm_api/api
+# http://contentobi.contentobps.com:5000/bancolombia_adm_api/api
 # PARÁMETROS:
 # cedula = número de consecutivo de deudor en ADMINFO
 # token = solo puede acceder al api quién tenga el TOKEN de autorización
@@ -96,7 +96,7 @@ def api():
 
 
 ##URL DE INVOCACIÓN:
-# http://contentobps.contentobi.com:5000/bancolombia_adm_api/api2
+# http://contentobi.contentobps.com:5000/bancolombia_adm_api/api2
 # PARÁMETROS:
 # cedula = número de consecutivo de deudor en ADMINFO
 # token = solo puede acceder al api quién tenga el TOKEN de autorización
@@ -158,7 +158,7 @@ def api2():
 
 
     ##URL DE INVOCACIÓN:
-    # http://contentobps.contentobi.com:5000/bancolombia_adm_api/api3
+    # http://contentobi.contentobps.com:5000/bancolombia_adm_api/api3
     # PARÁMETROS:
     # cedula = número de consecutivo de deudor en ADMINFO
     # token = solo puede acceder al api quién tenga el TOKEN de autorización

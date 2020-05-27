@@ -19,7 +19,7 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
 import sys
-import dataflow_pipeline.telefonia.chats_beam as agent_status_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import dataflow_pipeline.telefonia.chats_beam as chats_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 chats_api = Blueprint('chats_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
@@ -102,23 +102,23 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["chat_id"]).encode('utf-8')+"|"+
-                    str(rown["channel"])+"|"+
-                    str(rown["chat_date"])+"|"+
-                    str(rown["user_name"])+"|"+
-                    str(rown["user_email"])+"|"+
-                    str(rown["user_phone"]).encode('utf-8')+"|"+
-                    str(rown["user_chat_chars"])+"|"+
-                    str(rown["agent_id"])+"|"+
-                    str(rown["agent_name"])+"|"+
-                    str(rown["agent_chat_chars"])+"|"+
-                    str(rown["chat_duration"])+"|"+
-                    str(rown["cod_act"])+"|"+
-                    str(rown["comment"])+"|"+
-                    str(rown["id_customer"])+"|"+
-                    str(rown["agent_skill"])+"|"+
-                    str(rown["user_id"])+"|"+
-                    str(row.id_cliente)+"|"+
+                    str(rown["chat_id"]).encode('utf-8').replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["channel"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["chat_date"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["user_name"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["user_email"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["user_phone"]).encode('utf-8').replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["user_chat_chars"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["agent_id"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["agent_name"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["agent_chat_chars"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["chat_duration"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["cod_act"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["comment"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["id_customer"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["agent_skill"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(rown["user_id"]).replace('\n', ' ').replace('\r', '')+"|"+
+                    str(row.id_cliente).replace('\n', ' ').replace('\r', '')+"|"+
                     str(row.cartera).encode('utf-8') + "\n")
 
     file.close()

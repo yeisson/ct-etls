@@ -22,6 +22,8 @@ from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
+from procesos.Telefonia.chats import chats_api
+
 
 from procesos.bancolombia import bancolombia_api
 from procesos.avon import avon_api
@@ -70,6 +72,8 @@ app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
+app.register_blueprint(chats_api, url_prefix='/telefonia')
+
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')

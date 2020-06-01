@@ -6,6 +6,7 @@ from google.cloud import bigquery
 import dataflow_pipeline.turnos.turnos_visor_beam as turnos_visor_beam
 import dataflow_pipeline.turnos.turnos_unificadas_beam as turnos_unificadas_beam
 import dataflow_pipeline.turnos.turnos_sac_beam as turnos_sac_beam
+import dataflow_pipeline.turnos.turnos_sac2_beam as turnos_sac2_beam
 import os
 import socket
 
@@ -142,6 +143,52 @@ def sac():
             mensaje = turnos_sac_beam.run('gs://ct-turnos/sac/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje
+
+   ###############################################################################################################
+
+    ###############################################################################################################################################
+
+@turnos_api.route("/sac2")
+def sac2():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC2/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[9:17]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-turnos')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('sac/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.turnos.sac2` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = turnos_sac2_beam.run('gs://ct-turnos/sac/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Turnos/SAC2/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo la peticion Full HD"
                 response["status"] = True

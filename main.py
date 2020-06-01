@@ -30,6 +30,8 @@ from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
+from procesos.Telefonia.chats import chats_api
+
 
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
 app.register_blueprint(csat_api, url_prefix='/telefonia')
@@ -79,6 +81,27 @@ from procesos.rappi import rappi_api
 from procesos.bancolombia_api import bancolombia_api2
 from procesos.pyg import pyg_api
 from ui import ui_api
+
+
+from procesos.turnos import turnos_api
+from procesos.sensus import sensus_api
+from procesos.presupuesto import presupuesto_api
+from procesos.dispersion import dispersion_api
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
+
+app = Flask(__name__, static_url_path='/')
+CORS(app)
+
+app.register_blueprint(login_logout_api, url_prefix='/telefonia')
+app.register_blueprint(csat_api, url_prefix='/telefonia')
+app.register_blueprint(agent_status_api, url_prefix='/telefonia')
+app.register_blueprint(cdr_api, url_prefix='/telefonia')
+app.register_blueprint(remover_api, url_prefix='/telefonia')
+app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+app.register_blueprint(tester_api, url_prefix='/telefonia')
+app.register_blueprint(webpage_api, url_prefix='/telefonia')
+app.register_blueprint(chats_api, url_prefix='/telefonia')
 
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')

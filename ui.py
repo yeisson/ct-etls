@@ -13,11 +13,7 @@ myApp.config['my_resourses'] = my_resourses
 @myApp.route("/")
 @ui_api.route("/cargues_pyg")
 def ui_cargues_pyg():
-
-    # full_filename = os.path.join(myApp.config['my_resourses'], 'fondo1.jpg')
-    miNombre = 'Daniel'    
-    # return render_template('financiero/myIndex.html', the_name = miNombre)#user_image = full_filename)
-    return render_template('financiero/index.html', the_name = miNombre)#user_image = full_filename)
+    return render_template('financiero/index.html')#user_image = full_filename)
 
 
 # Invoca a cada ETL individualmente

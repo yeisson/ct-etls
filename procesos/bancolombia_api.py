@@ -123,11 +123,7 @@ def api2():
     if id_cliente is None:
         return("Por favor ingrese una cédula")
     else:
-        queryt = "FROM \
-                    (SELECT fecha_gestion, nit, grabador, codigo_abogado, nota, codigo_de_gestion, desc_ultimo_codigo_de_gestion_prejuridico, nro_documento,\
-                    ROW_NUMBER() OVER(PARTITION BY SUBSTR(fecha_gestion,0,16), nit, grabador, codigo_abogado, nota, codigo_de_gestion, desc_ultimo_codigo_de_gestion_prejuridico order by fecha_gestion  desc) AS RANK_GESTIONES_1\
-                    FROM `bancolombia_admin.seguimiento`\
-                    WHERE NIT = '" + id_cliente + "') WHERE RANK_GESTIONES_1 = 1 order by 1 desc, 2 LIMIT 10"
+        queryt = "FROM `contento-bi.bancolombia_admin.vista_escritorio_gestiones` WHERE nit = '" + id_cliente + "'"
 
     if token <> tokenq:
         return(token_incorrecto)
@@ -141,14 +137,14 @@ def api2():
         for row in rows:
             i = i+1
             items.append({
-                'fecha_gestion': row[0],
+                'fecha_gestion': row[0].strftime("%Y-%m-%d %H:%M:%S"),
                 'nit': row[1],
                 'grabador': row[2],
                 'codigo_abogado': row[3],
-                'nota': row[4].replace("\n",""),
+                'nota': row[4].replace("\n","").encode('utf8'),
                 'codigo_de_gestion': row[5],
                 'desc_ultimo_codigo_de_gestion_prejuridico': row[6],
-                'nro_documento': row[7],
+                'Consdocdeu': row[7],
                 '#Registro': i
                 })
 

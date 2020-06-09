@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, render_template, Flask, url_for
 import procesos.pyg as pyg
+import procesos.universidad_cooperativa_col as ucc
 import os
 
 my_resourses = os.path.join('static','images')
@@ -10,13 +11,29 @@ ui_api = Blueprint('ui_api', __name__)
 myApp = Flask(__name__)
 myApp.config['my_resourses'] = my_resourses
 
+
+
+# Vistas Principales
+
+# Vista del Informe financiero PyG
+# ----------------------------------
 @myApp.route("/")
 @ui_api.route("/cargues_pyg")
 def ui_cargues_pyg():
     return render_template('financiero/index.html')#user_image = full_filename)
+# ----------------------------------
 
+# Vista de las Operaciones Unificadas
+# ----------------------------------
+@myApp.route("/")
+@ui_api.route("/cargues_unificadas")
+def ui_cargues_unificadas():
+    return render_template('unificadas/index.html')
+# ----------------------------------
 
 # Invoca a cada ETL individualmente
+
+# Informe Financiero PyG:
 # ----------------------------------
 @ui_api.route("/cargar_agentes")
 def ui_cargar_agentes():      
@@ -43,6 +60,31 @@ def ui_cargar_puestos():
     return pyg.pyg_puestos()
 
 # ----------------------------------    
+
+# Operaciones Unificadas
+# ----------------------------------    
+@ui_api.route("/cargar_inscritos")
+def ui_cargar_inscritos():      
+    return ucc.archivos_inscritos()
+
+@ui_api.route("/cargar_integracion")
+def ui_cargar_integracion():      
+    return ucc.archivos_integracion()
+
+@ui_api.route("/cargar_sms")
+def ui_cargar_sms():      
+    return ucc.archivos_sms()
+
+@ui_api.route("/cargar_agentv")
+def ui_cargar_agentv():      
+    return ucc.archivos_agentev()
+
+@ui_api.route("/cargar_campanas")
+def ui_cargar_campanas():      
+    return ucc.archivos_campanas()
+
+# ----------------------------------    
+
 
 # Prueba invocacion optimizada
 @ui_api.route("/cargar")

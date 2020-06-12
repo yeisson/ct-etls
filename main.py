@@ -31,6 +31,7 @@ from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 from procesos.Telefonia.chats import chats_api
+from procesos.Telefonia.sms import sms_api
 
 
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
@@ -102,6 +103,7 @@ app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
+app.register_blueprint(sms_api, url_prefix='/telefonia')
 
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')

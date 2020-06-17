@@ -65,8 +65,8 @@ def profitto():
             mensaje = proyectoFC_bdc_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
+                checking += ['bdc->Procesado,']
                 try:
-                    checking += ['bdc->Procesado,']
                     message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
                     subject = 'Info-process-etl-python(google cloud platform)'
                     message = ('Subject: {}\n\n{}'.format(subject, message))
@@ -102,8 +102,8 @@ def profitto():
             mensaje = proyectoFC_bdf_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
+                checking += ['bdf->Procesado,']
                 try:
-                    checking += ['bdf->Procesado,']
                     message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
                     subject = 'Info-process-etl-python(google cloud platform)'
                     message = ('Subject: {}\n\n{}'.format(subject, message))
@@ -114,7 +114,7 @@ def profitto():
                     server.quit()
                 except:
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN bdf")
-        else: checking += ['bdf->NO Procesado,']
+            else: checking += ['bdf->NO Procesado,']
 
         if archivo.startswith("cxp_"):
             mifecha = archivo[4:12]
@@ -138,8 +138,8 @@ def profitto():
             mensaje = proyectoFC_cxp_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
+                checking += ['cxp->Procesado']
                 try:
-                    checking += ['cxp->Procesado']
                     message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
                     subject = 'Info-process-etl-python(google cloud platform)'
                     message = ('Subject: {}\n\n{}'.format(subject, message))

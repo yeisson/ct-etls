@@ -82,6 +82,7 @@ from procesos.rappi import rappi_api
 from procesos.bancolombia_api import bancolombia_api2
 from procesos.pyg import pyg_api
 from ui import ui_api
+from procesos.unificadas import unificadas_api
 
 
 from procesos.turnos import turnos_api
@@ -131,6 +132,7 @@ app.register_blueprint(rappi_api, url_prefix='/rappi')
 app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 app.register_blueprint(pyg_api, url_prefix='/pyg')
 app.register_blueprint(ui_api, url_prefix='/ui')
+app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 
 

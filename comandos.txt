@@ -57,3 +57,32 @@ para github
 1) commit
 2) pull
 3) push
+
+
+
+http://{ip_ipdialbox}/ipdialbox/api_reports.php?token= {token}&report=cdr_sms&date_ini=20190830000000&date_end=20190831235959
+
+
+3221741
+
+gordon 61.000
+
+http://35.238.175.158/ipdialbox/api_reports.php?token=7b69645f6469737472697d2d3230313931303137313035333033&report=cdr_sms&date_ini=20200501000000&date_end=20200531235959
+
+
+http://35.238.175.158/ipdialbox/api_reports.php?token=7b69645f6469737472697d2d3230313931303137313035333033&report=cdr_sms&date_ini=20200061200000&date_end=20200612235959
+
+
+Mitsubishi
+
+http://35.238.175.158/ipdialbox/api_reports.php?token=7b69645f6469737472697d2d3230313931303137313034383139&report=cdr_sms&date_ini=20200612000000&date_end=20200612235959
+
+
+
+id_call,id_agent,date,tel_number,msn,id_customer,channel
+
+
+
+1040749782
+
+andreacanorestrepo74@gmail.com

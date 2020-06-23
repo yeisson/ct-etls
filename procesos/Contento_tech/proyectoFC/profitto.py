@@ -39,7 +39,7 @@ def profitto():
 
     local_route = fileserver_baseroute + "/BI_Archivos/TECH/ProyectoFC/"
     archivos = os.listdir(local_route)
-    tokened = 'contento2020**'
+    tokened = 'contento2020**.'
     checking = []
     
     for archivo in archivos:
@@ -66,14 +66,17 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['bdc->Procesado,']
-                message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
-                subject = 'Info-process-etl-python(google cloud platform)'
-                message = ('Subject: {}\n\n{}'.format(subject, message))
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()
-                server.login('techcontentbisup@gmail.com',tokened)
-                server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
-                server.quit()
+                try:
+                    message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
+                    subject = 'Info-process-etl-python(google cloud platform)'
+                    message = ('Subject: {}\n\n{}'.format(subject, message))
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login('techcontentbisup@gmail.com',tokened)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.quit()
+                except:
+                    print("No se pudo enviar EMAIL DE VERIFICACIÓN bdc")
             else: checking += ['bdc->NO Procesado,']
 
 
@@ -100,14 +103,17 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['bdf->Procesado,']
-                message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
-                subject = 'Info-process-etl-python(google cloud platform)'
-                message = ('Subject: {}\n\n{}'.format(subject, message))
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()
-                server.login('techcontentbisup@gmail.com',tokened)
-                server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
-                server.quit()
+                try:
+                    message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
+                    subject = 'Info-process-etl-python(google cloud platform)'
+                    message = ('Subject: {}\n\n{}'.format(subject, message))
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login('techcontentbisup@gmail.com',tokened)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.quit()
+                except:
+                    print("No se pudo enviar EMAIL DE VERIFICACIÓN bdf")
             else: checking += ['bdf->NO Procesado,']
 
         if archivo.startswith("cxp_"):
@@ -133,14 +139,18 @@ def profitto():
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
                 checking += ['cxp->Procesado']
-                message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
-                subject = 'Info-process-etl-python(google cloud platform)'
-                message = ('Subject: {}\n\n{}'.format(subject, message))
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()
-                server.login('techcontentbisup@gmail.com',tokened)
-                server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com, arave163@gmail.com',message)
-                server.quit()
+                try:
+                    message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
+                    subject = 'Info-process-etl-python(google cloud platform)'
+                    message = ('Subject: {}\n\n{}'.format(subject, message))
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login('techcontentbisup@gmail.com',tokened)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com, arave163@gmail.com',message)
+                    server.quit()
+                except: 
+                    print("No se pudo enviar EMAIL DE VERIFICACIÓN cxp")
+                
             else: checking += ['cxp->NO Procesado,']
 
     if not checking:

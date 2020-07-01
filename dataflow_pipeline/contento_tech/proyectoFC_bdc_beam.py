@@ -25,18 +25,28 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'idkey:STRING, '
 	'fecha:STRING, '
-	'Id_Campaign:STRING, '
-	'Name:STRING, '
-	'Last_Name:STRING, '
-	'Id:STRING, '
-	'Date:STRING, '
-	'Telephone:STRING, '
-	'Result:STRING, '
-	'Campana:STRING, '
-	'Dia:STRING, '
-	'Mes:STRING '
-	)
-# ?
+	'CLIENTE:STRING, '
+	'NOMBRE_CLIENTE:STRING, '
+	'DOCUMENTO:STRING, '
+	'T_DCTO:STRING, '
+	'F_EXPEDIC:STRING, '
+	'F_VENCIM:STRING, '
+	'DIASVC:STRING, '
+	'DEUDA:STRING, '
+	'PAGADO:STRING, '
+	'POR_VENC:STRING, '
+	'VENC_0_30:STRING, '
+	'VENC_31_60:STRING, '
+	'VENC_61_90:STRING, '
+	'VENC_91:STRING, '
+	'SALDO:STRING, '
+	'TIPO_CARTERA:STRING, '
+	'NOMBRE_TIPO_CARTERA:STRING, '
+	'NOMBRE_VENDEDOR:STRING, '
+	'CENTRO_COSTOS:STRING, '
+	'NOMBRE_CENTRO_DE_COSTOS:STRING '
+)
+
 class formatearData(beam.DoFn):
 
 	def __init__(self, mifecha):
@@ -44,30 +54,37 @@ class formatearData(beam.DoFn):
 		self.mifecha = mifecha
 	
 	def process(self, element):
-		# print(element)
 		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				'fecha' : self.mifecha,
-				'Id_Campaign' : arrayCSV[0],
-				'Name' : arrayCSV[1],
-				'Last_Name' : arrayCSV[2],
-				'Id' : arrayCSV[3],
-				'Date' : arrayCSV[4],
-				'Telephone' : arrayCSV[5],
-				'Result' : arrayCSV[6],
-				'Campana' : arrayCSV[7],
-				'Dia' : arrayCSV[8],
-				'Mes' : arrayCSV[9]
+				'CLIENTE' : arrayCSV[0],
+				'NOMBRE_CLIENTE' : arrayCSV[1],
+				'DOCUMENTO' : arrayCSV[2],
+				'T_DCTO' : arrayCSV[3],
+				'F_EXPEDIC' : arrayCSV[4],
+				'F_VENCIM' : arrayCSV[5],
+				'DIASVC' : arrayCSV[6],
+				'DEUDA' : arrayCSV[7],
+				'PAGADO' : arrayCSV[8],
+				'POR_VENC' : arrayCSV[9],
+				'VENC_0_30' : arrayCSV[10],
+				'VENC_31_60' : arrayCSV[11],
+				'VENC_61_90' : arrayCSV[12],
+				'VENC_91' : arrayCSV[13],
+				'SALDO' : arrayCSV[14],
+				'TIPO_CARTERA' : arrayCSV[15],
+				'NOMBRE_TIPO_CARTERA' : arrayCSV[16],
+				'NOMBRE_VENDEDOR' : arrayCSV[17],
+				'CENTRO_COSTOS' : arrayCSV[18],
+				'NOMBRE_CENTRO_DE_COSTOS' : arrayCSV[19]
 				}
 		
 		return [tupla]
 
-
-
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-tech-tof"
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -77,23 +94,20 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "10",
+        "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-
 	])
-
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
-		gcs_project + ":fanalca_agendamiento.gestion", 
+	
+	lines = pipeline | 'Lectura de Archivo PFC' >> ReadFromText(archivo, skip_header_lines=1)
+	transformed = (lines | 'Formatear Data PFC' >> beam.ParDo(formatearData(mifecha)))
+	transformed | 'Escritura a BigQuery PFC' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Contento_Tech.profitto_bd_carteras", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
 
 	jobObject = pipeline.run()
-	# jobID = jobObject.job_id()
-
 	return ("Corrio Full HD")
 
 

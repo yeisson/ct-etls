@@ -24,19 +24,48 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING, '
-	'FECHA:STRING, '
-	'ID_OPERACION:STRING, '
-	'NOM_OPERACION:STRING, '
-	'ANO:STRING, '
+	'IDKEY:STRING,'
+	'FECHA:STRING,'
+	'DIA_MES:STRING, '
 	'MES:STRING, '
-	'PRODUCTO:STRING, '
-	'META_GEST_HORA:INTEGER, '
-	'META_RPC:NUMERIC, '
-	'META_WPC:NUMERIC, '
-	'META_HIT:NUMERIC, '
-	'META_RECAUDO:INTEGER, '
-	'META_FACTURA:INTEGER '
+	'CEDULA:STRING, '
+	'NOMBRE:STRING, '
+	'TEAM_LEADER:STRING, '
+	'JORNADA:STRING, '
+	'DIA:STRING, '
+	'PRETURNO:STRING, '
+	'HORA_ENTRADA:STRING, '
+	'HORA_SALIDA:STRING, '
+	'TOTAL_HORAS:STRING, '
+	'INICIO_REU:STRING, '
+	'FIN_REU:STRING, '
+	'INICIO_ALMUERZO:STRING, '
+	'FIN_ALMUERZO:STRING, '
+	'INICIO_CAPACITACION:STRING, '
+	'FIN_CAPACITACION:STRING, '
+	'DESCANSO1:STRING, '
+	'FIN1:STRING, '
+	'DESCANSO2:STRING, '
+	'FIN2:STRING, '
+	'DESCANSO3:STRING, '
+	'HORAS_GESTION:STRING, '
+	'SEGMENTO:STRING, '
+	'SEGMENTO_2:STRING, '
+	'TIEMPO_TOTAL_CAPACITACION:STRING, '
+	'ENTRENAMIENTO:STRING, '
+	'REUNION:STRING, '
+	'OBSERVACIONES:STRING, '
+	'HORAS_REU:STRING, '
+	'DESCANSOS:STRING, '
+	'DIFERENCIA_DESCANSO:STRING, '
+	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
+	'DIFERENCIA_DESCANSO_FINAL:STRING, '
+	'LAVADO_1:STRING, '
+	'LAVADO_2:STRING, '
+	'LAVADO_3:STRING '
+
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -49,20 +78,56 @@ class formatearData(beam.DoFn):
 		# print(element)
 		arrayCSV = element.split(';')
 
-		tupla= {'IDKEY' : str(uuid.uuid4()),
+		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'FECHA': self.mifecha,
-				'ID_OPERACION' : arrayCSV[0],
-				'NOM_OPERACION' : arrayCSV[1],
-				'ANO' : arrayCSV[2],
-				'MES' : arrayCSV[3],
-				'PRODUCTO' : arrayCSV[4],
-				'META_GEST_HORA' : arrayCSV[5],
-				'META_RPC' : arrayCSV[6],
-				'META_WPC' : arrayCSV[7],
-				'META_HIT' : arrayCSV[8],
-				'META_RECAUDO' : arrayCSV[9],
-				'META_FACTURA' : arrayCSV[10]
+				'fecha': self.mifecha,
+				'DIA_MES' : arrayCSV[0],
+				'MES' : arrayCSV[1],
+				'CEDULA' : arrayCSV[2],
+				'NOMBRE' : arrayCSV[3],
+				'TEAM_LEADER' : arrayCSV[4],
+				'JORNADA' : arrayCSV[5],
+				'DIA' : arrayCSV[6],
+				'PRETURNO' : arrayCSV[7],
+				'HORA_ENTRADA' : arrayCSV[8],
+				'HORA_SALIDA' : arrayCSV[9],
+				'TOTAL_HORAS' : arrayCSV[10],
+				'INICIO_REU' : arrayCSV[11],
+				'FIN_REU' : arrayCSV[12],
+				'INICIO_ALMUERZO' : arrayCSV[13],
+				'FIN_ALMUERZO' : arrayCSV[14],
+				'INICIO_CAPACITACION' : arrayCSV[15],
+				'FIN_CAPACITACION' : arrayCSV[16],
+				'DESCANSO1' : arrayCSV[17],
+				'FIN1' : arrayCSV[18],
+				'DESCANSO2' : arrayCSV[19],
+				'FIN2' : arrayCSV[20],
+				'DESCANSO3' : arrayCSV[21],
+				'HORAS_GESTION' : arrayCSV[22],
+				'SEGMENTO' : arrayCSV[23],
+				'SEGMENTO_2' : arrayCSV[24],
+				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[25],
+				'ENTRENAMIENTO' : arrayCSV[26],
+				'REUNION' : arrayCSV[27],
+				'OBSERVACIONES' : arrayCSV[28],
+				'HORAS_REU' : arrayCSV[29],
+				'DESCANSOS' : arrayCSV[30],
+				'DIFERENCIA_DESCANSO' : arrayCSV[31],
+				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[32],
+				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[33],
+				'LAVADO_1' : arrayCSV[34],
+				'LAVADO_2' : arrayCSV[35],
+				'LAVADO_3' : arrayCSV[36]
+
+
+
+
+
+
+
+
+
+
 				}
 		
 		return [tupla]
@@ -71,7 +136,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-bancolombia_castigada" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -98,8 +163,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.metas", 
+	transformed | 'Escritura a BigQuery SAC2' >> beam.io.WriteToBigQuery(
+		gcs_project + ":turnos.sac2", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

@@ -22,52 +22,34 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
+#coding: utf-8 
+
 TABLE_SCHEMA = (
-	'idkey:STRING, '
-	'fecha:STRING, '
-	'Id_Campaign:STRING, '
-	'Name:STRING, '
-	'Last_Name:STRING, '
-	'Id:STRING, '
-	'Date:STRING, '
-	'Telephone:STRING, '
-	'Result:STRING, '
-	'Campana:STRING, '
-	'Dia:STRING, '
-	'Mes:STRING '
-	)
-# ?
+	'Id_Segmento:STRING, '
+	'Nombre_Segmento:STRING, '
+	'Fecha_Creacion:STRING, '
+    'Usuario_Creacion:STRING, '
+	'Estado:STRING'
+)
+
 class formatearData(beam.DoFn):
 
-	def __init__(self, mifecha):
-		super(formatearData, self).__init__()
-		self.mifecha = mifecha
-	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split(';')
+		arrayCSV = element.split('|')
 
-		tupla= {'idkey' : str(uuid.uuid4()),
-				'fecha' : self.mifecha,
-				'Id_Campaign' : arrayCSV[0],
-				'Name' : arrayCSV[1],
-				'Last_Name' : arrayCSV[2],
-				'Id' : arrayCSV[3],
-				'Date' : arrayCSV[4],
-				'Telephone' : arrayCSV[5],
-				'Result' : arrayCSV[6],
-				'Campana' : arrayCSV[7],
-				'Dia' : arrayCSV[8],
-				'Mes' : arrayCSV[9]
+		tupla= {'Id_Segmento':arrayCSV[0],
+				'Nombre_Segmento':arrayCSV[1],
+				'Fecha_Creacion':arrayCSV[2],
+				'Usuario_Creacion':arrayCSV[3],
+				'Estado':arrayCSV[4]
 				}
 		
 		return [tupla]
 
+def run():
 
-
-def run(archivo, mifecha):
-
-	gcs_path = "gs://ct-fanalca" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-unificadas" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -77,24 +59,24 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "10",
+        "--max_num_workers", "5",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-
 	])
-
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
-	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-	transformed | 'Escritura a BigQuery fanalca' >> beam.io.WriteToBigQuery(
-		gcs_project + ":fanalca_agendamiento.gestion", 
-		schema=TABLE_SCHEMA, 
-		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
-		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
-		)
+	
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/Segmento/Unificadas_Segmento" + ".csv")
+	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
+	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Seguimiento/Avon_inf_seg_2",file_name_suffix='.csv',shard_name_template='')
+	
+	transformed | 'Escritura a BigQuery unificadas' >> beam.io.WriteToBigQuery(
+        gcs_project + ":unificadas.segmentos",
+        schema=TABLE_SCHEMA,
+        create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
+        write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
-	return ("Corrio Full HD")
+	return ("Corrio sin problema")
 
 
 

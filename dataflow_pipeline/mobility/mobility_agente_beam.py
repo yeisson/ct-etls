@@ -24,19 +24,35 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING, '
-	'FECHA:STRING, '
-	'ID_OPERACION:STRING, '
-	'NOM_OPERACION:STRING, '
-	'ANO:STRING, '
-	'MES:STRING, '
-	'PRODUCTO:STRING, '
-	'META_GEST_HORA:INTEGER, '
-	'META_RPC:NUMERIC, '
-	'META_WPC:NUMERIC, '
-	'META_HIT:NUMERIC, '
-	'META_RECAUDO:INTEGER, '
-	'META_FACTURA:INTEGER '
+		'idkey:STRING, '
+		'fecha:STRING, '
+		'DATE:STRING, '
+		'HOUR:STRING, '
+		'EXT_AGENT:STRING, '
+		'ID_AGENT:STRING, '
+		'AGENT:STRING, '
+		'CALLS:STRING, '
+		'INBOUND:STRING, '
+		'OUTBOUND:STRING, '
+		'INTERNAL:STRING, '
+		'READY_TIME:STRING, '
+		'INBOUND_TIME:STRING, '
+		'OUTBOUND_TIME:STRING, '
+		'ACW_TIME:STRING, '
+		'RING_TIME:STRING, '
+		'LOGIN_TIME:STRING, '
+		'AHT:STRING, '
+		'OCCUPANCY:STRING, '
+		'AUX_TIME:STRING '
+
+
+
+
+
+
+
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -49,20 +65,34 @@ class formatearData(beam.DoFn):
 		# print(element)
 		arrayCSV = element.split(';')
 
-		tupla= {'IDKEY' : str(uuid.uuid4()),
-				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'FECHA': self.mifecha,
-				'ID_OPERACION' : arrayCSV[0],
-				'NOM_OPERACION' : arrayCSV[1],
-				'ANO' : arrayCSV[2],
-				'MES' : arrayCSV[3],
-				'PRODUCTO' : arrayCSV[4],
-				'META_GEST_HORA' : arrayCSV[5],
-				'META_RPC' : arrayCSV[6],
-				'META_WPC' : arrayCSV[7],
-				'META_HIT' : arrayCSV[8],
-				'META_RECAUDO' : arrayCSV[9],
-				'META_FACTURA' : arrayCSV[10]
+		tupla= {'idkey' : str(uuid.uuid4()),
+				'fecha': self.mifecha,
+				'DATE' : arrayCSV[0],
+				'HOUR' : arrayCSV[1],
+				'EXT_AGENT' : arrayCSV[2],
+				'ID_AGENT' : arrayCSV[3],
+				'AGENT' : arrayCSV[4],
+				'CALLS' : arrayCSV[5],
+				'INBOUND' : arrayCSV[6],
+				'OUTBOUND' : arrayCSV[7],
+				'INTERNAL' : arrayCSV[8],
+				'READY_TIME' : arrayCSV[9],
+				'INBOUND_TIME' : arrayCSV[10],
+				'OUTBOUND_TIME' : arrayCSV[11],
+				'ACW_TIME' : arrayCSV[12],
+				'RING_TIME' : arrayCSV[13],
+				'LOGIN_TIME' : arrayCSV[14],
+				'AHT' : arrayCSV[15],
+				'OCCUPANCY' : arrayCSV[16],
+				'AUX_TIME' : arrayCSV[17]
+
+
+
+
+
+
+
+
 				}
 		
 		return [tupla]
@@ -71,7 +101,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-bancolombia_castigada" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-pto" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -81,7 +111,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		
@@ -98,8 +128,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.metas", 
+	transformed | 'Escritura a BigQuery Mobility' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Auteco_Mobility.agente", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

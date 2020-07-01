@@ -6,6 +6,8 @@ from google.cloud import bigquery
 import dataflow_pipeline.ucc.ucc_mensajes_beam as ucc_mensajes_beam
 import dataflow_pipeline.ucc.ucc_agentev_beam as ucc_agentev_beam
 import dataflow_pipeline.ucc.ucc_campana_beam as ucc_campana_beam
+import dataflow_pipeline.ucc.ucc_inscritos_beam as ucc_inscritos_beam
+import dataflow_pipeline.ucc.ucc_integracion_beam as ucc_integracion_beam
 import os
 import socket 
 import time
@@ -146,3 +148,91 @@ def archivos_campanas():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
+
+############################################################################################################################################
+
+@universidad_cooperativa_col_api.route("/archivos_inscritos")
+def archivos_inscritos():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Inscritos/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[15:23]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-ucc')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-inscritos/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.ucc.base_inscritos` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = ucc_inscritos_beam.run('gs://ct-ucc/info-inscritos/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Inscritos/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje    
+
+    ############################################################################################################################################
+
+@universidad_cooperativa_col_api.route("/archivos_integracion")
+def archivos_integracion():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Integracion/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[17:25]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-ucc')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('info-integracion/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.ucc.base_integracion` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = ucc_integracion_beam.run('gs://ct-ucc/info-integracion/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Ucc/Integracion/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje    

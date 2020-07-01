@@ -26,17 +26,55 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, '
 	'FECHA:STRING, '
-	'ID_OPERACION:STRING, '
-	'NOM_OPERACION:STRING, '
-	'ANO:STRING, '
-	'MES:STRING, '
-	'PRODUCTO:STRING, '
-	'META_GEST_HORA:INTEGER, '
-	'META_RPC:NUMERIC, '
-	'META_WPC:NUMERIC, '
-	'META_HIT:NUMERIC, '
-	'META_RECAUDO:INTEGER, '
-	'META_FACTURA:INTEGER '
+	'NOMBRE:STRING, '
+	'APELLIDO:STRING, '
+	'TIPOID:STRING, '
+	'ID:STRING, '
+	'EDAD:STRING, '
+	'SEXO:STRING, '
+	'PAIS:STRING, '
+	'DEPARTAMENTO:STRING, '
+	'CIUDAD:STRING, '
+	'ZONA:STRING, '
+	'DIRECCION:STRING, '
+	'OPT1:STRING, '
+	'OPT2:STRING, '
+	'OPT3:STRING, '
+	'OPT4:STRING, '
+	'OPT5:STRING, '
+	'OPT6:STRING, '
+	'OPT7:STRING, '
+	'OPT8:STRING, '
+	'OPT9:STRING, '
+	'OPT10:STRING, '
+	'OPT11:STRING, '
+	'OPT12:STRING, '
+	'TEL1:STRING, '
+	'TEL2:STRING, '
+	'TEL3:STRING, '
+	'TEL4:STRING, '
+	'TEL5:STRING, '
+	'TEL6:STRING, '
+	'TEL7:STRING, '
+	'TEL8:STRING, '
+	'TEL9:STRING, '
+	'TEL10:STRING, '
+	'OTROSTEL:STRING, '
+	'EMAIL:STRING, '
+	'RECALL_INFO:STRING, '
+	'AGENTE:STRING, '
+	'RESULTADOREG:STRING, '
+	'FECHAFINREG:STRING, '
+	'LLAMADAS:STRING, '
+	'IDCALL:STRING, '
+	'COD01:STRING, '
+	'COD02:STRING, '
+	'COMENTARIOSACUMULADOS:STRING, '
+	'DATE_RECALL:STRING, '
+	'COUNT_RECALL:STRING, '
+	'TEL_RECALL:STRING, '
+	'LAST_DIAL_TEL:STRING, '
+	'HISTORY_TEL:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -52,22 +90,58 @@ class formatearData(beam.DoFn):
 		tupla= {'IDKEY' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'FECHA': self.mifecha,
-				'ID_OPERACION' : arrayCSV[0],
-				'NOM_OPERACION' : arrayCSV[1],
-				'ANO' : arrayCSV[2],
-				'MES' : arrayCSV[3],
-				'PRODUCTO' : arrayCSV[4],
-				'META_GEST_HORA' : arrayCSV[5],
-				'META_RPC' : arrayCSV[6],
-				'META_WPC' : arrayCSV[7],
-				'META_HIT' : arrayCSV[8],
-				'META_RECAUDO' : arrayCSV[9],
-				'META_FACTURA' : arrayCSV[10]
+				'NOMBRE' : arrayCSV[0],
+				'APELLIDO' : arrayCSV[1],
+				'TIPOID' : arrayCSV[2],
+				'ID' : arrayCSV[3],
+				'EDAD' : arrayCSV[4],
+				'SEXO' : arrayCSV[5],
+				'PAIS' : arrayCSV[6],
+				'DEPARTAMENTO' : arrayCSV[7],
+				'CIUDAD' : arrayCSV[8],
+				'ZONA' : arrayCSV[9],
+				'DIRECCION' : arrayCSV[10],
+				'OPT1' : arrayCSV[11],
+				'OPT2' : arrayCSV[12],
+				'OPT3' : arrayCSV[13],
+				'OPT4' : arrayCSV[14],
+				'OPT5' : arrayCSV[15],
+				'OPT6' : arrayCSV[16],
+				'OPT7' : arrayCSV[17],
+				'OPT8' : arrayCSV[18],
+				'OPT9' : arrayCSV[19],
+				'OPT10' : arrayCSV[20],
+				'OPT11' : arrayCSV[21],
+				'OPT12' : arrayCSV[22],
+				'TEL1' : arrayCSV[23],
+				'TEL2' : arrayCSV[24],
+				'TEL3' : arrayCSV[25],
+				'TEL4' : arrayCSV[26],
+				'TEL5' : arrayCSV[27],
+				'TEL6' : arrayCSV[28],
+				'TEL7' : arrayCSV[29],
+				'TEL8' : arrayCSV[30],
+				'TEL9' : arrayCSV[31],
+				'TEL10' : arrayCSV[32],
+				'OTROSTEL' : arrayCSV[33],
+				'EMAIL' : arrayCSV[34],
+				'RECALL_INFO' : arrayCSV[35],
+				'AGENTE' : arrayCSV[36],
+				'RESULTADOREG' : arrayCSV[37],
+				'FECHAFINREG' : arrayCSV[38],
+				'LLAMADAS' : arrayCSV[39],
+				'IDCALL' : arrayCSV[40],
+				'COD01' : arrayCSV[41],
+				'COD02' : arrayCSV[42],
+				'COMENTARIOSACUMULADOS' : arrayCSV[43],
+				'DATE_RECALL' : arrayCSV[44],
+				'COUNT_RECALL' : arrayCSV[45],
+				'TEL_RECALL' : arrayCSV[46],
+				'LAST_DIAL_TEL' : arrayCSV[47],
+				'HISTORY_TEL' : arrayCSV[48]
 				}
 		
 		return [tupla]
-
-
 
 def run(archivo, mifecha):
 
@@ -99,7 +173,7 @@ def run(archivo, mifecha):
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.metas", 
+		gcs_project + ":bancolombia_castigada.tts", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

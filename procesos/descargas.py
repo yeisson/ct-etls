@@ -22,7 +22,7 @@ def descargar_csv(myRoute, myQuery, myHeader):
 
     response = {}
     response["code"] = 5000
-    response["description"] = "Listo Prueba 2"
+    response["description"] = "Descarga Exitosa"
     response["status"] = False
 
     query = myQuery
@@ -39,22 +39,22 @@ def descargar_csv(myRoute, myQuery, myHeader):
 
 # ---------------------------------------------------------------------------------------
 # A continuacion un ejemplo, el cual muestra la manera correcta de invocar la funcion 'descargar_csv':
-@descargas_api.route("/PRUEBA_3")
-def PRUEBA_3():
+# @descargas_api.route("/PRUEBA_3")
+# def PRUEBA_3():
 
-    response = {}
-    response["code"] = 5000
-    response["description"] = "Listo Prueba 3"
-    response["status"] = False
+#     response = {}
+#     response["code"] = 5000
+#     response["description"] = "Listo Prueba 3"
+#     response["status"] = False
 
-    # Defino la ruta de descarga (Sin incluir '//192.168.20.87').
-    route = '/BI_Archivos/GOOGLE/Bancolombia_Cast/Base_marcada/Base Calculada/Bancolombia_Cast_Base_Calculada.csv'
-    # Defino la consulta SQL a ejecutar en BigQuery.
-    query = 'SELECT * FROM `contento-bi.bancolombia_castigada.QRY_CALCULATE_BM`'# LIMIT 15'
-    # Defino los títulos de los campos resultantes de la ejecución del query.
-    header = ["IDKEY","FECHA","CONSECUTIVO_DOCUMENTO_DEUDOR","VALOR_CUOTA","NIT","NOMBRES","NUMERO_DOCUMENTO","TIPO_PRODUCTO","FECHA_ACTUALIZACION_PRIORIZACION","FECHA_PAGO_CUOTA","NOMBRE_DE_PRODUCTO","FECHA_DE_PERFECCIONAMIENTO","FECHA_VENCIMIENTO_DEF","NUMERO_CUOTAS","CUOTAS_EN_MORA","DIA_DE_VENCIMIENTO_DE_CUOTA","VALOR_OBLIGACION","VALOR_VENCIDO","SALDO_ACTIVO","SALDO_ORDEN","REGIONAL","CIUDAD","GRABADOR","CODIGO_AGENTE","NOMBRE_ASESOR","CODIGO_ABOGADO","NOMBRE_ABOGADO","FECHA_ULTIMA_GESTION_PREJURIDICA","ULTIMO_CODIGO_DE_GESTION_PARALELO","ULTIMO_CODIGO_DE_GESTION_PREJURIDICO","DESCRIPCION_SUBSECTOR","DESCRIPCION_CODIGO_SEGMENTO","DESC_ULTIMO_CODIGO_DE_GESTION_PREJURIDICO","DESCRIPCION_SUBSEGMENTO","DESCRIPCION_SECTOR","DESCRIPCION_CODIGO_CIIU","CODIGO_ANTERIOR_DE_GESTION_PREJURIDICO","DESC_CODIGO_ANTERIOR_DE_GESTION_PREJURIDICO","FECHA_ULTIMA_GESTION_JURIDICA","ULTIMA_FECHA_DE_ACTUACION_JURIDICA","ULTIMA_FECHA_PAGO","EJEC_ULTIMO_CODIGO_DE_GESTION_JURIDICO","DESC_ULTIMO_CODIGO_DE_GESTION_JURIDICO","CANT_OBLIG","CLUSTER_PERSONA","DIAS_MORA","PAIS_RESIDENCIA","TIPO_DE_CARTERA","CALIFICACION","RADICACION","ESTADO_DE_LA_OBLIGACION","FONDO_NACIONAL_GARANTIAS","REGION","SEGMENTO","CODIGO_SEGMENTO","FECHA_IMPORTACION","NIVEL_DE_RIESGO","FECHA_ULTIMA_FACTURACION","SUBSEGMENTO","TITULAR_UNIVERSAL","NEGOCIO_TITUTULARIZADO","SECTOR_ECONOMICO","PROFESION","CAUSAL","OCUPACION","CUADRANTE","FECHA_TRASLADO_PARA_COBRO","DESC_CODIGO_DE_GESTION_VISITA","FECHA_GRABACION_VISITA","ENDEUDAMIENTO","CALIFICACION_REAL","FECHA_PROMESA","RED","ESTADO_NEGOCIACION","TIPO_CLIENTE_SUFI","CLASE","FRANQUICIA","SALDO_CAPITAL_PESOS","SALDO_INTERESES_PESOS","PROBABILIDAD_DE_PROPENSION_DE_PAGO","PRIORIZACION_FINAL","PRIORIZACION_POR_CLIENTE","GRUPO_DE_PRIORIZACION","FECHA_PROMESA_V2","FECHA_PROMESA_AJUSTADA","DIAS_DESDE_TRASLADO","DIAS_SIN_COMPROMISO","DIAS_SIN_PAGO","DIAS_SIN_RPC","FRANJA_MORA","RANGO_PROP_TRASLADO","RANGO_PROP_PAGO","RANGO_PROP_CONTACTO","RANGO_PROP_ACUERDO","DESFASE","EQUIPO","MEJOR_DIA","MEJOR_HORA","LOTE","VUELTAS_REQUERIDAS","VUELTAS_REALES","GRABADOR_AJUSTADO"]
-    
-    b = descargar_csv(route, query, header) # Hago el llamado a la función de descarga.
+#     # Defino la ruta de descarga (Sin incluir '//192.168.20.87').
+#     route = '/BI_Archivos/GOOGLE/Metlife/Base/Descargas/base.csv'
+#     # Defino la consulta SQL a ejecutar en BigQuery.
+#     query = 'SELECT * FROM `contento-bi.MetLife.Base`'
+#     # Defino los títulos de los campos resultantes de la ejecución del query.
+#     header = ["IDKEY","FECHA","REFERENCIA","TIPO_IDENTIFICACION","CEDULA_NIT","NOMBRE_DEL_CLIENTE","SEXO","FECHA_DE_NACIMIENTO","EDAD","CODIGO_PRODUCTO","CICLO","DIRECCION_CORRESPONDENCIA","CODIGO_CIUDAD_DE_CORRESPON","TEL_NRO_CORRESPONDENCIA","CELULAR","NOMBRE_EMPRESA","DIRNRO_EMPRESA","TELNRO_OFICINA","CODIGO_CIUDAD_OFICINA","CARGO_EMPRESA","FECHA_DE_INGRESO","CODIGO_ESTADO_CIVIL","CEDULA_CONYUGE","PERSONAS_A_CARGO","CODIGO_PROFESION","SALARIO_MENSUAL","TOTAL_EGRESOS","OCUPACION","CUPO","SALDO_DISPONIBLE","MERCADO","FECHA_DE_APROBACION_TCO","FECHA_DESBLOQUEO_TCO","MAIL","TIPO_EXTRACTO","SEGMENTO","CATEGORIA","ANO_MES_ENVIO","COD_GESTION","TIPIFICACION","TEL_MARCADO","PROSPECT_NUM","RANGO_CUPO_VENTA","PLAN_MAX_AP"]
+          
+#     b = descargar_csv(route, query, header) # Hago el llamado a la función de descarga.
 
-    return jsonify(response), response["code"]
+#     return jsonify(response), response["code"]
     

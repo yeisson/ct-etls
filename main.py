@@ -46,14 +46,21 @@ from procesos.fanalca import fanalca_api
 from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
 from procesos.pio import pio_contento_api
+from procesos.pyg import pyg_api
+from procesos.metlife import Metlife_BM_api
+from procesos.Prueba import Prueba_api
+from procesos.metlife import Metlife_BM_descarga_api
+from procesos.refinancia import Refinancia_descarga_api
+from metlife_base_marcada.server import metlife_base_marcada_api
+
+
+
 
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
 from procesos.bancolombia_api import bancolombia_api2
-
-
 from procesos.turnos import turnos_api
 from procesos.sensus import sensus_api
 from procesos.presupuesto import presupuesto_api
@@ -96,6 +103,13 @@ app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamie
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
 app.register_blueprint(pio_contento_api, url_prefix='/pio')
+app.register_blueprint(pyg_api, url_prefix='/pyg')
+app.register_blueprint(Metlife_BM_api, url_prefix='/metlife')
+app.register_blueprint(Prueba_api, url_prefix='/Prueba')
+app.register_blueprint(Metlife_BM_descarga_api, url_prefix='/metlife')
+app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
+app.register_blueprint(metlife_base_marcada_api, url_prefix='/metlife_base_marcada')
+
 
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 
@@ -109,7 +123,7 @@ app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
 app.register_blueprint(presupuesto_api, url_prefix='/presupuesto')
 app.register_blueprint(dispersion_api, url_prefix='/dispersion')
-
+app.secret_key=os.urandom(24) 
 
 @app.route("/", methods=['GET', 'POST'])
 def raiz():
@@ -152,7 +166,7 @@ def start_dataflow():
 
 @app.errorhandler(500)
 def server_error(e):
-    logging.exception('Un error a ocurrido durante la ejecucion')
+    logging.exception('Un error ha ocurrido durante la ejecucion')
     return """
     Un error a ocurrido durante la ejecucion: <pre>{}</pre>
     Visualiza los logs para tener una trama completa.

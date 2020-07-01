@@ -71,7 +71,7 @@ from procesos.epm import epm_api
 from procesos.agaval import agaval_api
 from procesos.crediorbe import crediorbe_api
 from procesos.adeinco_juridico import adeinco_juridico_api
-from procesos.refinancia import refinancia_api
+# from procesos.refinancia import refinancia_api
 from procesos.cotrafa import cotrafa_api
 from procesos.universidad_cooperativa_col import universidad_cooperativa_col_api
 from procesos.descargas import descargas_api
@@ -81,9 +81,9 @@ from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
 from procesos.pyg import pyg_api
 from procesos.metlife import Metlife_BM_api
-from procesos.Prueba import Prueba_api
+# from procesos.Prueba import Prueba_api
 from procesos.metlife import Metlife_BM_descarga_api
-from procesos.refinancia import Refinancia_descarga_api
+# from procesos.refinancia import Refinancia_descarga_api
 from metlife_base_marcada.server import metlife_base_marcada_api
 
 
@@ -135,7 +135,7 @@ app.register_blueprint(epm_api, url_prefix='/epm')
 app.register_blueprint(agaval_api, url_prefix='/agaval')
 app.register_blueprint(crediorbe_api, url_prefix='/crediorbe')
 app.register_blueprint(adeinco_juridico_api, url_prefix='/adeinco_juridico')
-app.register_blueprint(refinancia_api, url_prefix='/refinancia')
+# app.register_blueprint(refinancia_api, url_prefix='/refinancia')
 app.register_blueprint(cotrafa_api, url_prefix='/cotrafa')
 app.register_blueprint(universidad_cooperativa_col_api, url_prefix='/universidad_cooperativa_col')
 app.register_blueprint(descargas_api, url_prefix='/descargas')
@@ -145,9 +145,9 @@ app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
 app.register_blueprint(pyg_api, url_prefix='/pyg')
 app.register_blueprint(Metlife_BM_api, url_prefix='/metlife')
-app.register_blueprint(Prueba_api, url_prefix='/Prueba')
+# app.register_blueprint(Prueba_api, url_prefix='/Prueba')
 app.register_blueprint(Metlife_BM_descarga_api, url_prefix='/metlife')
-app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
+# app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
 app.register_blueprint(metlife_base_marcada_api, url_prefix='/metlife_base_marcada')
 
 

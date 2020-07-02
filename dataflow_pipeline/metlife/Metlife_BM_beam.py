@@ -24,6 +24,8 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
+    'idkey:STRING, '
+	'fecha:STRING, '
     'REFERENCIA:STRING, '
     'TIPO_IDENTIFICACION:STRING, '
     'CEDULA_NIT:STRING, '
@@ -157,7 +159,7 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	# transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery presupuesto' >> beam.io.WriteToBigQuery(
+	transformed | 'Escritura a BigQuery metlife' >> beam.io.WriteToBigQuery(
 		gcs_project + ":MetLife.Base", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 

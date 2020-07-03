@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="Sonrisa-Roja.ico">
+    <title>Portal_de_Tranformación</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body class="container" style="background-color:rgb(239, 239, 241);">
+    <header>
+        <H1 class="display-5 text-center text-danger bg-white" style="border-radius: 10px;">
+            <strong>
+                ¡¡¡BIENVENIDO A NUESTRO PORTAL DE BASES MARCADAS!!!
+            </strong>   
+        </H1>
+        <hr>
+    </header>
+    <section>
+        <a href="/refinancia_base_marcada/logout" class="btn bg-primary p-2 m-3 text-white">
+            <i class="fa fa-sign-out" aria-hidden="true">
+            </i>
+            SALIR
+        </a>
+        <table class="mx-auto" style="border-radius: 10px; background:white; border-width: 5px;">
+            <tr id="Refinancia_filas_seleccion_y_descargue"> <!-- Comienza primera Fila de la Tabla: Archivo Base Inicial -->
+                <form action="/refinancia_base_marcada/redireccion_archivo_prejuridico" method="POST" enctype="multipart/form-data" id="Refinancia_form_Base_Inicial">
+                    <td> 
+                        <label for="Base_Inicial" id="Refinancia_label_cargue_a_Bi-Archivos_Base_Inicial" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                Selecciona Archivo: Base Inicial
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" name="file" id="Base_Inicial" class="d-none"/>   
+                    </td>
+                    <td>  
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>            
+                        <input type="submit" value="Upload" id="Refinancia_boton_cargue_a_Bi-Archivos_Base_Inicial" class="btn btn-primary btn-lg text-center ml-4 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/refinancia/BD_Calculada_Base_Inicial" id="Refinancia_URL_cargue_a_Bigquery_Base_Inicial" target="_blank" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                Actualizar Base Calculada
+                        </a>
+                    </td>
+                </form>
+            </tr>
+            <tr id="Refinancia_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+                <form action="/refinancia_base_marcada/redireccion_archivo_demograficos" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Demograficos" id="Refinancia_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                Selecciona Archivo: Demográficos
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Demograficos" name="file_demograficos" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Upload" id="Refinancia_boton_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-primary btn-lg text-center ml-4 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/refinancia/BD_Calculada_Demograficos" id="Refinancia_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                    Actualizar Base Calculada
+                        </a>
+                    </td>
+                </form>
+            </tr>
+            <tr id="Refinancia_filas_seleccion_y_descargue"> <!-- Comienza tercera Fila de la Tabla: Archivo Gestión Diaria -->
+                <form action="/refinancia_base_marcada/redireccion_archivo_gestion_diaria" method="POST" enctype="multipart/form-data" id="Refinancia_form_Gestion_Diaria">
+                    <td>
+                        <label for="Gestion_Diaria" id="Refinancia_label_cargue_a_Bi-Archivos_BD_gestion_diaria" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                Selecciona Archivo: Gestión Diaria
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Gestion_Diaria" name="file_gestion_diaria" class="d-none"/>       
+                    </td>
+                    <td>  
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>            
+                        <input type="submit" value="Upload" id="Refinancia_boton_cargue_a_Bi-Archivos_BD_gestion_diaria" class="btn btn-primary btn-lg text-center ml-4 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/refinancia/BD_Calculada_Gestion_Diaria" id="Refinancia_URL_cargue_a_Bigquery_BD_gestion_diaria" target="_blank" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Calculada
+                        </a>
+                    </td>
+                </form>
+            </tr>
+            <tr id="Refinancia_filas_seleccion_y_descargue"> <!-- Comienza cuarta Fila de la Tabla: Archivo de Pagos -->
+                <form action="/refinancia_base_marcada/redireccion_archivo_base_pagos" method="POST" enctype="multipart/form-data" id="Refinancia_form_Base_Pagos">
+                    <td>
+                        <label for="Base_Pagos" id="Refinancia_label_cargue_a_Bi-Archivos_BD_pagos" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                                Selecciona Archivo: Base de Pagos
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Base_Pagos" name="file_base_pagos" class="d-none"/>  
+                    </td>
+                    <td>     
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>         
+                        <input type="submit" value="Upload" id="Refinancia_boton_cargue_a_Bi-Archivos_BD_pagos" class="btn btn-primary btn-lg text-center ml-4 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/refinancia/BD_Calculada_Base_Pagos" id="Refinancia_URL_cargue_a_Bigquery_BD_pagos" target="_blank" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                             Actualizar Base Calculada
+                        </a>
+                    </td>
+                </form>
+            </tr>
+           <tr > <!-- Comienza Fila del botón de Descargas: Archivo de Descarga BD Calculada -->
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <a href="http://35.239.77.81:5000/refinancia/Refinancia_descarga_Base" id="Refinancia_URL_descargue_desde_Bigquery_BD_calculada" target="_blank" class="btn btn-primary btn-lg text-center p-2 m-3 text-white">
+                        <i class="fa fa-cloud-download" aria-hidden="true">
+                        </i> 
+                        &nbsp;
+                            Descargar <br> Base Calculada
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </section>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+</script>
+</body>
+</html>

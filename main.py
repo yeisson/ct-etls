@@ -79,8 +79,22 @@ from procesos.fanalca_agendamientos import fanalca_agendamientos_api
 from procesos.fanalca import fanalca_api
 from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
-from procesos.bancolombia_api import bancolombia_api2
 from procesos.pyg import pyg_api
+from procesos.metlife import Metlife_BM_api
+# from procesos.Prueba import Prueba_api
+from procesos.metlife import Metlife_BM_descarga_api
+from procesos.refinancia import Refinancia_descarga_api
+from metlife_base_marcada.server import metlife_base_marcada_api
+from refinancia_base_marcada.server import refinancia_base_marcada_api
+
+
+
+
+
+from procesos.Bridge.bridge import bridge_api
+from procesos.PhpTOPython.mirror import mirror_api
+from WebPage.inicio import webpage_app
+from procesos.bancolombia_api import bancolombia_api2
 from ui import ui_api
 from procesos.mobility import mobility_api
 from procesos.unificadas import unificadas_api
@@ -130,8 +144,16 @@ app.register_blueprint(fanalca_api, url_prefix='/fanalca')
 app.register_blueprint(fanalca_agendamientos_api, url_prefix='/fanalca_agendamientos')
 app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
-app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 app.register_blueprint(pyg_api, url_prefix='/pyg')
+app.register_blueprint(Metlife_BM_api, url_prefix='/metlife')
+# app.register_blueprint(Prueba_api, url_prefix='/Prueba')
+app.register_blueprint(Metlife_BM_descarga_api, url_prefix='/metlife')
+app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
+app.register_blueprint(metlife_base_marcada_api, url_prefix='/metlife_base_marcada')
+app.register_blueprint(refinancia_base_marcada_api, url_prefix='/refinancia_base_marcada')
+
+
+app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 app.register_blueprint(ui_api, url_prefix='/ui')
 app.register_blueprint(mobility_api, url_prefix='/mobility')
 app.register_blueprint(unificadas_api, url_prefix='/unificadas')
@@ -161,6 +183,7 @@ app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
 app.register_blueprint(presupuesto_api, url_prefix='/presupuesto')
 app.register_blueprint(dispersion_api, url_prefix='/dispersion')
+app.secret_key=os.urandom(24) 
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -242,7 +265,7 @@ def start_dataflow():
 
 @app.errorhandler(500)
 def server_error(e):
-    logging.exception('Un error a ocurrido durante la ejecucion')
+    logging.exception('Un error ha ocurrido durante la ejecucion')
     return """
     Un error a ocurrido durante la ejecucion: <pre>{}</pre>
     Visualiza los logs para tener una trama completa.

@@ -26,25 +26,19 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 'idkey:STRING, '
 'fecha:STRING, '
-'IDENTIFICACION:STRING, '
-'NOMBRECOMPLETO:STRING, '
-'IDCLIENTE:STRING, '
-'IDPORTAFOLIO:STRING, '
-'PORTAFOLIO:STRING, '
-'IDASESOR:STRING, '
-'PERFILCLIENTE:STRING, '
-'ESTADOCOMERCIAL:STRING, '
-'TOTALSALDOCAPITAL:STRING, '
-'FUNCIONARIO:STRING, '
-'TOTALDEUDA:STRING, '
-'FABRICA:STRING, '
-'CANAL:STRING, '
-'SEGMENTO:STRING, '
-'SCORE:STRING, '
-'CASA_COBRANZA:STRING, '
-'TIPOASIGNACION:STRING '
+'ID_SEGUIMIENTO:STRING, '
+'DOCUMENTO:STRING, '
+'ID_GESTION:STRING, '
+'NOMBRE_GESTION:STRING, '
+'FECHA_SEGUIMIENTO:STRING, '
+'NOTA:STRING, '
+'ID_USUARIO:STRING, '
+'VALOR_SALDO_TOTAL:STRING, '
+'FECHA_COMPROMISO:STRING, '
+'VALOR_COMPROMISO:STRING, '
+'NUMERO_DE_CONTACTO:STRING '
 )
-# ?
+
 class formatearData(beam.DoFn):
 
 	def __init__(self, mifecha):
@@ -53,31 +47,23 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha' : self.mifecha,
-				'IDENTIFICACION' : arrayCSV[0].replace('"',''),
-				'NOMBRECOMPLETO' : arrayCSV[1].replace('"',''),
-				'IDCLIENTE' : arrayCSV[2].replace('"',''),
-				'IDPORTAFOLIO' : arrayCSV[3].replace('"',''),
-				'PORTAFOLIO' : arrayCSV[4].replace('"',''),
-				'IDASESOR' : arrayCSV[5].replace('"',''),
-				'PERFILCLIENTE' : arrayCSV[6].replace('"',''),
-				'ESTADOCOMERCIAL' : arrayCSV[7].replace('"',''),
-				'TOTALSALDOCAPITAL' : arrayCSV[8].replace('"',''),
-				'FUNCIONARIO' : arrayCSV[9].replace('"',''),
-				'TOTALDEUDA' : arrayCSV[10].replace('"',''),
-				'FABRICA' : arrayCSV[11].replace('"',''),
-				'CANAL' : arrayCSV[12].replace('"',''),
-				'SEGMENTO' : arrayCSV[13].replace('"',''),
-				'SCORE' : arrayCSV[14].replace('"',''),
-				'CASA_COBRANZA' : arrayCSV[15].replace('"',''),
-				'TIPOASIGNACION' : arrayCSV[16].replace('"','')
-
+				'ID_SEGUIMIENTO' : arrayCSV[0],
+				'DOCUMENTO' : arrayCSV[1],
+				'ID_GESTION' : arrayCSV[2],
+				'NOMBRE_GESTION' : arrayCSV[3],
+				'FECHA_SEGUIMIENTO' : arrayCSV[4],
+				'NOTA' : arrayCSV[5],
+				'ID_USUARIO' : arrayCSV[6],
+				'VALOR_SALDO_TOTAL' : arrayCSV[7],
+				'FECHA_COMPROMISO' : arrayCSV[8],
+				'VALOR_COMPROMISO' : arrayCSV[9],
+				'NUMERO_DE_CONTACTO' : arrayCSV[10]
 				}
-		
 		return [tupla]
 
 
@@ -112,7 +98,7 @@ def run(archivo, mifecha):
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
 	transformed | 'Escritura a BigQuery refinancia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":refinancia.prejuridico", 
+		gcs_project + ":refinancia.BD_Calculada_Gestion_Diaria", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
@@ -124,7 +110,7 @@ def run(archivo, mifecha):
 	jobObject = pipeline.run()
 	# jobID = jobObject.job_id()
 
-	return ("Corrio Full HD")
+	return ("Base Calculada Actualizada")
 
 
 

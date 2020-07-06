@@ -9,6 +9,7 @@ python massive.py \
     --autoscaling_algorithm=NONE
 
 
+
 python massivelocal.py --input georreferenciar_1mil.csv --output salida
 
 

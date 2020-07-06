@@ -73,7 +73,7 @@ def profitto():
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com',message)
                     server.quit()
                 except:
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN bdc")
@@ -110,7 +110,7 @@ def profitto():
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com',message)
                     server.quit()
                 except:
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN bdf")
@@ -146,7 +146,7 @@ def profitto():
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com, arave163@gmail.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com, arave163@gmail.com',message)
                     server.quit()
                 except: 
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN cxp")

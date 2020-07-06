@@ -26,43 +26,13 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, ' 
 	'FECHA:STRING, ' 
-	'ID_CC:STRING, '
-	'DOC_ASESOR:STRING, '
-	'NOMBRES:STRING, '
-	'DOC_LIDER:STRING, '
-	'NOMBRE_TEAM_LEADER:STRING, '
-	'DOC_EJECUTIVO:STRING, '
-	'NOMBRE_EJECUTIVO:STRING, '
-	'DOC_GERENTE:STRING, '
-	'NOMBRE_GERENTE:STRING, '
-	'DESCRIPCION:STRING, '
-	'SEDE:STRING, '
-	'PRODUCTO:STRING, '
-	'DOC_ASEGURADOR:STRING, '
-	'EVALUADOR:STRING, '
-	'FECHA_ASEGURAMIENTO:STRING, '
-	'ESTADO_ASEG:STRING, '
-	'HORA_ASEGURAMIENTO:STRING, '
-	'PEC:STRING, '
-	'PENC:STRING, '
-	'GOS:STRING, '
-	'ID_CALL:STRING, '
-	'DOC_CLIENTE:STRING, '
-	'TELEFONO_CLIENTE:STRING, '
-	'TIPIFICACION:STRING, '
-	'FECHA_REGISTRO:STRING, '
-	'HORA_REGISTRO:STRING '
-
-
-
-
-
-
-
-
-
-
-
+	'MES:STRING, '
+	'CC:STRING, '
+	'CARTERA:STRING, '
+	'CANTIDAD_NEGOCIADORES:STRING, '
+	'CANTIDAD_ASEGURAMIENTOS:STRING, '
+	'DOCUMENTO:STRING, '
+	'TECNICO:STRING '
 )
 # ?
 class formatearData(beam.DoFn):
@@ -77,43 +47,13 @@ class formatearData(beam.DoFn):
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha': self.mifecha,
-				'ID_CC' : arrayCSV[0],
-				'DOC_ASESOR' : arrayCSV[1],
-				'NOMBRES' : arrayCSV[2],
-				'DOC_LIDER' : arrayCSV[3],
-				'NOMBRE_TEAM_LEADER' : arrayCSV[4],
-				'DOC_EJECUTIVO' : arrayCSV[5],
-				'NOMBRE_EJECUTIVO' : arrayCSV[6],
-				'DOC_GERENTE' : arrayCSV[7],
-				'NOMBRE_GERENTE' : arrayCSV[8],
-				'DESCRIPCION' : arrayCSV[9],
-				'SEDE' : arrayCSV[10],
-				'PRODUCTO' : arrayCSV[11],
-				'DOC_ASEGURADOR' : arrayCSV[12],
-				'EVALUADOR' : arrayCSV[13],
-				'FECHA_ASEGURAMIENTO' : arrayCSV[14],
-				'ESTADO_ASEG' : arrayCSV[15],
-				'HORA_ASEGURAMIENTO' : arrayCSV[16],
-				'PEC' : arrayCSV[17],
-				'PENC' : arrayCSV[18],
-				'GOS' : arrayCSV[19],
-				'ID_CALL' : arrayCSV[20],
-				'DOC_CLIENTE' : arrayCSV[21],
-				'TELEFONO_CLIENTE' : arrayCSV[22],
-				'TIPIFICACION' : arrayCSV[23],
-				'FECHA_REGISTRO' : arrayCSV[24],
-				'HORA_REGISTRO' : arrayCSV[25],
-
-
-
-
-
-
-
-
-
-
+		'MES' : arrayCSV[0],
+		'CC' : arrayCSV[1],
+		'CARTERA' : arrayCSV[2],
+		'CANTIDAD_NEGOCIADORES' : arrayCSV[3],
+		'CANTIDAD_ASEGURAMIENTOS' : arrayCSV[4],
+		'DOCUMENTO' : arrayCSV[5],
+		'TECNICO' : arrayCSV[6]
 				}
 		
 		return [tupla]
@@ -121,6 +61,7 @@ class formatearData(beam.DoFn):
 
 
 def run(archivo, mifecha):
+
 	gcs_path = "gs://ct-sensus" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
@@ -148,12 +89,13 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery seguimiento' >> beam.io.WriteToBigQuery(
-		gcs_project + ":sensus.seguimiento", 
+	transformed | 'Escritura a BigQuery avalcreditos' >> beam.io.WriteToBigQuery(
+		gcs_project + ":sensus.metas", 
 		schema=TABLE_SCHEMA, 	
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
+
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
 	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
 

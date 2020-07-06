@@ -24,43 +24,43 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'IDKEY:STRING, ' 
-	'FECHA:STRING, ' 
-	'ID_CC:STRING, '
-	'DOC_ASESOR:STRING, '
-	'NOMBRES:STRING, '
-	'DOC_LIDER:STRING, '
-	'NOMBRE_TEAM_LEADER:STRING, '
-	'DOC_EJECUTIVO:STRING, '
-	'NOMBRE_EJECUTIVO:STRING, '
-	'DOC_GERENTE:STRING, '
-	'NOMBRE_GERENTE:STRING, '
-	'DESCRIPCION:STRING, '
-	'SEDE:STRING, '
-	'PRODUCTO:STRING, '
-	'DOC_ASEGURADOR:STRING, '
-	'EVALUADOR:STRING, '
-	'FECHA_ASEGURAMIENTO:STRING, '
-	'ESTADO_ASEG:STRING, '
-	'HORA_ASEGURAMIENTO:STRING, '
-	'PEC:STRING, '
-	'PENC:STRING, '
-	'GOS:STRING, '
-	'ID_CALL:STRING, '
-	'DOC_CLIENTE:STRING, '
-	'TELEFONO_CLIENTE:STRING, '
-	'TIPIFICACION:STRING, '
-	'FECHA_REGISTRO:STRING, '
-	'HORA_REGISTRO:STRING '
-
-
-
-
-
-
-
-
-
+	'IDKEY:STRING,'
+	'FECHA:STRING,'
+	'CEDULA:STRING, '
+	'NOMBRE:STRING, '
+	'TEAM_LEADER:STRING, '
+	'JORNADA:STRING, '
+	'DIA:STRING, '
+	'PRETURNO:STRING, '
+	'HORA_ENTRADA:STRING, '
+	'HORA_SALIDA:STRING, '
+	'TOTAL_HORAS:STRING, '
+	'INICIO_REU:STRING, '
+	'FIN_REU:STRING, '
+	'INICIO_ALMUERZO:STRING, '
+	'FIN_ALMUERZO:STRING, '
+	'INICIO_CAPACITACION:STRING, '
+	'FIN_CAPACITACION:STRING, '
+	'DESCANSO1:STRING, '
+	'FIN1:STRING, '
+	'DESCANSO2:STRING, '
+	'FIN2:STRING, '
+	'DESCANSO3:STRING, '
+	'HORAS_GESTION:STRING, '
+	'SEGMENTO:STRING, '
+	'SEGMENTO_2:STRING, '
+	'TIEMPO_TOTAL_CAPACITACION:STRING, '
+	'ENTRENAMIENTO:STRING, '
+	'REUNION:STRING, '
+	'OBSERVACIONES:STRING, '
+	'HORAS_REU:STRING, '
+	'DESCANSOS:STRING, '
+	'DIFERENCIA_DESCANSO:STRING, '
+	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
+	'DIFERENCIA_DESCANSO_FINAL:STRING, '
+	'LAVADO_1:STRING, '
+	'LAVADO_2:STRING, '
+	'LAVADO_3:STRING '
 
 
 )
@@ -78,32 +78,42 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha': self.mifecha,
-				'ID_CC' : arrayCSV[0],
-				'DOC_ASESOR' : arrayCSV[1],
-				'NOMBRES' : arrayCSV[2],
-				'DOC_LIDER' : arrayCSV[3],
-				'NOMBRE_TEAM_LEADER' : arrayCSV[4],
-				'DOC_EJECUTIVO' : arrayCSV[5],
-				'NOMBRE_EJECUTIVO' : arrayCSV[6],
-				'DOC_GERENTE' : arrayCSV[7],
-				'NOMBRE_GERENTE' : arrayCSV[8],
-				'DESCRIPCION' : arrayCSV[9],
-				'SEDE' : arrayCSV[10],
-				'PRODUCTO' : arrayCSV[11],
-				'DOC_ASEGURADOR' : arrayCSV[12],
-				'EVALUADOR' : arrayCSV[13],
-				'FECHA_ASEGURAMIENTO' : arrayCSV[14],
-				'ESTADO_ASEG' : arrayCSV[15],
-				'HORA_ASEGURAMIENTO' : arrayCSV[16],
-				'PEC' : arrayCSV[17],
-				'PENC' : arrayCSV[18],
-				'GOS' : arrayCSV[19],
-				'ID_CALL' : arrayCSV[20],
-				'DOC_CLIENTE' : arrayCSV[21],
-				'TELEFONO_CLIENTE' : arrayCSV[22],
-				'TIPIFICACION' : arrayCSV[23],
-				'FECHA_REGISTRO' : arrayCSV[24],
-				'HORA_REGISTRO' : arrayCSV[25],
+				'CEDULA' : arrayCSV[0],
+				'NOMBRE' : arrayCSV[1],
+				'TEAM_LEADER' : arrayCSV[2],
+				'JORNADA' : arrayCSV[3],
+				'DIA' : arrayCSV[4],
+				'PRETURNO' : arrayCSV[5],
+				'HORA_ENTRADA' : arrayCSV[6],
+				'HORA_SALIDA' : arrayCSV[7],
+				'TOTAL_HORAS' : arrayCSV[8],
+				'INICIO_REU' : arrayCSV[9],
+				'FIN_REU' : arrayCSV[10],
+				'INICIO_ALMUERZO' : arrayCSV[11],
+				'FIN_ALMUERZO' : arrayCSV[12],
+				'INICIO_CAPACITACION' : arrayCSV[13],
+				'FIN_CAPACITACION' : arrayCSV[14],
+				'DESCANSO1' : arrayCSV[15],
+				'FIN1' : arrayCSV[16],
+				'DESCANSO2' : arrayCSV[17],
+				'FIN2' : arrayCSV[18],
+				'DESCANSO3' : arrayCSV[19],
+				'HORAS_GESTION' : arrayCSV[20],
+				'SEGMENTO' : arrayCSV[21],
+				'SEGMENTO_2' : arrayCSV[22],
+				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[23],
+				'ENTRENAMIENTO' : arrayCSV[24],
+				'REUNION' : arrayCSV[25],
+				'OBSERVACIONES' : arrayCSV[26],
+				'HORAS_REU' : arrayCSV[27],
+				'DESCANSOS' : arrayCSV[28],
+				'DIFERENCIA_DESCANSO' : arrayCSV[29],
+				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[30],
+				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[31],
+				'LAVADO_1' : arrayCSV[32],
+				'LAVADO_2' : arrayCSV[33],
+				'LAVADO_3' : arrayCSV[34]
+
 
 
 
@@ -121,7 +131,8 @@ class formatearData(beam.DoFn):
 
 
 def run(archivo, mifecha):
-	gcs_path = "gs://ct-sensus" #Definicion de la raiz del bucket
+
+	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -148,12 +159,13 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery seguimiento' >> beam.io.WriteToBigQuery(
-		gcs_project + ":sensus.seguimiento", 
-		schema=TABLE_SCHEMA, 	
+	transformed | 'Escritura a BigQuery Unificadas' >> beam.io.WriteToBigQuery(
+		gcs_project + ":turnos.protec", 
+		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
+
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
 	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
 
@@ -161,3 +173,6 @@ def run(archivo, mifecha):
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
+
+
+

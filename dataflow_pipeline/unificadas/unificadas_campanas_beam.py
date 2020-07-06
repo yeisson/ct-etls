@@ -24,11 +24,14 @@ from apache_beam.options.pipeline_options import SetupOptions
 #coding: utf-8 
 
 TABLE_SCHEMA = (
-	'Id_Segmento:STRING, '
-	'Nombre_Segmento:STRING, '
-	'Fecha_Creacion:STRING, '
-    'Usuario_Creacion:STRING, '
-	'Estado:STRING'
+    'Id_Campana:STRING, '
+    'Nombre_Campana:STRING, '
+    'Codigo_Campana:STRING, '
+    'Id_UEN:STRING, '
+    'Fecha_Creacion:STRING,'
+    'Estado:STRING'
+    # 'Logo:STRING'
+
 )
 
 class formatearData(beam.DoFn):
@@ -37,11 +40,14 @@ class formatearData(beam.DoFn):
 		# print(element)
 		arrayCSV = element.split('|')
 
-		tupla= {'Id_Segmento':arrayCSV[0],
-				'Nombre_Segmento':arrayCSV[1],
-				'Fecha_Creacion':arrayCSV[2],
-				'Usuario_Creacion':arrayCSV[3],
-				'Estado':arrayCSV[4]
+		tupla= {'Id_Campana':arrayCSV[0],
+                'Nombre_Campana':arrayCSV[1],
+                'Codigo_Campana':arrayCSV[2],
+                'Id_UEN':arrayCSV[3],
+                'Fecha_Creacion':arrayCSV[4],
+                'Estado':arrayCSV[5]
+                # 'Logo':arrayCSV[6]
+
 				}
 		
 		return [tupla]
@@ -62,20 +68,19 @@ def run():
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
 	])
 	
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/Segmento/Unificadas_Segmento" + ".csv")
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(gcs_path + "/campanas/Unificadas_campanas" + ".csv")
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	# transformed | 'Escribir en Archivo' >> WriteToText(gcs_path + "/Seguimiento/Avon_inf_seg_2",file_name_suffix='.csv',shard_name_template='')
 	
 	transformed | 'Escritura a BigQuery unificadas' >> beam.io.WriteToBigQuery(
-        gcs_project + ":unificadas.segmentos",
+        gcs_project + ":unificadas.Campanas",
         schema=TABLE_SCHEMA,
         create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
-	jobObject = pipeline.run()
-	# jobID = jobObject.job_id()
+	jobObject = pipeline.run();jobObject.wait_until_finish()
+
+    
+    # jobID = jobObject.job_id()
 
 	return ("Corrio sin problema")
-
-
-

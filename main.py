@@ -22,6 +22,7 @@ CORS(app)
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+from procesos.Telefonia.agent_detail import agent_detail_api
 from procesos.Telefonia.login_logout import login_logout_api
 from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
@@ -34,6 +35,7 @@ from procesos.Telefonia.chats import chats_api
 from procesos.Telefonia.sms import sms_api
 
 
+app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
 app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
@@ -42,7 +44,6 @@ app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
-
 
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -120,6 +121,7 @@ app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
 app.register_blueprint(sms_api, url_prefix='/telefonia')
+app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')

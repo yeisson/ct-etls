@@ -65,7 +65,6 @@ TABLE_SCHEMA = (
     'COD_GESTION:STRING, '
     'TIPIFICACION:STRING, '
     'TEL_MARCADO:STRING, '
-    'PROSPECT_NUM:INTEGER, '
     'RANGO_CUPO_VENTA:STRING, '
     'PLAN_MAX_AP:STRING '
 )
@@ -122,9 +121,8 @@ class formatearData(beam.DoFn):
                 'COD_GESTION' : arrayCSV[36],
                 'TIPIFICACION' : arrayCSV[37],
                 'TEL_MARCADO' : arrayCSV[38],
-                'PROSPECT_NUM' : arrayCSV[39],
-                'RANGO_CUPO_VENTA' : arrayCSV[40],
-                'PLAN_MAX_AP' : arrayCSV[41]
+                'RANGO_CUPO_VENTA' : arrayCSV[39],
+                'PLAN_MAX_AP' : arrayCSV[40]
 				}
 		
 		return [tupla]

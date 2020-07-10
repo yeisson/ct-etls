@@ -33,7 +33,7 @@ def login():
     if request.method == 'POST':
         if request.form ['username'] != 'metlife':
             error = 'Invalid username'
-        elif request.form ['password'] != 'Junio2020':
+        elif request.form ['password'] != 'Julio2020':
             error = 'Invalid password'
         else:
             session['logged_in'] = True                              #Guarda la sesion porque de lo contrario el user debe estarse logueando en todo momento

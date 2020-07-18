@@ -24,7 +24,7 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
 	'skill:STRING, '
-	'iw_date_inboundcall:STRING, '
+	'date:STRING, '
 	'iw_date_lastout:STRING, '
 	'status:STRING, '
 	'calls:STRING, '
@@ -44,7 +44,7 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split('|')
 		tupla= {
 				'skill' : arrayCSV[0],
-				'iw_date_inboundcall' : arrayCSV[1],
+				'date' : arrayCSV[1],
 				'iw_date_lastout' : arrayCSV[2],
 				'status' : arrayCSV[3],
 				'calls' : arrayCSV[4],

@@ -6,15 +6,12 @@ from google.cloud import bigquery
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import dataflow_pipeline.refinancia.refinancia_seguimiento_beam as refinancia_seguimiento_beam
 import dataflow_pipeline.refinancia.refinancia_prejuridico_beam as refinancia_prejuridico_beam
-<<<<<<< HEAD
 import dataflow_pipeline.refinancia.refinancia_seguimiento_aut_beam as refinancia_seguimiento_aut_beam
-=======
 import dataflow_pipeline.refinancia.refinancia_BD_Calculada_Base_Inicial_beam as refinancia_BD_Calculada_Base_Inicial_beam
 import dataflow_pipeline.refinancia.refinancia_BD_Calculada_Demograficos_beam as refinancia_BD_Calculada_Demograficos_beam
 import dataflow_pipeline.refinancia.refinancia_BD_Calculada_Gestion_Diaria_beam as refinancia_BD_Calculada_Gestion_Diaria_beam
 import dataflow_pipeline.refinancia.refinancia_BD_Calculada_Base_Pagos_beam as refinancia_BD_Calculada_Base_Pagos_beam
 import procesos.descargas as descargas
->>>>>>> 67cf35a953c6f76be9ac87fe5454bd16d767e7a3
 import os
 import socket
 import time
@@ -116,7 +113,6 @@ def archivos_Prejuridico():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
-<<<<<<< HEAD
 ########################################################################################################################################################################################################
 
 @refinancia_api.route("/seguimiento_aut")
@@ -192,7 +188,6 @@ def seguimiento_aut():
     # return jsonify(flowAnswer), 200
     return "X" + "flowAnswer" 
    
-=======
 '''
 -----------------------------------------------------------------------------------------------------------------------
                                             PROYECTO "BASE CALCULADA" -> BASE INICIAL
@@ -400,4 +395,3 @@ def x():
                 
     return descargas.descargar_csv(myRoute, myQuery, myHeader) 
     
->>>>>>> 67cf35a953c6f76be9ac87fe5454bd16d767e7a3

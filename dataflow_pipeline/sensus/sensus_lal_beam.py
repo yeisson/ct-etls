@@ -24,25 +24,32 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-'idkey:STRING, '
-'fecha:STRING, '
-'IDENTIFICACION:STRING, '
-'NOMBRECOMPLETO:STRING, '
-'IDCLIENTE:STRING, '
-'IDPORTAFOLIO:STRING, '
-'PORTAFOLIO:STRING, '
-'IDASESOR:STRING, '
-'PERFILCLIENTE:STRING, '
-'ESTADOCOMERCIAL:STRING, '
-'TOTALSALDOCAPITAL:STRING, '
-'FUNCIONARIO:STRING, '
-'TOTALDEUDA:STRING, '
-'FABRICA:STRING, '
-'CANAL:STRING, '
-'SEGMENTO:STRING, '
-'SCORE:STRING, '
-'CASA_COBRANZA:STRING, '
-'TIPOASIGNACION:STRING '
+		'idkey:STRING, '
+		'fecha:STRING, '
+		'ID:STRING, '
+		'CC:STRING, '
+		'CED_NEG:STRING, '
+		'NEGOCIADOR:STRING, '
+		'PRODUCTO:STRING, '
+		'CED_TEAM:STRING, '
+		'TEAM:STRING, '
+		'CED_EJEC:STRING, '
+		'EJEC:STRING, '
+		'CED_GER:STRING, '
+		'GERENTE:STRING, '
+		'ID_CALL:STRING, '
+		'CED_CLIENT:STRING, '
+		'TEL_CLIENT:STRING, '
+		'FECH_AUD:STRING, '
+		'CC_EV:STRING, '
+		'EVALUADOR:STRING, '
+		'FECHA_FINAL:STRING, '
+		'HORA:STRING '
+
+
+
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -53,28 +60,37 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha' : self.mifecha,
-				'IDENTIFICACION' : arrayCSV[0].replace('"',''),
-				'NOMBRECOMPLETO' : arrayCSV[1].replace('"',''),
-				'IDCLIENTE' : arrayCSV[2].replace('"',''),
-				'IDPORTAFOLIO' : arrayCSV[3].replace('"',''),
-				'PORTAFOLIO' : arrayCSV[4].replace('"',''),
-				'IDASESOR' : arrayCSV[5].replace('"',''),
-				'PERFILCLIENTE' : arrayCSV[6].replace('"',''),
-				'ESTADOCOMERCIAL' : arrayCSV[7].replace('"',''),
-				'TOTALSALDOCAPITAL' : arrayCSV[8].replace('"',''),
-				'FUNCIONARIO' : arrayCSV[9].replace('"',''),
-				'TOTALDEUDA' : arrayCSV[10].replace('"',''),
-				'FABRICA' : arrayCSV[11].replace('"',''),
-				'CANAL' : arrayCSV[12].replace('"',''),
-				'SEGMENTO' : arrayCSV[13].replace('"',''),
-				'SCORE' : arrayCSV[14].replace('"',''),
-				'CASA_COBRANZA' : arrayCSV[15].replace('"',''),
-				'TIPOASIGNACION' : arrayCSV[16].replace('"','')
+				'fecha': self.mifecha,
+				'ID' : arrayCSV[0],
+				'CC' : arrayCSV[1],
+				'CED_NEG' : arrayCSV[2],
+				'NEGOCIADOR' : arrayCSV[3],
+				'PRODUCTO' : arrayCSV[4],
+				'CED_TEAM' : arrayCSV[5],
+				'TEAM' : arrayCSV[6],
+				'CED_EJEC' : arrayCSV[7],
+				'EJEC' : arrayCSV[8],
+				'CED_GER' : arrayCSV[9],
+				'GERENTE' : arrayCSV[10],
+				'ID_CALL' : arrayCSV[11],
+				'CED_CLIENT' : arrayCSV[12],
+				'TEL_CLIENT' : arrayCSV[13],
+				'FECH_AUD' : arrayCSV[14],
+				'CC_EV' : arrayCSV[15],
+				'EVALUADOR' : arrayCSV[16],
+				'FECHA_FINAL' : arrayCSV[17],
+				'HORA' : arrayCSV[18]
+
+
+
+
+
+
+
 
 				}
 		
@@ -83,8 +99,7 @@ class formatearData(beam.DoFn):
 
 
 def run(archivo, mifecha):
-
-	gcs_path = "gs://ct-refinancia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-sensus" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -111,13 +126,12 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery refinancia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":refinancia.prejuridico", 
-		schema=TABLE_SCHEMA, 
+	transformed | 'Escritura a BigQuery lal' >> beam.io.WriteToBigQuery(
+		gcs_project + ":sensus.lal", 
+		schema=TABLE_SCHEMA, 	
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
-
 	# transformed | 'Borrar Archivo' >> FileSystems.delete('gs://ct-avon/prejuridico/AVON_INF_PREJ_20181111.TXT')
 	# 'Eliminar' >> FileSystems.delete (["archivos/Info_carga_avon.1.txt"])
 
@@ -125,6 +139,3 @@ def run(archivo, mifecha):
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
-
-
-

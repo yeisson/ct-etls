@@ -24,25 +24,45 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-'idkey:STRING, '
-'fecha:STRING, '
-'IDENTIFICACION:STRING, '
-'NOMBRECOMPLETO:STRING, '
-'IDCLIENTE:STRING, '
-'IDPORTAFOLIO:STRING, '
-'PORTAFOLIO:STRING, '
-'IDASESOR:STRING, '
-'PERFILCLIENTE:STRING, '
-'ESTADOCOMERCIAL:STRING, '
-'TOTALSALDOCAPITAL:STRING, '
-'FUNCIONARIO:STRING, '
-'TOTALDEUDA:STRING, '
-'FABRICA:STRING, '
-'CANAL:STRING, '
-'SEGMENTO:STRING, '
-'SCORE:STRING, '
-'CASA_COBRANZA:STRING, '
-'TIPOASIGNACION:STRING '
+	'IDKEY:STRING,'
+	'FECHA:STRING,'
+	'CEDULA:STRING, '
+	'NOMBRE:STRING, '
+	'TEAM_LEADER:STRING, '
+	'JORNADA:STRING, '
+	'DIA:STRING, '
+	'PRETURNO:STRING, '
+	'HORA_ENTRADA:STRING, '
+	'HORA_SALIDA:STRING, '
+	'TOTAL_HORAS:STRING, '
+	'INICIO_REU:STRING, '
+	'FIN_REU:STRING, '
+	'INICIO_ALMUERZO:STRING, '
+	'FIN_ALMUERZO:STRING, '
+	'INICIO_CAPACITACION:STRING, '
+	'FIN_CAPACITACION:STRING, '
+	'DESCANSO1:STRING, '
+	'FIN1:STRING, '
+	'DESCANSO2:STRING, '
+	'FIN2:STRING, '
+	'DESCANSO3:STRING, '
+	'HORAS_GESTION:STRING, '
+	'SEGMENTO:STRING, '
+	'SEGMENTO_2:STRING, '
+	'TIEMPO_TOTAL_CAPACITACION:STRING, '
+	'ENTRENAMIENTO:STRING, '
+	'REUNION:STRING, '
+	'OBSERVACIONES:STRING, '
+	'HORAS_REU:STRING, '
+	'DESCANSOS:STRING, '
+	'DIFERENCIA_DESCANSO:STRING, '
+	'DIFERENCIA_DE_DESCANSO_INTERMEDIO:STRING, '
+	'DIFERENCIA_DESCANSO_FINAL:STRING, '
+	'LAVADO_1:STRING, '
+	'LAVADO_2:STRING, '
+	'LAVADO_3:STRING '
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -53,28 +73,56 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha' : self.mifecha,
-				'IDENTIFICACION' : arrayCSV[0].replace('"',''),
-				'NOMBRECOMPLETO' : arrayCSV[1].replace('"',''),
-				'IDCLIENTE' : arrayCSV[2].replace('"',''),
-				'IDPORTAFOLIO' : arrayCSV[3].replace('"',''),
-				'PORTAFOLIO' : arrayCSV[4].replace('"',''),
-				'IDASESOR' : arrayCSV[5].replace('"',''),
-				'PERFILCLIENTE' : arrayCSV[6].replace('"',''),
-				'ESTADOCOMERCIAL' : arrayCSV[7].replace('"',''),
-				'TOTALSALDOCAPITAL' : arrayCSV[8].replace('"',''),
-				'FUNCIONARIO' : arrayCSV[9].replace('"',''),
-				'TOTALDEUDA' : arrayCSV[10].replace('"',''),
-				'FABRICA' : arrayCSV[11].replace('"',''),
-				'CANAL' : arrayCSV[12].replace('"',''),
-				'SEGMENTO' : arrayCSV[13].replace('"',''),
-				'SCORE' : arrayCSV[14].replace('"',''),
-				'CASA_COBRANZA' : arrayCSV[15].replace('"',''),
-				'TIPOASIGNACION' : arrayCSV[16].replace('"','')
+				'fecha': self.mifecha,
+				'CEDULA' : arrayCSV[0],
+				'NOMBRE' : arrayCSV[1],
+				'TEAM_LEADER' : arrayCSV[2],
+				'JORNADA' : arrayCSV[3],
+				'DIA' : arrayCSV[4],
+				'PRETURNO' : arrayCSV[5],
+				'HORA_ENTRADA' : arrayCSV[6],
+				'HORA_SALIDA' : arrayCSV[7],
+				'TOTAL_HORAS' : arrayCSV[8],
+				'INICIO_REU' : arrayCSV[9],
+				'FIN_REU' : arrayCSV[10],
+				'INICIO_ALMUERZO' : arrayCSV[11],
+				'FIN_ALMUERZO' : arrayCSV[12],
+				'INICIO_CAPACITACION' : arrayCSV[13],
+				'FIN_CAPACITACION' : arrayCSV[14],
+				'DESCANSO1' : arrayCSV[15],
+				'FIN1' : arrayCSV[16],
+				'DESCANSO2' : arrayCSV[17],
+				'FIN2' : arrayCSV[18],
+				'DESCANSO3' : arrayCSV[19],
+				'HORAS_GESTION' : arrayCSV[20],
+				'SEGMENTO' : arrayCSV[21],
+				'SEGMENTO_2' : arrayCSV[22],
+				'TIEMPO_TOTAL_CAPACITACION' : arrayCSV[23],
+				'ENTRENAMIENTO' : arrayCSV[24],
+				'REUNION' : arrayCSV[25],
+				'OBSERVACIONES' : arrayCSV[26],
+				'HORAS_REU' : arrayCSV[27],
+				'DESCANSOS' : arrayCSV[28],
+				'DIFERENCIA_DESCANSO' : arrayCSV[29],
+				'DIFERENCIA_DE_DESCANSO_INTERMEDIO' : arrayCSV[30],
+				'DIFERENCIA_DESCANSO_FINAL' : arrayCSV[31],
+				'LAVADO_1' : arrayCSV[32],
+				'LAVADO_2' : arrayCSV[33],
+				'LAVADO_3' : arrayCSV[34]
+
+
+
+
+
+
+
+
+
+
 
 				}
 		
@@ -84,7 +132,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-refinancia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-turnos" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -111,8 +159,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery refinancia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":refinancia.prejuridico", 
+	transformed | 'Escritura a BigQuery Unificadas' >> beam.io.WriteToBigQuery(
+		gcs_project + ":turnos.protec", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

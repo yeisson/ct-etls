@@ -24,25 +24,32 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-'idkey:STRING, '
-'fecha:STRING, '
-'IDENTIFICACION:STRING, '
-'NOMBRECOMPLETO:STRING, '
-'IDCLIENTE:STRING, '
-'IDPORTAFOLIO:STRING, '
-'PORTAFOLIO:STRING, '
-'IDASESOR:STRING, '
-'PERFILCLIENTE:STRING, '
-'ESTADOCOMERCIAL:STRING, '
-'TOTALSALDOCAPITAL:STRING, '
-'FUNCIONARIO:STRING, '
-'TOTALDEUDA:STRING, '
-'FABRICA:STRING, '
-'CANAL:STRING, '
-'SEGMENTO:STRING, '
-'SCORE:STRING, '
-'CASA_COBRANZA:STRING, '
-'TIPOASIGNACION:STRING '
+		'idkey:STRING, '
+		'fecha:STRING, '
+		'ID_CALL:STRING, '
+		'ID_AGENT:STRING, '
+		'AGENT_NAME:STRING, '
+		'SKILL:STRING, '
+		'DATE:STRING, '
+		'COD1:STRING, '
+		'COD2:STRING, '
+		'CALL_COMMENTS:STRING, '
+		'TYPE_OF_CALL:STRING, '
+		'TELEPHONE:STRING, '
+		'DESTINATION:STRING, '
+		'DURATION_SEG_:STRING, '
+		'WHO_HUNG_UP:STRING, '
+		'ID_CUSTOMER:STRING, '
+		'ID_CAMPAING:STRING '
+
+
+
+
+
+
+
+
+
 )
 # ?
 class formatearData(beam.DoFn):
@@ -53,28 +60,32 @@ class formatearData(beam.DoFn):
 	
 	def process(self, element):
 		# print(element)
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha' : self.mifecha,
-				'IDENTIFICACION' : arrayCSV[0].replace('"',''),
-				'NOMBRECOMPLETO' : arrayCSV[1].replace('"',''),
-				'IDCLIENTE' : arrayCSV[2].replace('"',''),
-				'IDPORTAFOLIO' : arrayCSV[3].replace('"',''),
-				'PORTAFOLIO' : arrayCSV[4].replace('"',''),
-				'IDASESOR' : arrayCSV[5].replace('"',''),
-				'PERFILCLIENTE' : arrayCSV[6].replace('"',''),
-				'ESTADOCOMERCIAL' : arrayCSV[7].replace('"',''),
-				'TOTALSALDOCAPITAL' : arrayCSV[8].replace('"',''),
-				'FUNCIONARIO' : arrayCSV[9].replace('"',''),
-				'TOTALDEUDA' : arrayCSV[10].replace('"',''),
-				'FABRICA' : arrayCSV[11].replace('"',''),
-				'CANAL' : arrayCSV[12].replace('"',''),
-				'SEGMENTO' : arrayCSV[13].replace('"',''),
-				'SCORE' : arrayCSV[14].replace('"',''),
-				'CASA_COBRANZA' : arrayCSV[15].replace('"',''),
-				'TIPOASIGNACION' : arrayCSV[16].replace('"','')
+				'fecha': self.mifecha,
+				'ID_CALL' : arrayCSV[0],
+				'ID_AGENT' : arrayCSV[1],
+				'AGENT_NAME' : arrayCSV[2],
+				'SKILL' : arrayCSV[3],
+				'DATE' : arrayCSV[4],
+				'COD1' : arrayCSV[5],
+				'COD2' : arrayCSV[6],
+				'CALL_COMMENTS' : arrayCSV[7],
+				'TYPE_OF_CALL' : arrayCSV[8],
+				'TELEPHONE' : arrayCSV[9],
+				'DESTINATION' : arrayCSV[10],
+				'DURATION_SEG_' : arrayCSV[11],
+				'WHO_HUNG_UP' : arrayCSV[12],
+				'ID_CUSTOMER' : arrayCSV[13],
+				'ID_CAMPAING' : arrayCSV[14]
+
+
+
+
+
+
+
 
 				}
 		
@@ -84,7 +95,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-refinancia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-pto" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -94,7 +105,7 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
         # "--num_workers", "30",
         # "--autoscaling_algorithm", "NONE"		
@@ -111,8 +122,8 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery refinancia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":refinancia.prejuridico", 
+	transformed | 'Escritura a BigQuery Mobility' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Auteco_Mobility.tipificacion", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

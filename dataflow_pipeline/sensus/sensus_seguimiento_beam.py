@@ -26,31 +26,34 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'IDKEY:STRING, ' 
 	'FECHA:STRING, ' 
-	'MES:STRING, '
-	'MONITOREOS:STRING, '
 	'ID_CC:STRING, '
-	'NEGOCIADOR:STRING, '
-	'TEAM_LEADER:STRING, '
-	'EJECUTIVO_DE_CUENTA:STRING, '
-	'GERENTE:STRING, '
-	'OPERACION:STRING, '
+	'DOC_ASESOR:STRING, '
+	'NOMBRES:STRING, '
+	'DOC_LIDER:STRING, '
+	'NOMBRE_TEAM_LEADER:STRING, '
+	'DOC_EJECUTIVO:STRING, '
+	'NOMBRE_EJECUTIVO:STRING, '
+	'DOC_GERENTE:STRING, '
+	'NOMBRE_GERENTE:STRING, '
+	'DESCRIPCION:STRING, '
 	'SEDE:STRING, '
-	'CATEGORIA:STRING, '
-	'UEN:STRING, '
 	'PRODUCTO:STRING, '
+	'DOC_ASEGURADOR:STRING, '
 	'EVALUADOR:STRING, '
+	'FECHA_ASEGURAMIENTO:STRING, '
+	'ESTADO_ASEG:STRING, '
+	'HORA_ASEGURAMIENTO:STRING, '
 	'PEC:STRING, '
 	'PENC:STRING, '
 	'GOS:STRING, '
+	'ID_CALL:STRING, '
+	'DOC_CLIENTE:STRING, '
+	'TELEFONO_CLIENTE:STRING, '
+	'TIPIFICACION:STRING, '
 	'FECHA_REGISTRO:STRING, '
-	'HORA_REGISTRO:STRING, '
-	'SEMANA:STRING, '
-	'CONSECUTIVO:STRING, '
-	'HORA:STRING, '
-	'MINUTOS:STRING, '
-	'DIASH:STRING, '
-	'CDIAS:STRING, '
-	'ESTADO:STRING '
+	'HORA_REGISTRO:STRING '
+
+
 
 
 
@@ -75,31 +78,35 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
 				'fecha': self.mifecha,
-				'MES' : arrayCSV[0],
-				'MONITOREOS' : arrayCSV[1],
-				'ID_CC' : arrayCSV[2],
-				'NEGOCIADOR' : arrayCSV[3],
-				'TEAM_LEADER' : arrayCSV[4],
-				'EJECUTIVO_DE_CUENTA' : arrayCSV[5],
-				'GERENTE' : arrayCSV[6],
-				'OPERACION' : arrayCSV[7],
-				'SEDE' : arrayCSV[8],
-				'CATEGORIA' : arrayCSV[9],
-				'UEN' : arrayCSV[10],
+				'ID_CC' : arrayCSV[0],
+				'DOC_ASESOR' : arrayCSV[1],
+				'NOMBRES' : arrayCSV[2],
+				'DOC_LIDER' : arrayCSV[3],
+				'NOMBRE_TEAM_LEADER' : arrayCSV[4],
+				'DOC_EJECUTIVO' : arrayCSV[5],
+				'NOMBRE_EJECUTIVO' : arrayCSV[6],
+				'DOC_GERENTE' : arrayCSV[7],
+				'NOMBRE_GERENTE' : arrayCSV[8],
+				'DESCRIPCION' : arrayCSV[9],
+				'SEDE' : arrayCSV[10],
 				'PRODUCTO' : arrayCSV[11],
-				'EVALUADOR' : arrayCSV[12],
-				'PEC' : arrayCSV[13],
-				'PENC' : arrayCSV[14],
-				'GOS' : arrayCSV[15],
-				'FECHA_REGISTRO' : arrayCSV[16],
-				'HORA_REGISTRO' : arrayCSV[17],
-				'SEMANA' : arrayCSV[18],
-				'CONSECUTIVO' : arrayCSV[19],
-				'HORA' : arrayCSV[20],
-				'MINUTOS' : arrayCSV[21],
-				'DIASH' : arrayCSV[22],
-				'CDIAS' : arrayCSV[23],
-				'ESTADO' : arrayCSV[24]
+				'DOC_ASEGURADOR' : arrayCSV[12],
+				'EVALUADOR' : arrayCSV[13],
+				'FECHA_ASEGURAMIENTO' : arrayCSV[14],
+				'ESTADO_ASEG' : arrayCSV[15],
+				'HORA_ASEGURAMIENTO' : arrayCSV[16],
+				'PEC' : arrayCSV[17],
+				'PENC' : arrayCSV[18],
+				'GOS' : arrayCSV[19],
+				'ID_CALL' : arrayCSV[20],
+				'DOC_CLIENTE' : arrayCSV[21],
+				'TELEFONO_CLIENTE' : arrayCSV[22],
+				'TIPIFICACION' : arrayCSV[23],
+				'FECHA_REGISTRO' : arrayCSV[24],
+				'HORA_REGISTRO' : arrayCSV[25],
+
+
+
 
 
 

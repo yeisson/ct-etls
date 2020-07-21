@@ -65,15 +65,15 @@ def profitto():
             mensaje = proyectoFC_bdc_beam.run('gs://ct-tech-tof/profitto/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 os.remove(local_route + archivo)
-                checking += ['bdc->Procesado,']
                 try:
+                    checking += ['bdc->Procesado,']
                     message = horario + '\n\n' +'El archivo: ' + archivo + '. Se procesó correctamente.' + '\n\n\n\n\n\n' + 'Contento Tech'
                     subject = 'Info-process-etl-python(google cloud platform)'
                     message = ('Subject: {}\n\n{}'.format(subject, message))
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com',message)
                     server.quit()
                 except:
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN bdc")
@@ -110,7 +110,7 @@ def profitto():
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com',message)
                     server.quit()
                 except:
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN bdf")
@@ -146,7 +146,7 @@ def profitto():
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login('techcontentbisup@gmail.com',tokened)
-                    server.sendmail('NO-REPLY@gmail.com','arave@contentobps.com, arave163@gmail.com',message)
+                    server.sendmail('NO-REPLY@gmail.com','arave@contentotech.com, arave163@gmail.com',message)
                     server.quit()
                 except: 
                     print("No se pudo enviar EMAIL DE VERIFICACIÓN cxp")

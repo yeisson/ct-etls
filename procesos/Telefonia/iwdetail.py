@@ -84,7 +84,7 @@ def Ejecutar():
 
     try:
         ##QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where date = ' + '"' + dateini[0:8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.iw_detail` where CAST(date AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.iw_detail` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

@@ -22,6 +22,7 @@ CORS(app)
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+from procesos.Telefonia.agent_detail import agent_detail_api
 from procesos.Telefonia.login_logout import login_logout_api
 from procesos.Telefonia.csat import csat_api
 from procesos.Telefonia.agent_status import agent_status_api
@@ -34,6 +35,7 @@ from procesos.Telefonia.chats import chats_api
 from procesos.Telefonia.sms import sms_api
 
 
+app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 app.register_blueprint(login_logout_api, url_prefix='/telefonia')
 app.register_blueprint(csat_api, url_prefix='/telefonia')
 app.register_blueprint(agent_status_api, url_prefix='/telefonia')
@@ -42,7 +44,6 @@ app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
-
 
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -87,10 +88,6 @@ from procesos.refinancia import Refinancia_descarga_api
 from metlife_base_marcada.server import metlife_base_marcada_api
 from refinancia_base_marcada.server import refinancia_base_marcada_api
 
-
-
-
-
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
 from WebPage.inicio import webpage_app
@@ -99,11 +96,11 @@ from ui import ui_api
 from procesos.mobility import mobility_api
 from procesos.unificadas import unificadas_api
 
-
 from procesos.turnos import turnos_api
 from procesos.sensus import sensus_api
 from procesos.presupuesto import presupuesto_api
 from procesos.dispersion import dispersion_api
+from procesos.proteccion import proteccion_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -120,7 +117,7 @@ app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
 app.register_blueprint(sms_api, url_prefix='/telefonia')
-
+app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
 app.register_blueprint(avon_api, url_prefix='/avon')
@@ -152,12 +149,12 @@ app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
 app.register_blueprint(metlife_base_marcada_api, url_prefix='/metlife_base_marcada')
 app.register_blueprint(refinancia_base_marcada_api, url_prefix='/refinancia_base_marcada')
 
-
 app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')
 app.register_blueprint(ui_api, url_prefix='/ui')
 app.register_blueprint(mobility_api, url_prefix='/mobility')
 app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
+app.register_blueprint(proteccion_api, url_prefix='/proteccion')
 
 
 

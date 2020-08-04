@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -84,7 +84,7 @@ def Ejecutar():
 
     try:
         ##QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where date = ' + '"' + dateini[0:8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.Iw_detail` where CAST(date AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.iw_detail` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

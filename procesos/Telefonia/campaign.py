@@ -131,13 +131,13 @@ def index():
                     str(rown[0]['tel1']).encode('utf-8') +";"+
                     str(rown[0]['tel2']).encode('utf-8') +";"+
                     str(rown[0]['tel3']).encode('utf-8') +";"+
-                    str(rown[0]['tel4']).encode('utf-8') +";"+
-                    str(rown[0]['tel5']).encode('utf-8') +";"+
-                    str(rown[0]['tel6']).encode('utf-8') +";"+
-                    str(rown[0]['tel7']).encode('utf-8') +";"+
-                    str(rown[0]['tel8']).encode('utf-8') +";"+
-                    str(rown[0]['tel9']).encode('utf-8') +";"+
-                    str(rown[0]['tel10']).encode('utf-8') +";"+
+                    # str(rown[0]['tel4']).encode('utf-8') +";"+
+                    # str(rown[0]['tel5']).encode('utf-8') +";"+
+                    # str(rown[0]['tel6']).encode('utf-8') +";"+
+                    # str(rown[0]['tel7']).encode('utf-8') +";"+
+                    # str(rown[0]['tel8']).encode('utf-8') +";"+
+                    # str(rown[0]['tel9']).encode('utf-8') +";"+
+                    # str(rown[0]['tel10']).encode('utf-8') +";"+
                     str(rown[0]['tel_extra']).encode('utf-8') +";"+
                     str(rown[0]['id_agent']).encode('utf-8') +";"+
                     str(rown[0]['fecha']).encode('utf-8') +";"+

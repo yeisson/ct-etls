@@ -31,7 +31,7 @@ def bd():
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query('SELECT Id_resultado,Id_CC,Doc_Asesor,nombres,doc_lider,Nombre_team_leader,doc_ejecutivo,nombre_ejecutivo,doc_gerente,Nombre_Gerente,descripcion,sede,producto,Doc_Asegurador,Evaluador,Fecha_Aseguramiento,estado_aseg,Hora_Aseguramiento,PEC,PENC,GOs,Id_Call,Doc_Cliente,Telefono_Cliente,Tipificacion,Fecha_Registro,Hora_Registro FROM ' + TABLE_DB )
+    conn.execute_query('SELECT Id_resultado,Id_CC,Doc_Asesor,nombres,doc_lider,Nombre_team_leader,doc_ejecutivo,nombre_ejecutivo,doc_gerente,Nombre_Gerente,descripcion,sede,producto,Doc_Asegurador,Evaluador,Fecha_Aseguramiento,estado_aseg,Hora_Aseguramiento,PEC,PENC,GOs,Id_Call,Doc_Cliente,Telefono_Cliente,Tipificacion,Fecha_Registro,Hora_Registro FROM ' + TABLE_DB + ' WHERE CONVERT(DATE,fecha_registro) = CONVERT(DATE,GETDATE()-1)')
     # conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu, Nota FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) >= CAST(' + "'2019-02-01' as DATE) ")
 
     cloud_storage_rows = ""
@@ -75,7 +75,7 @@ def bd():
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-sensus")
 
     try:
-        deleteQuery = "DELETE FROM `contento-bi.sensus.bd_sensus` WHERE CAST(SUBSTR(Fecha_registro,0,10) AS DATE) = CURRENT_DATE()"
+        deleteQuery = "DELETE FROM `contento-bi.sensus.bd_sensus` WHERE CAST(SUBSTR(Fecha_registro,0,10) AS DATE) = DATE_ADD(CURRENT_DATE(),INTERVAL -1 DAY)"
         client = bigquery.Client()
         query_job = client.query(deleteQuery)
         query_job.result()

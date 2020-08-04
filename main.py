@@ -87,6 +87,7 @@ from procesos.metlife import Metlife_BM_descarga_api
 from procesos.refinancia import Refinancia_descarga_api
 from metlife_base_marcada.server import metlife_base_marcada_api
 from refinancia_base_marcada.server import refinancia_base_marcada_api
+from procesos.ucc import ucc_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -155,6 +156,7 @@ app.register_blueprint(mobility_api, url_prefix='/mobility')
 app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 app.register_blueprint(proteccion_api, url_prefix='/proteccion')
+app.register_blueprint(ucc_api, url_prefix='/ucc')
 
 
 

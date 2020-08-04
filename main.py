@@ -181,6 +181,7 @@ from procesos.dispersion import dispersion_api
 from procesos.bdsensus import bdsensus_api
 from procesos.Telefonia.ivr import ivr_api
 from procesos.Telefonia.iwdetail import iwdetail_api
+from procesos.facturas import facturas_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -189,6 +190,7 @@ app.register_blueprint(dispersion_api, url_prefix='/dispersion')
 app.register_blueprint(bdsensus_api, url_prefix='/bd')
 app.register_blueprint(ivr_api, url_prefix='/telefonia')
 app.register_blueprint(iwdetail_api, url_prefix='/telefonia')
+app.register_blueprint(facturas_api, url_prefix='/facturas')
 app.secret_key=os.urandom(24) 
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

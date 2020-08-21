@@ -21,7 +21,7 @@ import time
 import sys
 import dataflow_pipeline.telefonia.agent_detail_beam as agent_detail_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
-agent_detail_api = Blueprint('agent_detail_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+ad_productos_api = Blueprint('ad_productos_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 
 ############################# DEFINICION DE VARIABLES ###########################
@@ -32,7 +32,7 @@ hour2 = "235959"
 GetDate1 = time.strftime('%Y%m%d')+str(hour1)
 GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-KEY_REPORT = "agent_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+KEY_REPORT = "ad_productos" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "agents_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
@@ -41,7 +41,7 @@ ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + f
 
 ########################### CODIGO #####################################################################################
 
-@agent_detail_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@ad_productos_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
 
     reload(sys)
@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where estado = "Activado" and Cartera <> "Bancolombia Administrativa" ') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente  FROM `contento-bi.telefonia.parametros_ipdial`  where operacion <> "Bancolombia Consumo" and Estado = "Activado" and Cartera = "Bancolombia Administrativa" ') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -84,7 +84,7 @@ def Ejecutar():
 
     try:
         ##QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where date = ' + '"' + dateini[0:8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.agent_detail` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.ad_productos` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
@@ -133,7 +133,7 @@ def Ejecutar():
     return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
 ########################################################################################################################
 
-@agent_detail_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@ad_productos_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar2():
 
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, render_template, Flask, url_for
 import procesos.pyg as pyg
 import procesos.universidad_cooperativa_col as ucc
-import procesos.metlife as metlife
+import procesos.metlife as met
 import os
 
 my_resourses = os.path.join('static','images')
@@ -94,7 +94,13 @@ def ui_cargar_campanas():
 
 # ----------------------------------    
 
+# Operaciones Unificadas
+# ----------------------------------    
+@ui_api.route("/cargar_metlife_seguimiento")
+def ui_cargar_metlife_seguimiento():      
+    return met.archivos_seguimiento_metlife()    
 
+# ----------------------------------    
 
 # Prueba invocacion optimizada
 @ui_api.route("/cargar")

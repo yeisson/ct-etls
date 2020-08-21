@@ -120,7 +120,7 @@ def seguimiento_aut():
     
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER="BDA01\DELTA"
+    SERVER="192.168.20.63\DELTA"
     USER="BI_Bogota"
     PASSWORD="340$Uuxwp7Mcxo7Khy"
     DATABASE="Refinancia"

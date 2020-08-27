@@ -19,6 +19,7 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
 import sys
+import csv
 import dataflow_pipeline.telefonia.sms_beam as sms_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 sms_api = Blueprint('sms_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
@@ -32,7 +33,7 @@ hour2 = "235959"
 GetDate1 = time.strftime('%Y%m%d')+str(hour1)
 GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-KEY_REPORT = "sms" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+KEY_REPORT = "cdr_sms" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "cdr_sms" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
@@ -84,35 +85,43 @@ def Ejecutar():
 
     try:
         ##QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where date = ' + '"' + dateini[0:8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where CAST(date AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where CAST(SUBSTR(date,1,10) as DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
         print("Eliminado de bigquery")
 
+    key = 1    
+
     file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
-        datos = requests.get(url).content
-
+        print ('URL es igual '+ url)        
+        datos = requests.get(url)
+        print ('Los datos son ' + str(datos.content))
         # print(url)
 
-        if len(requests.get(url).content) < 50:
+        if len(datos.content) < 50:
+
+            print('Aun los datos siguen pasando por aqui'+  str(datos))
             continue
         else:
-            i = json.loads(datos)
-            for rown in i:
-                file.write(
-                    (rown["id_call"])+"|"+
-                    (rown["id_agent"])+"|"+
-                    str(rown["date"]).encode('utf-8')+"|"+
-                    str(rown["tel_number"]).encode('utf-8')+"|"+
-                    str(rown["msn"]).encode('utf-8')+"|"+
-                    str(rown["id_customer"]).encode('utf-8')+"|"+
-                    (rown["channel"])+"|"+
-                    str(row.id_cliente)+"|"+
-                    str(row.cartera).encode('utf-8') + "\n")
-
+          ##  i = json.loads(datos)
+            i = datos.json()
+            for item in i.values():
+                file.write(                    
+                    str(item["id_call"]).encode('utf-8')+"|"+
+                    str(item["id_agent"]).encode('utf-8')+"|"+
+                    str(item["date"]).encode('utf-8')+"|"+                   
+                    str(item["tel_number"]).encode('utf-8')+"|"+  
+                    str(item["msn"]).encode('utf-8')+"|"+
+                    str(item["id_customer"]).encode('utf-8') +"|"+ 
+                    str(item["channel"]).encode('utf-8') +"|"+ 
+                    str(row.id_cliente).encode('utf-8') + "|" +
+                    row.cartera.encode('utf-8') + "\n")
+                  
+                                 
+                    
     file.close()
     blob.upload_from_filename(ruta_completa)
     time.sleep(10)
@@ -120,6 +129,7 @@ def Ejecutar():
     time.sleep(60)
 
     return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
+########################################################################################################################
 ########################################################################################################################
 
 @sms_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]

@@ -39,8 +39,8 @@ Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Agendamientos/"+ KEY_REPORT +"/" + fecha + ext
 
-user = 'helpdeskofima@contento.com.co/token'
-token = '0SspItOQAJXDnRlmKlg04aOuAqVKPGzzJHoC0jMc'
+user = 'BLOCKED'
+token = 'BLOCKED'
 
 ########################### CODIGO #####################################################################################
 

@@ -39,9 +39,6 @@ Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Agendamientos/"+ KEY_REPORT +"/" + fecha + ext
 
-user = 'helpdeskofima@contento.com.co/token'
-token = '0SspItOQAJXDnRlmKlg04aOuAqVKPGzzJHoC0jMc'
-
 ########################### CODIGO #####################################################################################
 
 @Ofima_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
@@ -86,13 +83,22 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('Delete FROM `contento-bi.Ofima_sac.number` where tk is not null')
+        QUERY2 = ('delete FROM `contento-bi.Ofima_sac.Tickets` where date id is not null')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
-        print("No se elimino la tabla")
+        print("Eliminado de bigquery")
 
+    try:
+        QUERY3 = ('Select user, token FROM `contento-bi.Ofima_sac.auth`')
+        query_job = client.query(QUERY3)
+        rows3 = query_job.result()
+    except: 
+        print("Se lanza el Query")    
 
+    for row in rows3:
+        user = row.user
+        token = row.token
    
 
     file = open(ruta_completa,"a")
@@ -110,17 +116,14 @@ def Ejecutar():
             i = datos.json()
             for rown in i['comments']:
                 file.write(
-                    row.id.encode('utf-8')+"|"+
-                    str(rown["audit_id"]).encode('utf-8')+"|"+
+                    str(rown["id"]).encode('utf-8')+"|"+
                     str(rown["type"]).encode('utf-8')+"|"+
-                    str(rown["author_id"]).encode('utf-8')+"|"+                   
+                    str(rown["author_id"]).encode('utf-8')+"|"+                     
+                    str(rown["plain_body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+                     
                     str(rown["public"]).encode('utf-8')+"|"+  
-                    str(rown["created_at"]).encode('utf-8')+"|"+
-                    str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '').replace(' ', '') +"|"+ 
-                     str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+ 
-                     "\n")
-                                 
-                    
+                    str(rown["created_at"]).encode('utf-8')+"|"+                  
+                    row.id + "\n")
+               
     file.close()
     blob.upload_from_filename(ruta_completa)
     time.sleep(10)

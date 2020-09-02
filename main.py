@@ -167,15 +167,12 @@ app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 app.register_blueprint(proteccion_api, url_prefix='/proteccion')
 app.register_blueprint(ucc_api, url_prefix='/ucc')
-<<<<<<< HEAD
 app.register_blueprint(Metlife_Rep_Wolkvox_api, url_prefix='/metlife_repositorio')
-=======
 app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
->>>>>>> 1b459e7366c6cfce53e4f001a3b437fac91b12d0
 
 
 
-# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

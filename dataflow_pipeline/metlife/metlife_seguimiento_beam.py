@@ -147,9 +147,6 @@ def run(archivo, mifecha):
 
 	return ("Corrio Full HD")
 
-<<<<<<< HEAD
     
-=======
 
 
->>>>>>> 1b459e7366c6cfce53e4f001a3b437fac91b12d0

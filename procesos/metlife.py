@@ -128,4 +128,8 @@ def archivos_seguimiento_metlife():
                 response["status"] = True
 
     return jsonify(response), response["code"]
+<<<<<<< HEAD
     # return "Corriendo : " + mensaje
+=======
+    # return "Corriendo : " + mensaje
+>>>>>>> 1b459e7366c6cfce53e4f001a3b437fac91b12d0

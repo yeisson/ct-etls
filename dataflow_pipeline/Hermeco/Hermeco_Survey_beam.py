@@ -1,5 +1,5 @@
-#coding: utf-8 
 from __future__ import print_function, absolute_import
+
 import logging
 import re
 import json
@@ -22,38 +22,30 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 TABLE_SCHEMA = (
-	'idkey:STRING, '
-	'fecha:STRING, '
-	'Item:STRING, '
-	'Sponsor:STRING, '
-	'campana:STRING, '
-	'Num_Doc_Cliente:STRING, '
-	'fecha_llamada:STRING, '
-	'id_asesor:STRING, '
-	'nombre_asesor:STRING, '
-	'tipo_contacto:STRING, '
-	'tipificacion:STRING, '
-	'Unico:STRING, '
-	'Contacto_General:INTEGER, '
-	'Contacto_Efectivo:INTEGER, '
-	'Venta:INTEGER, '
-	'Dia:STRING, '
-	'Tipo_Base:STRING, '
-	'Genero:STRING, '
-	'Rango_Edad:STRING, '
-	'Segmento_Edad:STRING, '
-	'Estado_Civil:STRING, '
-	'Beneficiarios:STRING, '
-	'Categoria:STRING, '
-	'Rango_Cupo:STRING, '
-	'Perfil:STRING, '
-	'Campana_2:STRING, '
-	'Franja:STRING, '
-	'Fecha_Asignada:STRING, '
-	'Fecha_Gestion_x:STRING, '
-	'Fecha_Gestion:STRING, '
-	'Val:STRING '
-)
+    'IDKEY:STRING, ' 
+	'FECHA:STRING, ' 
+	'ID:STRING, '
+	'COMPLETADO:STRING, '
+	'ULTIMA_PAGINA:STRING, '
+	'LENGUAJE_INICIAL:STRING, '
+	'FECHA_DE_INICIO:STRING, '
+	'FECHA_DE_LA_ULTIMA_ACCION:STRING, '
+	'PEDIDO:STRING, '
+	'VALOR:STRING, '
+	'MEDIO_DE_PAGO:STRING, '
+	'MEDIO_DE_CONTACTO:STRING, '
+	'TIPO_DE_LLAMADA:STRING, '
+	'TIPOLOGIA_IN:STRING, '
+	'TIPOLOGIA_OUT:STRING, '
+	'VENTA_CRUZADA_EFECTIVA:STRING, '
+	'NOMBRE_ASESOR:STRING, '
+	'NOMBRE_ASESOR_OTRO:STRING, '
+	'HORA_INICIO_CHAT:STRING, '
+	'FINALIZACION_CHAT:STRING '
+
+
+
+	)
 # ?
 class formatearData(beam.DoFn):
 
@@ -67,36 +59,28 @@ class formatearData(beam.DoFn):
 
 		tupla= {'idkey' : str(uuid.uuid4()),
 				# 'fecha' : datetime.datetime.today().strftime('%Y-%m-%d'),
-				'fecha' : self.mifecha,
-				'Item': arrayCSV[0],
-				'Sponsor': arrayCSV[1],
-				'campana': arrayCSV[2],
-				'Num_Doc_Cliente': arrayCSV[3],
-				'fecha_llamada': arrayCSV[4],
-				'id_asesor': arrayCSV[5],
-				'nombre_asesor': arrayCSV[6],
-				'tipo_contacto': arrayCSV[7],
-				'tipificacion': arrayCSV[8],
-				'Unico': arrayCSV[9],
-				'Contacto_General': arrayCSV[10],
-				'Contacto_Efectivo': arrayCSV[11],
-				'Venta': arrayCSV[12],
-				'Dia': arrayCSV[13],
-				'Tipo_Base': arrayCSV[14],
-				'Genero': arrayCSV[15],
-				'Rango_Edad': arrayCSV[16],
-				'Segmento_Edad': arrayCSV[17],
-				'Estado_Civil': arrayCSV[18],
-				'Beneficiarios': arrayCSV[19],
-				'Categoria': arrayCSV[20],
-				'Rango_Cupo': arrayCSV[21],
-				'Perfil': arrayCSV[22],
-				'Campana_2': arrayCSV[23],
-				'Franja': arrayCSV[24],
-				'Fecha_Asignada': arrayCSV[25],
-				'Fecha_Gestion_x': arrayCSV[26],
-				'Fecha_Gestion': arrayCSV[27],
-				'Val': arrayCSV[28]
+				'fecha': self.mifecha, 
+				'ID' : arrayCSV[0],
+				'COMPLETADO' : arrayCSV[1],
+				'ULTIMA_PAGINA' : arrayCSV[2],
+				'LENGUAJE_INICIAL' : arrayCSV[3],
+				'FECHA_DE_INICIO' : arrayCSV[4],
+				'FECHA_DE_LA_ULTIMA_ACCION' : arrayCSV[5],
+				'PEDIDO' : arrayCSV[6],
+				'VALOR' : arrayCSV[7],
+				'MEDIO_DE_PAGO' : arrayCSV[8],
+				'MEDIO_DE_CONTACTO' : arrayCSV[9],
+				'TIPO_DE_LLAMADA' : arrayCSV[10],
+				'TIPOLOGIA_IN' : arrayCSV[11],
+				'TIPOLOGIA_OUT' : arrayCSV[12],
+				'VENTA_CRUZADA_EFECTIVA' : arrayCSV[13],
+				'NOMBRE_ASESOR' : arrayCSV[14],
+				'NOMBRE_ASESOR_OTRO' : arrayCSV[15],
+				'HORA_INICIO_CHAT' : arrayCSV[16],
+				'FINALIZACION_CHAT' : arrayCSV[17]
+
+
+
 				}
 		
 		return [tupla]
@@ -105,7 +89,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-metlife" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-sensus" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -132,9 +116,9 @@ def run(archivo, mifecha):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery Metlife' >> beam.io.WriteToBigQuery(
-		gcs_project + ":MetLife.Seguimiento_Diario", 
-		schema=TABLE_SCHEMA, 
+	transformed | 'Escritura a BigQuery Survey Hermeco' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Hermeco.Survey", 
+		schema=TABLE_SCHEMA, 	
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
@@ -146,10 +130,3 @@ def run(archivo, mifecha):
 	# jobID = jobObject.job_id()
 
 	return ("Corrio Full HD")
-
-<<<<<<< HEAD
-    
-=======
-
-
->>>>>>> 1b459e7366c6cfce53e4f001a3b437fac91b12d0

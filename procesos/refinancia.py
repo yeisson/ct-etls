@@ -120,7 +120,7 @@ def seguimiento_aut():
     
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER="BDA01\DELTA"
+    SERVER="192.168.20.63\DELTA"
     USER="BI_Bogota"
     PASSWORD="340$Uuxwp7Mcxo7Khy"
     DATABASE="Refinancia"
@@ -129,8 +129,8 @@ def seguimiento_aut():
 
     #Nos conectamos a la BD y obtenemos los registros
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query('SELECT Id_seguimiento,Id_docdeu,Id_gestion,Id_causal,fecha_seguimiento,Nota,Id_usuario,Valor_Saldo_Total,numero_contac FROM ' + TABLE_DB  + ' where CAST(fecha_seguimiento AS date) = CAST(GETDATE() as DATE) ')
-    ##conn.execute_query('SELECT Id_seguimiento,Id_docdeu,Id_gestion,Id_causal,fecha_seguimiento,Nota,Id_usuario,Valor_Saldo_Total,numero_contac FROM ' + TABLE_DB  + ' where CAST(fecha_seguimiento AS date) = CAST(' + "'2020-07-15' as DATE) ")
+    # conn.execute_query('SELECT Id_seguimiento,Id_docdeu,Id_gestion,Id_causal,fecha_seguimiento,Nota,Id_usuario,Valor_Saldo_Total,numero_contac FROM ' + TABLE_DB  + ' where CAST(fecha_seguimiento AS date) = CAST(GETDATE() as DATE) ')
+    conn.execute_query('SELECT Id_seguimiento,Id_docdeu,Id_gestion,Id_causal,fecha_seguimiento,Nota,Id_usuario,Valor_Saldo_Total,numero_contac FROM ' + TABLE_DB  + ' where CAST(fecha_seguimiento AS date) > CAST(' + "'2020-07-30' as DATE) ")
     # conn.execute_query('SELECT Id_Gestion,Id_Causal,Fecha_Seguimiento,Id_Usuario,Valor_Obligacion,Id_Docdeu, Nota FROM ' + TABLE_DB + ' where CAST(Fecha_Seguimiento AS date) >= CAST(' + "'2019-02-01' as DATE) ")
 
     cloud_storage_rows = ""

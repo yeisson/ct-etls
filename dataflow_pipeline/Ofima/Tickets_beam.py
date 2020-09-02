@@ -23,15 +23,18 @@ from apache_beam.options.pipeline_options import SetupOptions
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
 TABLE_SCHEMA = (
-	'id_call:STRING,'
-	'id_agent:STRING,'
-	'date:STRING,'
-	'tel_number:STRING,'
-	'msn:STRING,'
-	'id_customer:STRING,'
-	'channel:STRING,'
-	'id_cliente:STRING,'
-	'cartera:STRING'
+	'URL:STRING, '
+	'ID:STRING, '
+	'SUBJECT:STRING, '
+	'REQUESTER_ID:STRING, '
+	'SUBMITTER_ID:STRING, '
+	'ORGANIZATION_ID:STRING, '
+	'CREATED_AT:STRING, '
+	'STATUS:STRING, '
+	'CUSTOM_FIELDS:STRING, '
+	'GROUP_ID:STRING '
+
+	
 )
 
 ################################# PAR'DO #######################################
@@ -41,16 +44,17 @@ class formatearData(beam.DoFn):
 	def process(self, element):
 		arrayCSV = element.split('|')
 		tupla= {
-				
-				'id_call': arrayCSV[0],
-				'id_agent': arrayCSV[1],
-				'date': arrayCSV[2],
-				'tel_number': arrayCSV[3],
-				'msn': arrayCSV[4],
-				'id_customer': arrayCSV[5],
-				'channel': arrayCSV[6],
-				'id_cliente': arrayCSV[7],
-				'cartera': arrayCSV[8]
+				'URL' : arrayCSV[0],
+				'ID' : arrayCSV[1],
+				'SUBJECT' : arrayCSV[2],
+				'REQUESTER_ID' : arrayCSV[3],
+				'SUBMITTER_ID' : arrayCSV[4],
+				'ORGANIZATION_ID' : arrayCSV[5],
+				'CREATED_AT' : arrayCSV[6],
+				'STATUS' : arrayCSV[7],
+				'CUSTOM_FIELDS' : arrayCSV[8],
+				'GROUP_ID' : arrayCSV[9]
+
 				}
 		return [tupla]
 
@@ -58,7 +62,7 @@ class formatearData(beam.DoFn):
 
 def run(output,KEY_REPORT):
 
-	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
+	gcs_path = 'gs://ct-ofima_sac' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -75,8 +79,8 @@ def run(output,KEY_REPORT):
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(output)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	
-	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia." + KEY_REPORT, 
+	transformed | 'Escritura a BigQuery Tickets' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Ofima_sac." + KEY_REPORT, 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)

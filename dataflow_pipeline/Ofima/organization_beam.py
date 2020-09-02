@@ -23,15 +23,14 @@ from apache_beam.options.pipeline_options import SetupOptions
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
 TABLE_SCHEMA = (
-	'id_call:STRING,'
-	'id_agent:STRING,'
-	'date:STRING,'
-	'tel_number:STRING,'
-	'msn:STRING,'
-	'id_customer:STRING,'
-	'channel:STRING,'
-	'id_cliente:STRING,'
-	'cartera:STRING'
+	'name:STRING, '
+	'id:STRING, '
+	'shared_tickets:STRING, '
+	'shared_comments:STRING, '
+	'external_id:STRING, '
+	'created_at:STRING, '
+	'updated_at:STRING '
+	
 )
 
 ################################# PAR'DO #######################################
@@ -41,16 +40,19 @@ class formatearData(beam.DoFn):
 	def process(self, element):
 		arrayCSV = element.split('|')
 		tupla= {
-				
-				'id_call': arrayCSV[0],
-				'id_agent': arrayCSV[1],
-				'date': arrayCSV[2],
-				'tel_number': arrayCSV[3],
-				'msn': arrayCSV[4],
-				'id_customer': arrayCSV[5],
-				'channel': arrayCSV[6],
-				'id_cliente': arrayCSV[7],
-				'cartera': arrayCSV[8]
+				'name' : arrayCSV[0],
+				'id' : arrayCSV[1],
+				'shared_tickets' : arrayCSV[2],
+				'shared_comments' : arrayCSV[3],
+				'external_id' : arrayCSV[4],
+				'created_at' : arrayCSV[5],
+				'updated_at' : arrayCSV[6]
+					
+
+
+
+
+
 				}
 		return [tupla]
 
@@ -58,7 +60,7 @@ class formatearData(beam.DoFn):
 
 def run(output,KEY_REPORT):
 
-	gcs_path = 'gs://ct-telefonia' #Definicion de la raiz del bucket
+	gcs_path = 'gs://ct-ofima_sac' #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runner = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -75,8 +77,8 @@ def run(output,KEY_REPORT):
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(output)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData()))
 	
-	transformed | 'Escritura a BigQuery Telefonia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia." + KEY_REPORT, 
+	transformed | 'Escritura a BigQuery Organizations' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Ofima_sac." + KEY_REPORT, 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)

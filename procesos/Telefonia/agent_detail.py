@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where estado = "Activado" and Cartera <> "Bancolombia Administrativa" ') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -144,10 +144,3 @@ def Ejecutar2():
     urllib.urlopen('http://35.239.77.81:5000/telefonia/'+ KEY_REPORT + '?dateini=' + str(ayer) + '&dateend=' + str(ayer))
 
     return ('Datos recuperados por el desperdicio hora a hora')
-
-
-@agent_detail_api.route("/prueba_brothaaa") 
-def Prueba_Brothaaa():
-
-    dato = 'Este ano si'
-    return jsonify(dato)

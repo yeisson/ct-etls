@@ -5,6 +5,7 @@ from google.cloud import bigquery
 import pandas as pd
 from pandas import DataFrame
 import socket
+import os
 
 descargas_api = Blueprint('descargas_api', __name__)
 
@@ -19,21 +20,31 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 # En el procedimiento llamado PRUEBA_3 se ejemplifica la manera practica de invocar la funcion 'descargar_csv'.
 @descargas_api.route("/descargar_csv")
 def descargar_csv(myRoute, myQuery, myHeader):
-
-    response = {}
-    response["code"] = 5000
-    response["description"] = "Descarga Exitosa"
-    response["status"] = False
+    
 
     query = myQuery
     client = bigquery.Client()
     df = client.query(query).to_dataframe() # Permite utilizar el resultado del query desde pandas, mediante DataFrame.
 
     cabecera = myHeader
-    df.colums = cabecera    # Agrega los titulos de los campos al DataFrame.
+    df.colums = cabecera    # Agrega los titulos de los campos al DataFrame.    
 
-    mi_ruta_descarga = fileserver_baseroute + myRoute
-    df.to_csv(mi_ruta_descarga, encoding='utf-8')   # Ejecuta la descarga del arvhivo csv, especificando el tipo de codificacion 'utf-8'.
+      
+
+    if df.empty:
+        code = 400
+        descripcion = 'ERROR!! No existen datos para los parametros ingresados'
+          
+    else:        
+        mi_ruta_descarga = fileserver_baseroute + myRoute
+        df.to_csv(mi_ruta_descarga, encoding='utf-8')   # Ejecuta la descarga del arvhivo csv, especificando el tipo de codificacion 'utf-8'.
+        code = 200
+        descripcion = 'Descarga Exitosa, Ubicacion: ' + mi_ruta_descarga
+
+    response = {}
+    response["code"] = code
+    response["description"] = descripcion
+    response["status"] = False
 
     return jsonify(response), response["code"]
 

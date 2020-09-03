@@ -22,7 +22,8 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 
 
-TABLE_SCHEMA = (
+TABLE_SCHEMA = ('IDKEY:STRING, '
+                'CAMPANA:STRING, '
                 'NOMBRE_DE_CUENTA:STRING, '
                 'TRAFFIC_SOURCE:STRING, '
                 'NOMBRE_DE_COMUNICACION:STRING, '
@@ -73,46 +74,46 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split(';')
 
 		tupla= {'idkey' : str(uuid.uuid4()),
-			    'campana' : self.mifecha,
-                'NOMBRE_DE_CUENTA' : arrayCSV[0],
-                'TRAFFIC_SOURCE' : arrayCSV[1],
-                'NOMBRE_DE_COMUNICACION' : arrayCSV[2],
-                'COMUNICACION_PROGRAMADA_PARA' : arrayCSV[3],
-                'FECHA_DE_INICIO_DE_LA_COMUNICACION' : arrayCSV[4],
-                'PLANTILLA_DE_COMUNICACION' : arrayCSV[5],
-                'DE' : arrayCSV[6],
-                'A' : arrayCSV[7],
-                'ID_DEL_MENSAJE' : arrayCSV[8],
-                'ENVIAR_EL' : arrayCSV[9],
-                'PREFIJO_DE_PAIS' : arrayCSV[10],
-                'NOMBRE_DE_PAIS' : arrayCSV[11],
-                'NOMBRE_DE_RED' : arrayCSV[12],
-                'ORIGINAL_MCC' : arrayCSV[13],
-                'ORIGINAL_MNC' : arrayCSV[14],
-                'MCC_MNC_ORIGINAL' : arrayCSV[15],
-                'PRECIO_DE_COMPRA' : arrayCSV[16],
-                'MONEDA_DE_COMPRA' : arrayCSV[17],
-                'PRECIO_DE_VENTA' : arrayCSV[18],
-                'MONEDA_DE_VENTA' : arrayCSV[19],
-                'TIPO_DE_MENSAJE' : arrayCSV[20],
-                'SMS_TYPE' : arrayCSV[21],
-                'ESTADO' : arrayCSV[22],
-                'RAZON' : arrayCSV[23],
-                'ACCION' : arrayCSV[24],
-                'GRUPO_DE_ERROR' : arrayCSV[25],
-                'NOMBRE_DE_ERROR' : arrayCSV[26],
-                'HECHO_EL' : arrayCSV[27],
-                'TEXTO' : arrayCSV[28],
-                'MESSAGE_LENGTH' : arrayCSV[29],
-                'CONTEO_DE_MENSAJES' : arrayCSV[30],
-                'NOMBRE_DE_SERVICIO' : arrayCSV[31],
-                'NOMBRE_DE_USUARIO' : arrayCSV[32],
-                'ID_DE_MENSAJE_SINCRONIZADO' : arrayCSV[33],
-                'CLICKS' : arrayCSV[34],
-                'DATA_PAYLOAD' : arrayCSV[35]
+                        'campana' : self.mifecha,
+                        'NOMBRE_DE_CUENTA' : arrayCSV[0],
+                        'TRAFFIC_SOURCE' : arrayCSV[1],
+                        'NOMBRE_DE_COMUNICACION' : arrayCSV[2],
+                        'COMUNICACION_PROGRAMADA_PARA' : arrayCSV[3],
+                        'FECHA_DE_INICIO_DE_LA_COMUNICACION' : arrayCSV[4],
+                        'PLANTILLA_DE_COMUNICACION' : arrayCSV[5],
+                        'DE' : arrayCSV[6],
+                        'A' : arrayCSV[7],
+                        'ID_DEL_MENSAJE' : arrayCSV[8],
+                        'ENVIAR_EL' : arrayCSV[9],
+                        'PREFIJO_DE_PAIS' : arrayCSV[10],
+                        'NOMBRE_DE_PAIS' : arrayCSV[11],
+                        'NOMBRE_DE_RED' : arrayCSV[12],
+                        'ORIGINAL_MCC' : arrayCSV[13],
+                        'ORIGINAL_MNC' : arrayCSV[14],
+                        'MCC_MNC_ORIGINAL' : arrayCSV[15],
+                        'PRECIO_DE_COMPRA' : arrayCSV[16],
+                        'MONEDA_DE_COMPRA' : arrayCSV[17],
+                        'PRECIO_DE_VENTA' : arrayCSV[18],
+                        'MONEDA_DE_VENTA' : arrayCSV[19],
+                        'TIPO_DE_MENSAJE' : arrayCSV[20],
+                        'SMS_TYPE' : arrayCSV[21],
+                        'ESTADO' : arrayCSV[22],
+                        'RAZON' : arrayCSV[23],
+                        'ACCION' : arrayCSV[24],
+                        'GRUPO_DE_ERROR' : arrayCSV[25],
+                        'NOMBRE_DE_ERROR' : arrayCSV[26],
+                        'HECHO_EL' : arrayCSV[27],
+                        'TEXTO' : arrayCSV[28],
+                        'MESSAGE_LENGTH' : arrayCSV[29],
+                        'CONTEO_DE_MENSAJES' : arrayCSV[30],
+                        'NOMBRE_DE_SERVICIO' : arrayCSV[31],
+                        'NOMBRE_DE_USUARIO' : arrayCSV[32],
+                        'ID_DE_MENSAJE_SINCRONIZADO' : arrayCSV[33],
+                        'CLICKS' : arrayCSV[34],
+                        'DATA_PAYLOAD' : arrayCSV[35]
 
 
-                }
+                        }
 		
 		return [tupla]
 

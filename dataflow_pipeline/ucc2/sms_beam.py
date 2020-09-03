@@ -23,6 +23,8 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 
 TABLE_SCHEMA = (
+        'IDKEY:STRING, '
+        'CAMPANA:STRING, '
         'EVENT_DATE:STRING, '
         'CAMPAIGN_NAME:STRING, '
         'PROGRAM:STRING, '

@@ -42,7 +42,7 @@ class formatearData(beam.DoFn):
 		tupla= {'idkey' : str(uuid.uuid4()),
 			    'campana' : self.mifecha,
                 'CORREO_ELECTRONICO' : arrayCSV[0],
-                'PRIMER_NOMBRE' : arrayCSV[1],
+                'PRIMER_NOMBRE' : arrayCSV[1]
 
 
                 }

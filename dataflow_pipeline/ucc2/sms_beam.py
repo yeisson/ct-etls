@@ -99,7 +99,7 @@ class formatearData(beam.DoFn):
                         'OPEN_NO_ACTION' : arrayCSV[27],
                         'MENSAJE' : arrayCSV[28],
                         'MOBILE_NUMBER' : arrayCSV[29],
-                        'DRIPSUNITNAME' : arrayCSV[30],
+                        'DRIPSUNITNAME' : arrayCSV[30]
 
 
                 }

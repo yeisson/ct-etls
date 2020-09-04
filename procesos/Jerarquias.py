@@ -21,8 +21,9 @@ def Jerarquias():
     response["status"] = False
 
     homepath = os.environ["HOMEPATH"]
+    C = os.environ["HOMEDRIVE"]
     dir_ = "/Documents/gmv/"   
-    local_route = homepath + dir_
+    local_route = C + homepath + dir_
 
     archivos = os.listdir(local_route)
     for archivo in archivos:

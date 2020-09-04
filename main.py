@@ -29,6 +29,7 @@ from procesos.Telefonia.agent_status import agent_status_api
 from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
+from procesos.Telefonia.cdr_unconnected import cdr_unconnected_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 from procesos.Telefonia.chats import chats_api
@@ -36,6 +37,7 @@ from procesos.Telefonia.sms import sms_api
 from procesos.Telefonia.ad_consumo import ad_consumo_api
 from procesos.Telefonia.ad_productos import ad_productos_api
 from procesos.Telefonia.agent_detail import agent_detail_api
+from procesos.Telefonia.llamadas_report import llamadas_report_api
 
 
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
@@ -45,12 +47,13 @@ app.register_blueprint(agent_status_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
+app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 app.register_blueprint(ad_consumo_api, url_prefix='/telefonia')
 app.register_blueprint(ad_productos_api, url_prefix='/telefonia')
-
+app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
 
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -125,6 +128,8 @@ app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
+app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
+app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
 app.register_blueprint(sms_api, url_prefix='/telefonia')
@@ -236,7 +241,6 @@ from WebPage.inicio import webpage_app
 from procesos.Contento_tech.Tof.tof import tof_api
 from procesos.Contento_tech.BancolombiaSac.BancolombiaSac import bancosac_api
 from procesos.Contento_tech.proyectoFC.profitto import profitto_api
-
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')

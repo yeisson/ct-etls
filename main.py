@@ -34,8 +34,7 @@ from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 from procesos.Telefonia.chats import chats_api
 from procesos.Telefonia.sms import sms_api
-from procesos.Telefonia.ad_consumo import ad_consumo_api
-from procesos.Telefonia.ad_productos import ad_productos_api
+
 from procesos.Telefonia.agent_detail import agent_detail_api
 from procesos.Telefonia.llamadas_report import llamadas_report_api
 
@@ -51,8 +50,6 @@ app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
-app.register_blueprint(ad_consumo_api, url_prefix='/telefonia')
-app.register_blueprint(ad_productos_api, url_prefix='/telefonia')
 app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
 
 
@@ -115,6 +112,7 @@ from procesos.dispersion import dispersion_api
 from procesos.proteccion import proteccion_api
 from procesos.Jerarquias import Jerarquias_api
 from procesos.metlife_repositorio_wolkvox import Metlife_Rep_Wolkvox_api
+
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -205,6 +203,9 @@ from procesos.Zendesk.organizations import organizations_api
 from procesos.Zendesk.user import user_api
 from procesos.Zendesk.Ofima import Ofima_api
 from procesos.Zendesk.Tickets import Tickets_api
+from procesos.base_banco import base_banco_api
+from procesos.Telefonia.ad_consumo import ad_consumo_api
+from procesos.Telefonia.ad_productos import ad_productos_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -220,7 +221,9 @@ app.register_blueprint(historico_api, url_prefix='/Ofima')
 app.register_blueprint(organizations_api, url_prefix='/Ofima')
 app.register_blueprint(user_api, url_prefix='/Ofima')
 app.secret_key=os.urandom(24) 
-
+app.register_blueprint(base_banco_api, url_prefix='/Base')
+app.register_blueprint(ad_productos_api, url_prefix='/telefonia')
+app.register_blueprint(ad_consumo_api, url_prefix='/telefonia')
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

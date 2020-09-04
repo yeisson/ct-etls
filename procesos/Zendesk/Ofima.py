@@ -109,20 +109,22 @@ def Ejecutar():
         print ('Los datos son ' + str(datos.text))
         # print(url)
 
-        if len(datos.text) < 50:
+        if len(datos.content) < 50:
             continue
         else:
           ##  i = json.loads(datos)
             i = datos.json()
             for rown in i['comments']:
                 file.write(
-                    str(rown["id"]).encode('utf-8')+"|"+
+                    row.id.encode('utf-8')+"|"+
+                    str(rown["audit_id"]).encode('utf-8')+"|"+
                     str(rown["type"]).encode('utf-8')+"|"+
-                    str(rown["author_id"]).encode('utf-8')+"|"+                     
-                    str(rown["plain_body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+                     
+                    str(rown["author_id"]).encode('utf-8')+"|"+                   
                     str(rown["public"]).encode('utf-8')+"|"+  
-                    str(rown["created_at"]).encode('utf-8')+"|"+                  
-                    row.id + "\n")
+                    str(rown["created_at"]).encode('utf-8')+"|"+
+                    str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '').replace(' ', '') +"|"+ 
+                     str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+ 
+                     "\n")
                
     file.close()
     blob.upload_from_filename(ruta_completa)

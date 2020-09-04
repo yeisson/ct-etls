@@ -121,8 +121,8 @@ def seguimiento_aut():
     reload(sys)
     sys.setdefaultencoding('utf8')
     SERVER="192.168.20.63\DELTA"
-    USER="BI_Bogota"
-    PASSWORD="340$Uuxwp7Mcxo7Khy"
+    USER="BI_Refinancia"
+    PASSWORD="3$#0$Uuxwp7Mcxo7Khy.**"
     DATABASE="Refinancia"
     TABLE_DB = "dbo.Tb_Seguimiento"
     HOY = datetime.datetime.today().strftime('%Y-%m-%d')

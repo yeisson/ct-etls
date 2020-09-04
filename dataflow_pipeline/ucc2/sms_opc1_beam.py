@@ -23,6 +23,8 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 
 TABLE_SCHEMA = (
+        'IDKEY:STRING, '
+        'CAMPANA:STRING, '
         'NAME:STRING, '
         'EMAIL:STRING, '
         'MESSAGE:STRING, '
@@ -59,7 +61,7 @@ class formatearData(beam.DoFn):
                         'RESPONSESTATUS' : arrayCSV[7],
                         'CAMPAIGNCREATEDAT' : arrayCSV[8],
                         'CAMPAIGNSENTAT' : arrayCSV[9],
-                        'NUMPARTS' : arrayCSV[10],
+                        'NUMPARTS' : arrayCSV[10]
 
                 }
 		

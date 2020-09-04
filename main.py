@@ -113,6 +113,8 @@ from procesos.sensus import sensus_api
 from procesos.presupuesto import presupuesto_api
 from procesos.dispersion import dispersion_api
 from procesos.proteccion import proteccion_api
+from procesos.Jerarquias import Jerarquias_api
+from procesos.metlife_repositorio_wolkvox import Metlife_Rep_Wolkvox_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -171,11 +173,13 @@ app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 app.register_blueprint(proteccion_api, url_prefix='/proteccion')
 app.register_blueprint(ucc_api, url_prefix='/ucc')
+app.register_blueprint(Metlife_Rep_Wolkvox_api, url_prefix='/metlife_repositorio')
 app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
+app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')
 
 
 
-# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

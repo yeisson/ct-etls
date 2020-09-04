@@ -23,18 +23,23 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 
 TABLE_SCHEMA = (
-				'IDKEY:STRING, '
-        		'CAMPANA:STRING, '
-        		'BASE:STRING, '
-                'FECHA:STRING, '
-                'EMAIL:STRING, '
-                'ID_CONTACTO:STRING, '
-                'TIPO_DE_REBOTE:STRING, '
-                'SUBJECT_REBOTE:STRING, '
-                'ID_MENSAJE:STRING '
+                'ID_CLIENTE:STRING, '
+                'PRODUCTO:STRING, '
+                'SUB_PRODUCTO:STRING, '
+                'ID_COLABORADOR:STRING, '
+                'NOMBRE_COLABORADOR:STRING, '
+                'ID_GRABADOR:STRING, '
+                'ID_LIDER:STRING, '
+                'NOMBRE_LIDER:STRING, '
+                'ID_EJECUTIVO:STRING, '
+                'NOMBRE_EJECUTIVO:STRING, '
+                'ID_GERENTE:STRING, '
+                'NOMBRE_GERENTE:STRING, '
+                'META:STRING, '
+                'CIUDAD:STRING, '
+                'FECHA_ACTUALIZACION:DATE '
 
-	            )
-
+            	)
 
 class formatearData(beam.DoFn):
     
@@ -45,16 +50,22 @@ class formatearData(beam.DoFn):
 	def process(self, element):
 		arrayCSV = element.split(';')
 
-		tupla= {'idkey' : str(uuid.uuid4()),
-			    'campana' : self.mifecha,
-                'BASE' : str("Rebote"),
-                'FECHA' : arrayCSV[0],
-                'EMAIL' : arrayCSV[1],
-                'ID_CONTACTO' : arrayCSV[2],
-                'TIPO_DE_REBOTE' : arrayCSV[3],
-                'SUBJECT_REBOTE' : arrayCSV[4],
-                'ID_MENSAJE' : arrayCSV[5]
-                  
+		tupla= {'ID_CLIENTE' : arrayCSV[0],
+                'PRODUCTO' : arrayCSV[1],
+                'SUB_PRODUCTO' : arrayCSV[2],
+                'ID_COLABORADOR' : arrayCSV[3],
+                'NOMBRE_COLABORADOR' : arrayCSV[4],
+                'ID_GRABADOR' : arrayCSV[5],
+                'ID_LIDER' : arrayCSV[6],
+                'NOMBRE_LIDER' : arrayCSV[7],
+                'ID_EJECUTIVO' : arrayCSV[8],
+                'NOMBRE_EJECUTIVO' : arrayCSV[9],
+                'ID_GERENTE' : arrayCSV[10],
+                'NOMBRE_GERENTE' : arrayCSV[11],
+                'META' : arrayCSV[12],
+                'CIUDAD' : arrayCSV[13],
+                'FECHA_ACTUALIZACION' : arrayCSV[14]
+
 
                 }
 		
@@ -64,7 +75,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-ucc" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-prueba" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -80,8 +91,8 @@ def run(archivo, mifecha):
 	
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo,skip_header_lines=1)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-	transformed | 'Escritura a BigQuery ucc' >> beam.io.WriteToBigQuery(
-		gcs_project + ":ucc.Correo_Rebote", 
+	transformed | 'Escritura a BigQuery jerararquias y metas' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Contento.Jerarquias_Metas", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

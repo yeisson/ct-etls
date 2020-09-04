@@ -86,9 +86,3 @@ def upload_file():
             return redirect(url_for('metlife_base_marcada_api.upload_file',
                                     filename=filename))
     return "Fichero movido exitosamente"
-
-    
-
-
-
-

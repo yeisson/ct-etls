@@ -41,6 +41,7 @@ class formatearData(beam.DoFn):
 	def process(self, element):
 		arrayCSV = element.split('|')
 		tupla= {
+				
 				'id_call': arrayCSV[0],
 				'id_agent': arrayCSV[1],
 				'date': arrayCSV[2],

@@ -39,8 +39,7 @@ Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Agendamientos/"+ KEY_REPORT +"/" + fecha + ext
 
-user = 'helpdeskofima@contento.com.co/token'
-token = '0SspItOQAJXDnRlmKlg04aOuAqVKPGzzJHoC0jMc'
+
 
 ########################### CODIGO #####################################################################################
 
@@ -90,6 +89,16 @@ def Ejecutar():
     except: 
         print("Eliminado de storage")
 
+    try:
+        QUERY3 = ('Select user, token FROM `contento-bi.Ofima_sac.auth`')
+        query_job = client.query(QUERY3)
+        rows3 = query_job.result()
+    except: 
+        print("Se lanza el Query")    
+
+    for row in rows3:
+        user = row.user
+        token = row.token
      
    
     dato = 0

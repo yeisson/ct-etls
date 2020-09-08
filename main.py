@@ -206,6 +206,7 @@ from procesos.Zendesk.Tickets import Tickets_api
 from procesos.base_banco import base_banco_api
 from procesos.Telefonia.ad_consumo import ad_consumo_api
 from procesos.Telefonia.ad_productos import ad_productos_api
+from procesos.bdlal import bdlal_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -224,6 +225,7 @@ app.secret_key=os.urandom(24)
 app.register_blueprint(base_banco_api, url_prefix='/Base')
 app.register_blueprint(ad_productos_api, url_prefix='/telefonia')
 app.register_blueprint(ad_consumo_api, url_prefix='/telefonia')
+app.register_blueprint(bdlal_api, url_prefix='/lal')
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

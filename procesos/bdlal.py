@@ -67,7 +67,7 @@ def bd():
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-sensus")
 
     try:
-        deleteQuery = "DELETE FROM `contento-bi.sensus.bd_sensus` WHERE CAST(SUBSTR(Fecha_registro,0,10) AS DATE) = DATE_ADD(CURRENT_DATE(),INTERVAL -1 DAY)"
+        deleteQuery = "DELETE FROM `contento-bi.sensus.bd_lal` WHERE CAST(SUBSTR(Fecha_registro,0,10) AS DATE) = DATE_ADD(CURRENT_DATE(),INTERVAL -1 DAY)"
         client = bigquery.Client()
         query_job = client.query(deleteQuery)
         query_job.result()

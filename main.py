@@ -112,7 +112,7 @@ from procesos.dispersion import dispersion_api
 from procesos.proteccion import proteccion_api
 from procesos.Jerarquias import Jerarquias_api
 from procesos.metlife_repositorio_wolkvox import Metlife_Rep_Wolkvox_api
-
+from procesos.Workforce import workforce_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -174,6 +174,7 @@ app.register_blueprint(ucc_api, url_prefix='/ucc')
 app.register_blueprint(Metlife_Rep_Wolkvox_api, url_prefix='/metlife_repositorio')
 app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
 app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')
+app.register_blueprint(workforce_api, url_prefix='/workforce')
 
 
 

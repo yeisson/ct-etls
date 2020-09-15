@@ -32,7 +32,7 @@ hour2 = "235959"
 GetDate1 = time.strftime('%Y%m%d')+str(hour1)
 GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-KEY_REPORT = "ivr" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+KEY_REPORT = "ivr2" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 CODE_REPORT = "ivr_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -84,7 +84,7 @@ def Ejecutar():
 
     try:
         ##QUERY2 = ('delete FROM `contento-bi.telefonia.sms` where date = ' + '"' + dateini[0:8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.ivr` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.ivr2` where CAST(substr(date,0,10) AS DATE) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
@@ -110,7 +110,9 @@ def Ejecutar():
                     str(rown["dn_transfer"])+"|"+
                     str(rown["date"]).encode('utf-8')+"|"+
                     str(rown["ani"]).encode('utf-8')+"|"+                    
-                    str(rown["id_customer"]).encode('utf-8')+"|"+                    
+                    str(rown["id_customer"]).encode('utf-8')+"|"+    
+                    str(rown["hung_up"]).encode('utf-8')+"|"+     
+                    str(rown["id_call"]).encode('utf-8')+"|"+                                   
                     str(row.id_cliente)+"|"+
                     str(row.cartera).encode('utf-8') + "\n")
 

@@ -30,17 +30,17 @@ TABLE_SCHEMA = (
 	'id_call:STRING,'
 	'ANI:STRING,'
 	'id_customer:STRING,'
-	'q01:INTEGER,'
-	'q02:INTEGER,'
-	'q03:INTEGER,'
-	'q04:INTEGER,'
-	'q05:INTEGER,'
-	'q06:INTEGER,'
-	'q07:INTEGER,'
-	'q08:INTEGER,'
-	'q09:INTEGER,'
-	'q10:INTEGER,'
-	'duration:INTEGER,'
+	'q01:STRING,'
+	'q02:STRING,'
+	'q03:STRING,'
+	'q04:STRING,'
+	'q05:STRING,'
+	'q06:STRING,'
+	'q07:STRING,'
+	'q08:STRING,'
+	'q09:STRING,'
+	'q10:STRING,'
+	'duration:STRING,'
 	'type_call:STRING,'
 	'result:STRING,'
 	'id_cliente:STRING,'
@@ -52,7 +52,7 @@ TABLE_SCHEMA = (
 class formatearData(beam.DoFn):
 	
 	def process(self, element):
-		arrayCSV = element.split(',')
+		arrayCSV = element.split('|')
 		tupla= {
 				'operation': arrayCSV[0],
 				'id_agent_ipdial': arrayCSV[1],

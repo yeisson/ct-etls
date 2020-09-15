@@ -99,27 +99,27 @@ def Ejecutar():
             i = json.loads(datos)
             for rown in i:
                 file.write(
-                    str(rown["operation"].encode('utf-8'))+","+
-                    str(rown["id_agent"])+","+
-                    str(rown["skill"])+","+
-                    str(rown["date"])+","+
-                    str(rown["id_call"])+","+
-                    str(rown["ANI"])+","+
-                    str(rown["id_customer"])+","+
-                    str(rown["q01"])+","+
-                    str(rown["q02"])+","+
-                    str(rown["q03"])+","+
-                    str(rown["q04"])+","+
-                    str(rown["q05"])+","+
-                    str(rown["q06"])+","+
-                    str(rown["q07"])+","+
-                    str(rown["q08"])+","+
-                    str(rown["q09"])+","+
-                    str(rown["q10"])+","+
-                    str(rown["duration"])+","+
-                    str(rown["type_call"].encode('utf-8'))+","+
-                    str(rown["result"].encode('utf-8'))+","+
-                    str(row.id_cliente).encode('utf-8')+","+
+                    str(rown["operation"].encode('utf-8'))+"|"+
+                    str(rown["id_agent"])+"|"+
+                    str(rown["skill"])+"|"+
+                    str(rown["date"])+"|"+
+                    str(rown["id_call"])+"|"+
+                    str(rown["ANI"])+"|"+
+                    str(rown["id_customer"])+"|"+
+                    str(rown["q01"])+"|"+
+                    str(rown["q02"])+"|"+
+                    str(rown["q03"])+"|"+
+                    str(rown["q04"])+"|"+
+                    str(rown["q05"])+"|"+
+                    str(rown["q06"])+"|"+
+                    str(rown["q07"])+"|"+
+                    str(rown["q08"])+"|"+
+                    str(rown["q09"])+"|"+
+                    str(rown["q10"])+"|"+
+                    str(rown["duration"])+"|"+
+                    str(rown["type_call"].encode('utf-8'))+"|"+
+                    str(rown["result"].encode('utf-8'))+"|"+
+                    str(row.id_cliente).encode('utf-8')+"|"+
                     str(row.cartera).encode('utf-8') + "\n")
     
 
@@ -133,14 +133,4 @@ def Ejecutar():
 
 ########################################################################################################################
 
-@csat_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-def Ejecutar2():
 
-    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-    ayer = yesterday.strftime("%Y%m%d")
-
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-    urllib.urlopen('http://35.239.77.81:5000/telefonia/'+ KEY_REPORT + '?dateini=' + str(ayer) + '&dateend=' + str(ayer))
-
-    return ('Datos recuperados por el desperdicio hora a hora')

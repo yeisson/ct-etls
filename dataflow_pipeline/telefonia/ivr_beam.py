@@ -31,6 +31,8 @@ TABLE_SCHEMA = (
 	'DATE:STRING, '
 	'ANI:STRING, '
 	'ID_CUSTOMER:STRING, '
+	'HUNG_UP:STRING, '
+	'ID_CALL:STRING, '
 	'ID_CLIENTE:STRING, '
 	'CARTERA:STRING '
 
@@ -52,8 +54,10 @@ class formatearData(beam.DoFn):
 				'DATE' : arrayCSV[5],
 				'ANI' : arrayCSV[6],
 				'ID_CUSTOMER' : arrayCSV[7],
-				'ID_CLIENTE' : arrayCSV[8],
-				'CARTERA' : arrayCSV[9]
+				'HUNG_UP' : arrayCSV[8],
+				'ID_CALL' : arrayCSV[9],
+				'ID_CLIENTE' : arrayCSV[10],
+				'CARTERA' : arrayCSV[11]
 
 
 				}

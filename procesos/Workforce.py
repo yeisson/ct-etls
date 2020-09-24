@@ -24,7 +24,7 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 def workforce():
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER="BDA01\DOKIMI"
+    SERVER="192.168.20.63\DOKIMI" # "BDA01\DOKIMI"
     USER="BI_Workforce"
     PASSWORD="340$Uuxwp7Mcxo7Khy.*"
     DATABASE="Workforce"
@@ -114,7 +114,7 @@ def workforce():
 def Iti():
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER="BDA01\DOKIMI"
+    SERVER= "192.168.20.63\DOKIMI" #"BDA01\DOKIMI"
     USER="BI_Workforce"
     PASSWORD="340$Uuxwp7Mcxo7Khy.*"
     DATABASE="Workforce"

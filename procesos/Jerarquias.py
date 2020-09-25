@@ -20,9 +20,9 @@ def Jerarquias():
     response["description"] = "No se encontraron ficheros"
     response["status"] = False
 
-    homepath = os.environ["HOMEPATH"]
-    dir_ = "/Documents/gmv/"   
-    local_route = homepath + dir_
+    #homepath = os.environ["HOMEPATH"]
+    #dir_ = "/Documents/GMV/"   
+    local_route = "C:/Users/jeisson.vargas/Documents/GMV/"
 
     archivos = os.listdir(local_route)
     for archivo in archivos:

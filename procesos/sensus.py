@@ -6,6 +6,10 @@ from google.cloud import bigquery
 import dataflow_pipeline.sensus.sensus_seguimiento_beam as sensus_seguimiento_beam
 import dataflow_pipeline.sensus.sensus_metas_beam as sensus_metas_beam
 import dataflow_pipeline.sensus.sensus_adh_beam as sensus_adh_beam
+import dataflow_pipeline.sensus.sensus_dmobility_beam as sensus_dmobility_beam
+import dataflow_pipeline.sensus.sensus_dchat_beam as sensus_dchat_beam
+import dataflow_pipeline.sensus.sensus_dcorreo_beam as sensus_dcorreo_beam
+import dataflow_pipeline.sensus.sensus_banco_beam as sensus_banco_beam
 import os
 import socket
 
@@ -150,3 +154,176 @@ def adh():
   
 
 #####################################################################################################
+
+@sensus_api.route("/dmobility")
+def dmobility():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Detallado/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('adh/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.dmobility` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_dmobility_beam.run('gs://ct-sensus/adh/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Detallado/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+  #####################################################################################################
+ 
+
+@sensus_api.route("/dchat")
+def dchat():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Chat/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('adh/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.dchat` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_dchat_beam.run('gs://ct-sensus/adh/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Chat/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+
+    #####################################################################################################
+
+@sensus_api.route("/dcorreo")
+def dcorreo():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Correo/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('adh/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.dcorreo` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_dcorreo_beam.run('gs://ct-sensus/adh/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Correo/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+
+
+
+
+     #####################################################################################################
+
+@sensus_api.route("/banco")
+def banco():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Banco/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('adh/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.banco` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_banco_beam.run('gs://ct-sensus/adh/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Banco/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo la peticion Full HD"
+                response["status"] = True
+
+    return jsonify(response), response["code"]

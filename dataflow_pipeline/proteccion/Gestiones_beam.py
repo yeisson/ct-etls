@@ -70,11 +70,11 @@ class formatearData(beam.DoFn):
                 'FECHA_VENCIMIENTO' : arrayCSV[8],
                 'FECHA_GESTION' : arrayCSV[9],
                 'DURACION' : arrayCSV[10],
-                'HORA_INICIO_DE_GRABACION' : arrayCSV[11],
-                'HORA_FIN_DE_GRABACION' : arrayCSV[12],
-                'NOTA' : arrayCSV[13],
-                'CUOTAS_VENCIDAS' : arrayCSV[14],
-                'CODIGO_GESTION' : arrayCSV[15]
+                'HORA_INICIO_DE_GRABACION' : arrayCSV[13],
+                'HORA_FIN_DE_GRABACION' : arrayCSV[14],
+                'NOTA' : arrayCSV[15],
+                'CUOTAS_VENCIDAS' : arrayCSV[12],
+                'CODIGO_GESTION' : arrayCSV[11]
 
                 }
 		

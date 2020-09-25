@@ -40,6 +40,7 @@ ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
 
 
+
 ########################### CODIGO #####################################################################################
 
 @sms_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
@@ -68,7 +69,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta"
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta"
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -76,7 +77,7 @@ def Ejecutar():
     try:
         os.remove(ruta_completa) #Eliminar de aries
     except: 
-        print("Eliminado de aries")
+        print(ruta_completa)
     
     try:
         blob.delete() #Eliminar del storage-----
@@ -114,7 +115,7 @@ def Ejecutar():
                     str(item["id_agent"]).encode('utf-8')+"|"+
                     str(item["date"]).encode('utf-8')+"|"+                   
                     str(item["tel_number"]).encode('utf-8')+"|"+  
-                    str(item["msn"]).encode('utf-8')+"|"+
+                    str(item["msn"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+
                     str(item["id_customer"]).encode('utf-8') +"|"+ 
                     str(item["channel"]).encode('utf-8') +"|"+ 
                     str(row.id_cliente).encode('utf-8') + "|" +

@@ -37,6 +37,7 @@ from procesos.Telefonia.sms import sms_api
 
 from procesos.Telefonia.agent_detail import agent_detail_api
 from procesos.Telefonia.llamadas_report import llamadas_report_api
+from procesos.Telefonia.Agent_scripting import agent_api
 
 
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
@@ -51,6 +52,7 @@ app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
+app.register_blueprint(agent_api, url_prefix='/telefonia')
 
 
 # Telefonía <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -113,6 +115,7 @@ from procesos.proteccion import proteccion_api
 from procesos.Jerarquias import Jerarquias_api
 from procesos.metlife_repositorio_wolkvox import Metlife_Rep_Wolkvox_api
 from procesos.Workforce import workforce_api
+from procesos.MobilityAgentScript import Mobility_Agent_Script
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -175,6 +178,7 @@ app.register_blueprint(Metlife_Rep_Wolkvox_api, url_prefix='/metlife_repositorio
 app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
 app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')
 app.register_blueprint(workforce_api, url_prefix='/workforce')
+app.register_blueprint(Mobility_Agent_Script, url_prefix='/perfil_cliente')
 
 
 

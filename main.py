@@ -30,6 +30,7 @@ from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.cdr_unconnected import cdr_unconnected_api
+from procesos.Telefonia.detalle_predictivo import detalle_predictivo_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 from procesos.Telefonia.chats import chats_api
@@ -48,6 +49,7 @@ app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
+app.register_blueprint(detalle_predictivo_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
@@ -130,6 +132,7 @@ app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
+app.register_blueprint(detalle_predictivo_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
 app.register_blueprint(sms_api, url_prefix='/telefonia')

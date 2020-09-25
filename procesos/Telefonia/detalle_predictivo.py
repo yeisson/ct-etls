@@ -19,9 +19,10 @@ import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import datetime
 import time
 import sys
-import dataflow_pipeline.telefonia.cdr_unconnected_beam as cdr_unconnected_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+import dataflow_pipeline.telefonia.detalle_predictivo_beam as detalle_predictivo_beam #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
-cdr_unconnected_api = Blueprint('cdr_unconnected_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+
+detalle_predictivo_api = Blueprint('detalle_predictivo_api', __name__) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 
 
 ########################### DEFINICION DE VARIABLES ###########################
@@ -32,16 +33,16 @@ hour2 = "235959"
 GetDate1 = time.strftime('%Y%m%d')+str(hour1)
 GetDate2 = time.strftime('%Y%m%d')+str(hour2)
 
-KEY_REPORT = "cdr_unconnected" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
-CODE_REPORT = "cdr_unconnected_calls" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+KEY_REPORT = "detalle_predictivo" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+CODE_REPORT = "full_detail" #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 Ruta = ("/192.168.20.87", "media")[socket.gethostname()=="contentobi"]
 ext = ".csv"
 ruta_completa = "/"+ Ruta +"/BI_Archivos/GOOGLE/Telefonia/"+ KEY_REPORT +"/" + fecha + ext
-
+# https://34.74.133.63/ipdialbox/api_campaing.php?token=7b69645f6469737472697d2d3230323030363136313432323532&action=full_detail&date_ini=20200910000000&date_end=20200914235959
 
 ########################### CODIGO #####################################################################################
 
-@cdr_unconnected_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@detalle_predictivo_api.route("/" + KEY_REPORT, methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar():
     
     reload(sys)
@@ -67,12 +68,13 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-claro-fija" ') #WHERE ipdial_code = "intcob-unisabaneta" 
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where estado = "Activado" and token = "7b69645f6469737472697d2d3230323030393134313235373536" ') #WHERE ipdial_code = "intcob-unisabaneta" 
         #  'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-banco-sufi-cast"') 
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
     
+
     try:
         os.remove(ruta_completa) #Eliminar de aries
     except: 
@@ -84,47 +86,41 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.cdr_unconnected` where cast(substr(date,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-8] + '-' + dateini[6:-6] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where cast(substr(fecha,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-6] + '-' + dateini[6:-8] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
         print("Eliminado de bigquery")
 
     file = open(ruta_completa,"a")
+    data = ''
     for row in rows:
-        url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
-        datos = requests.get(url).content
+        url = 'https://' + str(row.servidor) + '/ipdialbox/api_campaing.php?token=' + row.token + '&action=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
+        datos = requests.get(url,verify=False).content
+        print url
 
-        
-        if len(requests.get(url).content) < 50:
-            continue
-        else:
-            i = json.loads(datos)
-            for rown in i:
-                file.write(
-                   str(rown["name_agent"]).encode('utf-8')+"|"+
-                    str(rown["date"]).encode('utf-8')+"|"+
-                    str(rown["destination"]).encode('utf-8')+"|"+
-                    str(rown["tel"]).encode('utf-8')+"|"+
-                    str(rown["time"]).encode('utf-8')+"|"+
-                    str(rown["dialstatus"]).encode('utf-8')+"|"+
-                    str(rown["type_call"]).encode('utf-8')+"|"+
-                    str(rown["id_customer"]).encode('utf-8')+"|"+
-                    str(rown["id_campaing"]).encode('utf-8')+"|"+              
-                    str(row.id_cliente)+"|"+
-                    str(row.ipdial_code)+"|"+
-                    str(row.cartera).encode('utf-8') + "\n")
     
+        for rown in datos.split('\r\n'):
+            if (len(rown) > 10):
+                file.write(
+                    str(rown.split('|')).replace('\n','').replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +
+                    str(row.id_cliente) + ',' + 
+                    str(row.ipdial_code) + ',' +
+                    str(row.cartera) +'\n'  
+                )
+            else:
+                continue
+
+                
     file.close()
     blob.upload_from_filename(ruta_completa)
-    time.sleep(10)
-    ejecutar = cdr_unconnected_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
-    time.sleep(60)
+
+    ejecutar = detalle_predictivo_beam.run(output, KEY_REPORT) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]    
 
     return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
 ########################################################################################################################
 
-@cdr_unconnected_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
+@detalle_predictivo_api.route("/" + KEY_REPORT + "_recov", methods=['GET']) #[[[[[[[[[[[[[[[[[[***********************************]]]]]]]]]]]]]]]]]]
 def Ejecutar2():
 
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -135,3 +131,6 @@ def Ejecutar2():
     urllib.urlopen('http://35.239.77.81:5000/telefonia/'+ KEY_REPORT + '?dateini=' + str(ayer) + '&dateend=' + str(ayer))
 
     return ('Datos recuperados por el desperdicio hora a hora')
+
+
+##para el api de este detalle de llamadas, asegurarme de hacer un ultimo barrido antes de las 12 am 

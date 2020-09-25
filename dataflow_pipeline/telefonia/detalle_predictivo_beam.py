@@ -23,20 +23,16 @@ from apache_beam.options.pipeline_options import SetupOptions
 ####################### PARAMETROS DE LA TABLA EN BQ ##########################
 
 TABLE_SCHEMA = (
-	'date:STRING,'
-	'id_agent:STRING,'
-	'name:STRING,'
-	'id_queue:STRING,'
-	'type_call:STRING,'
-	'tel_number:STRING,'
-	'cod_act:STRING,'
-	'id_customer:STRING,'
-	'comment:STRING,'
-	'duration:STRING,'
-	'hung_up:STRING,'
-	'cost:STRING,'
+	'tipo:STRING,'
 	'id_campaing:STRING,'
-	'id_call:STRING,'
+	'nombre_cliente:STRING,'
+	'apellido_cliente:STRING,'
+	'tipo_doc:STRING,'
+	'id_cliente_cc:STRING,'
+	'resultado_maquina:STRING,'
+	'telefono:STRING,'
+	'fecha:STRING,'
+	'x:STRING,'
 	'id_cliente:STRING,'
 	'ipdial_code:STRING,'
 	'cartera:STRING'
@@ -47,25 +43,21 @@ TABLE_SCHEMA = (
 class formatearData(beam.DoFn):
 	
 	def process(self, element):
-		arrayCSV = element.split('|')
+		arrayCSV = element.split(',')
 		tupla= {
-				'date': arrayCSV[0],
-				'id_agent': arrayCSV[1],
-				'name': arrayCSV[2],
-				'id_queue': arrayCSV[3],
-				'type_call': arrayCSV[4],
-				'tel_number': arrayCSV[5],
-				'cod_act': arrayCSV[6],
-				'id_customer': arrayCSV[7],
-				'comment': arrayCSV[8],
-				'duration': arrayCSV[9],
-				'hung_up': arrayCSV[10],
-				'cost': arrayCSV[11],
-				'id_campaing': arrayCSV[12],
-				'id_call': arrayCSV[13],
-				'id_cliente': arrayCSV[14],
-				'ipdial_code': arrayCSV[15],
-				'cartera': arrayCSV[16]
+				'tipo': arrayCSV[0],
+				'id_campaing': arrayCSV[1],
+				'nombre_cliente': arrayCSV[2],
+				'apellido_cliente': arrayCSV[3],
+				'tipo_doc': arrayCSV[4],
+				'id_cliente_cc': arrayCSV[5],
+				'resultado_maquina': arrayCSV[6],
+				'telefono': arrayCSV[7],
+				'fecha': arrayCSV[8],
+				'x': arrayCSV[9],
+				'id_cliente': arrayCSV[10],
+				'ipdial_code': arrayCSV[11],
+				'cartera': arrayCSV[12]
 				}
 		return [tupla]
 

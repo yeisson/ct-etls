@@ -188,10 +188,10 @@ def Iti():
     bucket = storage_client.get_bucket('ct-workforce')
     blob = bucket.blob("workforce/iti" + ".csv")
     # Eliminar el archivo en la variable
-    blob.delete()
+    #blob.delete()
     
     # return jsonify(flowAnswer), 200
-    return "data cargada" + "flowAnswer" 
+    return "data cargada" + flowAnswer 
 
 
 

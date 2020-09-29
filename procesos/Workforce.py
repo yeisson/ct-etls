@@ -117,7 +117,7 @@ def workforce():
     bucket = storage_client.get_bucket('ct-workforce')
     blob = bucket.blob("adherencia/workforce" + ".csv")
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     
     # return jsonify(flowAnswer), 200
     return "data cargada" + "flowAnswer" 

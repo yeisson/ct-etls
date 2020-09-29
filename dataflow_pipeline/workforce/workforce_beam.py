@@ -47,7 +47,6 @@ TABLE_SCHEMA = ('DOCUMENTO_NEG:STRING, '
                 'CENTRO_COSTO:STRING, '
                 'REL_UNICO:STRING, '
                 'REL_ORDEN:STRING '
-
                 )
 
 class formatearData(beam.DoFn):
@@ -56,7 +55,8 @@ class formatearData(beam.DoFn):
 		# print(element)
 		arrayCSV = element.split('|')
 
-		tupla= {'DOCUMENTO_NEG' : arrayCSV[0],
+		tupla= {
+                'DOCUMENTO_NEG' : arrayCSV[0],
                 'SEGMENTO' : arrayCSV[1],
                 'ITER' : arrayCSV[2],
                 'FECHA_MALLA' : arrayCSV[3],

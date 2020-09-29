@@ -3,9 +3,14 @@ from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
+from google.oauth2 import service_account
+from google.auth.transport.requests import AuthorizedSession
+from flask import request
 import dataflow_pipeline.workforce.workforce_beam as workforce_beam
 import dataflow_pipeline.workforce.Iti_beam as Iti_beam
 import dataflow_pipeline.workforce.Iti_detalle_beam as Iti_detalle_beam
+import cloud_storage_controller.cloud_storage_controller as gcscontroller
+import dataflow_pipeline.massive as pipeline
 import cloud_storage_controller.cloud_storage_controller as gcscontroller
 import os
 import time
@@ -22,20 +27,32 @@ fileserver_baseroute = ("//192.168.20.87", "/media")[socket.gethostname()=="cont
 
 @workforce_api.route("/workforce")
 def workforce():
+
+
+    client = bigquery.Client()
+    QUERY = ('select Tabla,servidor,usuario,contrasena,data_base,tabla_bd from `contento-bi.Contento.Usuario_conexion_bases` where Tabla = "workforce"')
+    query_job = client.query(QUERY)
+    rows = query_job.result()
+    data = ""
+
+    for row in rows:
+        servidor = row.servidor
+        usuario = row.usuario
+        contrasena = row.contrasena
+        data_base = row.data_base 
+        tabla_bd = row.tabla_bd
+    
+
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER="192.168.20.63\DOKIMI" # "BDA01\DOKIMI"
-    USER="BI_Workforce"
-    PASSWORD="340$Uuxwp7Mcxo7Khy.*"
-    DATABASE="Workforce"
-    TABLE_DB = "informe_Adherencia"
     HOY = datetime.datetime.today().strftime('%Y-%m-%d')
 
     # Nos conectamos a la BD y obtenemos los registros
     
-    conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query('SELECT documento_neg, segmento,Iter,Fecha_Malla,Hora_Inicio,Fecha_Final,Hora_Final,logueo,Deslogueo,Dif_Inicio,Dif_Final,Ausentismo,tiempo_malla,tiempo_conexion,tiempo_conexion_tiempo,Tiempo_EstAux,Tiempo_EstAux_tiempo,tiempo_estaux_out,tiempo_estaux_out_tiempo,adherencia_malla,adherencia_tiempo,Centro_Costo,rel_unico,rel_orden FROM ' + TABLE_DB + " WHERE CONVERT(DATE, FECHA_MALLA) = CONVERT(DATE,GETDATE())")
+    conn = _mssql.connect(server=servidor, user=usuario, password=contrasena, database=data_base)
+    conn.execute_query('SELECT documento_neg, segmento,Iter,Fecha_Malla,Hora_Inicio,Fecha_Final,Hora_Final,logueo,Deslogueo,Dif_Inicio,Dif_Final,Ausentismo,tiempo_malla,tiempo_conexion,tiempo_conexion_tiempo,Tiempo_EstAux,Tiempo_EstAux_tiempo,tiempo_estaux_out,tiempo_estaux_out_tiempo,adherencia_malla,adherencia_tiempo,Centro_Costo,rel_unico,rel_orden FROM ' + tabla_bd + " WHERE CONVERT(DATE, FECHA_MALLA) = CONVERT(DATE,GETDATE())")
     
+
     # conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
     # conn.execute_query('SELECT documento_neg, segmento,Iter,Fecha_Malla,Hora_Inicio,Fecha_Final,Hora_Final,logueo,Deslogueo,Dif_Inicio,Dif_Final,Ausentismo,tiempo_malla,tiempo_conexion,tiempo_conexion_tiempo,Tiempo_EstAux,Tiempo_EstAux_tiempo,tiempo_estaux_out,tiempo_estaux_out_tiempo,adherencia_malla,adherencia_tiempo,Centro_Costo,rel_unico,rel_orden FROM ' + TABLE_DB)
 
@@ -73,7 +90,7 @@ def workforce():
     conn.close()
 
     filename = "adherencia/workforce" + ".csv"
-    #Finalizada la carga en local creamos un Bucket con los datos
+     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-workforce")
 
     # try:
@@ -114,7 +131,7 @@ def workforce():
 def Iti():
     reload(sys)
     sys.setdefaultencoding('utf8')
-    SERVER= "192.168.20.63\DOKIMI" #"BDA01\DOKIMI"
+    SERVER="192.168.20.63\DOKIMI"
     USER="BI_Workforce"
     PASSWORD="340$Uuxwp7Mcxo7Khy.*"
     DATABASE="Workforce"
@@ -124,10 +141,10 @@ def Iti():
     # Nos conectamos a la BD y obtenemos los registros
     
     conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
-    conn.execute_query('SELECT Id_Iti,Fecha,Hora,Centro_Costo,Peso,fecha_ejecucion,Estado FROM ' + TABLE_DB)
-    #  + " WHERE CONVERT(DATE, Fecha) = CONVERT(DATE,GETDATE())")
+    conn.execute_query('SELECT Id_Iti,Fecha,Hora,Centro_Costo,Peso,fecha_ejecucion,Estado FROM ' + TABLE_DB  + " WHERE CONVERT(DATE, Fecha) = CONVERT(DATE,GETDATE())")
     
-
+    # conn = _mssql.connect(server=SERVER, user=USER, password=PASSWORD, database=DATABASE)
+    # conn.execute_query('SELECT Id_Iti,Fecha,Hora,Centro_Costo,Peso,fecha_ejecucion,Estado FROM ' + TABLE_DB  )
     
     cloud_storage_rows = ""
 
@@ -140,7 +157,7 @@ def Iti():
         text_row += str(row['Centro_Costo']).encode('utf-8') + "|"
         text_row += str(row['Peso']).encode('utf-8') + "|"
         text_row += str(row['fecha_ejecucion']).encode('utf-8') + "|"
-        text_row += str(row['Estado']).encode('utf-8') + "|"
+        text_row += str(row['Estado']).encode('utf-8') 
         text_row += "\n"
         cloud_storage_rows += text_row
     conn.close()
@@ -148,12 +165,13 @@ def Iti():
     filename = "workforce/iti" + ".csv"
     #Finalizada la carga en local creamos un Bucket con los datos
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-workforce")
+   
 
 
     try:
-        # deleteQuery = 'DELETE FROM `contento-bi.Workforce.Iti` WHERE CAST(Fecha AS DATE) = CURRENT_DATE()'
+        deleteQuery = 'DELETE FROM `contento-bi.Workforce.Iti` WHERE CAST(Fecha AS DATE) = CURRENT_DATE()'
 
-        deleteQuery = "DELETE FROM `contento-bi.Workforce.Iti` WHERE id_iti is not null"
+        # deleteQuery = "DELETE FROM `contento-bi.Workforce.Iti` WHERE id_iti is not null"
         client = bigquery.Client()
         query_job = client.query(deleteQuery)
         query_job.result()

@@ -84,7 +84,7 @@ def workforce():
         text_row += str(row['adherencia_tiempo']).encode('utf-8') + "|"
         text_row += str(row['Centro_Costo']).encode('utf-8') + "|"
         text_row += str(row['rel_unico']).encode('utf-8') + "|"
-        text_row += str(row['rel_orden']).encode('utf-8') + "|"
+        text_row += str(row['rel_orden']).encode('utf-8')
         text_row += "\n"
         cloud_storage_rows += text_row
     conn.close()

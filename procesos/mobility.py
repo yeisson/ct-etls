@@ -16,6 +16,7 @@ import dataflow_pipeline.mobility.mobility_autotec_beam as mobility_autotec_beam
 import dataflow_pipeline.mobility.mobility_chat_beam as mobility_chat_beam
 import dataflow_pipeline.mobility.mobility_AHT_beam as mobility_AHT_beam
 import dataflow_pipeline.mobility.mobility_messenger_beam as mobility_messenger_beam
+import dataflow_pipeline.mobility.perfil_demografico_beam as perfil_demografico_beam
 
 
 
@@ -611,4 +612,46 @@ def messenger():
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
 
+########################## PERFIL DEMOGRAFICO ############################
 
+@mobility_api.route("/perfil")
+def perfil():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Mobility/Perfil_demografico/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-auteco')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('perfil_demografico/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.Auteco_Mobility.Base_perfil_cliente` WHERE BASE = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = perfil_demografico_beam.run('gs://ct-auteco/perfil_demografico/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Mobility/Perfil_demografico/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo el cargue exitosamente"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje

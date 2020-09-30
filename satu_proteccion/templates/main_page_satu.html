@@ -13,35 +13,35 @@
 </head>
 
 <body>
-        
+
     <div class="burbuja">
         <div class="burbuja2"></div>
     </div>
 
-    
+
     <div class="container">
         <div class="container-center">
 
-            
+
             <div class="container-flex">
                 <div class="form">
 
-                    
-                    <div class="form-title">                       
-                       
-                        <img src="{{ url_for('satu_proteccion_api.static',filename='Logo_Contento.png') }}" alt="infy" width="30%">                                                      
+
+                    <div class="form-title">
+
+                        <img src="{{ url_for('satu_proteccion_api.static',filename='Logo_Contento.png') }}" alt="infy" width="30%">
                         <div class="title-infy">
                             <h1 class="infy">Informe Satu | </h1>
                             <img src="{{ url_for('satu_proteccion_api.static',filename='pplogo.jpg') }}" alt="infy" width="20%">
-                            
+
                         </div>
-                        
+
                         <p>Bienvenidos Iniciar Sesion para acceder al módulo</p>
-                        
+
                     </div>
 
-                    
-                    <form method="post" action="/satu_proteccion/login" id="form" >
+
+                    <form method="post" action="/satu_proteccion/login" id="form">
                         <div class="inputs">
                             <i class="fas fa-user-friends"></i>
                             <input type="text" name="username" id="box_usuario" placeholder="Usuario..." required />
@@ -49,42 +49,39 @@
                         &nbsp;
                         <div class="inputs">
                             <i class="fas fa-box-open"></i>
-                            <input type="password" name="password" id="box_password" placeholder="Contraseña..." required /> 
+                            <input type="password" name="password" id="box_password" placeholder="Contraseña..." required />
                         </div>
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <input type="submit" value="Iniciar Sesion" class="boton">
-                    </form>  
-                    &nbsp;
-                    &nbsp;
-                    &nbsp;                
+                    </form>
+                    &nbsp; &nbsp; &nbsp;
 
-                   
+
 
                 </div>
-                
+
                 <div class="container-formText">
                     <div class="formText">
-                        <img src="{{ url_for('cargue_tempus_api.static',filename='Logo-Contento-BPS-Blanco.png') }}" alt="Infy" width="40%">
+                        <img src="{{ url_for('satu_proteccion_api.static',filename='Logo-Contento-BPS-Blanco.png') }}" alt="Infy" width="40%">
                         <h2>Bienvenidos</h2>
-                        
+
                     </div>
                 </div>
-                
+
                 <footer>
                     <small> . . Creado por: Dirección de Operaciones  ® © V1.0</small>
-                      
-                   
-                   </footer>
-           
+
+
+                </footer>
+
 
 
             </div>
-            
+
         </div>
     </div>
 
-       
+
 </body>
 
 </html>

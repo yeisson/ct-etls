@@ -29,7 +29,7 @@ def wufoo():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[0:7]
+            mifecha = archivo[0:8]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-dispersion')
@@ -73,7 +73,7 @@ def sales():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[0:7]
+            mifecha = archivo[0:8]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-dispersion')
@@ -116,7 +116,7 @@ def asesores():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[0:7]
+            mifecha = archivo[0:8]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-dispersion')
@@ -159,7 +159,7 @@ def gestion():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[0:7]
+            mifecha = archivo[0:8]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-dispersion')

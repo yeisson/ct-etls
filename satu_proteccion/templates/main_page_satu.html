@@ -3,12 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('satu_proteccion_api.static',filename='all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('satu_proteccion_api.static',filename='normalize.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ url_for('satu_proteccion_api.static',filename='Logo_Contento.png') }}">
     <link rel="stylesheet" href="{{ url_for('satu_proteccion_api.static',filename='main.css') }}">
+
     <title>Gestion Satu Protección</title>
 </head>
 
@@ -43,12 +46,12 @@
 
                     <form method="post" action="/satu_proteccion/login" id="form">
                         <div class="inputs">
-                            <i class="fas fa-user-friends"></i>
+                            <span class="material-icons"> &nbsp;account_circle</span>
                             <input type="text" name="username" id="box_usuario" placeholder="Usuario..." required />
                         </div>
                         &nbsp;
                         <div class="inputs">
-                            <i class="fas fa-box-open"></i>
+                            <span class="material-icons"> &nbsp;security</span>
                             <input type="password" name="password" id="box_password" placeholder="Contraseña..." required />
                         </div>
                         &nbsp; &nbsp;
@@ -69,7 +72,7 @@
                 </div>
 
                 <footer>
-                    <small> . . Creado por: Dirección de Operaciones  ® © V1.0</small>
+                    <center><small> Creado por: Dirección de Operaciones  ® © V1.0</small></center>
 
 
                 </footer>

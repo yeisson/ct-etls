@@ -86,7 +86,8 @@ def Ejecutar():
         print("Eliminado de storage")
 
     try:
-        QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where cast(substr(fecha,0,10)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-6] + '-' + dateini[6:-8] + '"')
+        # QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where cast(substr(fecha,0,8)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-6] + '-' + dateini[6:-8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where substr(fecha,0,9) = ' + '"' + dateini[0:4] +  dateini[4:-6] +  dateini[6:-8] + '"')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 
@@ -103,7 +104,7 @@ def Ejecutar():
         for rown in datos.split('\r\n'):
             if (len(rown) > 10):
                 file.write(
-                    str(rown.split('|')).replace('\n','').replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +
+                    str(rown.split('|')).replace('\n','').replace(" ","").replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +
                     str(row.id_cliente) + ',' + 
                     str(row.ipdial_code) + ',' +
                     str(row.cartera) +'\n'  

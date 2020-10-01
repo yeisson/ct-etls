@@ -32,6 +32,7 @@ TABLE_SCHEMA = (
 	'resultado_maquina:STRING,'
 	'telefono:STRING,'
 	'fecha:STRING,'
+	'id_call:STRING,'
 	'x:STRING,'
 	'id_cliente:STRING,'
 	'ipdial_code:STRING,'
@@ -54,10 +55,11 @@ class formatearData(beam.DoFn):
 				'resultado_maquina': arrayCSV[6],
 				'telefono': arrayCSV[7],
 				'fecha': arrayCSV[8],
-				'x': arrayCSV[9],
-				'id_cliente': arrayCSV[10],
-				'ipdial_code': arrayCSV[11],
-				'cartera': arrayCSV[12]
+				'id_call': arrayCSV[9],
+				'x': arrayCSV[10],
+				'id_cliente': arrayCSV[11],
+				'ipdial_code': arrayCSV[12],
+				'cartera': arrayCSV[13]
 				}
 		return [tupla]
 

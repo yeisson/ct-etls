@@ -120,6 +120,7 @@ from procesos.Workforce import workforce_api
 from procesos.MobilityAgentScript import Mobility_Agent_Script
 from procesos.claro_result import claro_result
 from procesos.Telefonia.Agent_scripting import agent_api
+from procesos.felicidad_y_cultura import clima_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -186,6 +187,7 @@ app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')
 app.register_blueprint(workforce_api, url_prefix='/workforce')
 app.register_blueprint(Mobility_Agent_Script, url_prefix='/perfil_cliente')
 app.register_blueprint(claro_result, url_prefix='/claro_result')
+app.register_blueprint(clima_api, url_prefix='/clima_encuesta')
 
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

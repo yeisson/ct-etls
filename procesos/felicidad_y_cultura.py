@@ -112,7 +112,7 @@ def calificaciones():
 
     client = bigquery.Client()
     QUERY = ('select Tabla,servidor,usuario,contrasena,data_base,tabla_bd from `contento-bi.Contento.Usuario_conexion_bases` where Tabla = "Clima_calificaciones"')
-    query_job = client.bigquery(QUERY)
+    query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
 
@@ -152,7 +152,9 @@ def calificaciones():
     gcscontroller.create_file(filename, cloud_storage_rows, "ct-felicidad_y_cultura")
 
     try:
-        deleteQuery = "DELETE FROM `contento-bi.Felicidad_y_Cultura.Calificaciones` WHERE cast(substr(fecha_registro,0,10) as date) = current_date"
+        # deleteQuery = "DELETE FROM `contento-bi.Felicidad_y_Cultura.Calificaciones` WHERE SUBSTR(fecha_registro,0,10) > '2020-09-30' "
+    #         
+        deleteQuery = "DELETE FROM `contento-bi.Felicidad_y_Cultura.Calificaciones` WHERE id_afirmacion is not null"
         client = bigquery.Client()
         query_job = client.query(deleteQuery)
         query_job.result()

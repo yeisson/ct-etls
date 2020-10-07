@@ -118,6 +118,8 @@ def workforce():
     try:
         if dateini == "":
             deleteQuery = 'DELETE FROM `contento-bi.Workforce.Adherencia` WHERE CAST(Fecha_Malla AS DATE) = CURRENT_DATE()'
+            # deleteQuery = 'DELETE FROM `contento-bi.Workforce.Adherencia` WHERE 1=1
+
             client = bigquery.Client()
             query_job = client.query(deleteQuery)
             query_job.result()
@@ -246,7 +248,7 @@ def Iti():
     bucket = storage_client.get_bucket('ct-workforce')
     blob = bucket.blob("workforce/iti" + ".csv")
     # Eliminar el archivo en la variable
-    blob.delete()
+    # blob.delete()
     
     # return jsonify(flowAnswer), 200
     return "data cargada" + "flowAnswer" 

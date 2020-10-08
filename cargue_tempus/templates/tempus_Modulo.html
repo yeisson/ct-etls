@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Módulo de cargue</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <<link href="{{ url_for('cargue_tempus_api.static',filename='styles.css') }}" rel="stylesheet" type="text/css"
+        media="screen" />
+
+    <script type="text/javascript"
+        src="{{ url_for('cargue_tempus_api.static',filename='jquery-1.3.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('cargue_tempus_api.static',filename='jquery.tools.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('cargue_tempus_api.static',filename='cufon.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('cargue_tempus_api.static',filename='jquery.custom.js') }}"></script>
+
+
+</head>
+
+<body class="container" background="{{ url_for('cargue_tempus_api.static',filename='imagen1.jpg') }}" style="background-color: #d3d3d3;">
+    <header>
+
+
+        
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a href="#" class="navbar-brand"><img
+                          src="{{ url_for('cargue_tempus_api.static',filename='Logo_Contento.png') }}" width="25%">  Bienvenidos al Sistema de Cargue Base Tempus  </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm" type="button">
+                          Menú
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="nav-link" href="http://35.239.77.81:5000/tempus/tempus"><h3>Descargar Base</h3></a>
+                        </div>
+                <a class="btn btn-secondary btn-sm" href="/cargue_tempus/logout">Salir <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#"></a>
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"></a>
+              </div>
+            </div>
+          </nav>
+        
+        
+          
+          
+          
+        
+    </header>
+    <section>    
+
+        
+
+        <table class="table table-dark" background= "{{ url_for('cargue_tempus_api.static',filename='imagen1.jpg') }}">
+            <thead class="thead-dark"></thead>
+            <tr id="Tempus_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+                <form action="/cargue_tempus/redireccion_archivo_demograficos" method="POST"
+                    enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Demograficos" id="Tempus_boton_cargue_a_Bi-Archivos_BD_prejuridicos"
+                            class="btn btn-dark btn-lg  btn-block text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Adeinco Prejuridico
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Demograficos" name="file_demograficos" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Tempus_boton_cargue_a_Bi-Archivos_BD_prejuridicos"
+                            class="btn btn-dark btn-lg  text-center ml-4 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/adeinco1"
+                            id="Refinancia_URL_cargue_a_Bigquery_BD_demograficos" target="_blank"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>                            
+                            Actualizar Adeinco Prejuridico
+                        </a>
+                    </td>
+                    
+                </form>
+
+            <tr id="Adeinco_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+
+
+            <tr id="Adeinco_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+                <form action="/cargue_tempus/redireccion_archivo_asignacion2" method="POST"
+                    enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Asignacion" id="Refinancia_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Adeinco Asignación
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Asignacion" name="file_asignacion" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Refinancia_boton_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/adeinco2"
+                            id="Refinancia_URL_cargue_a_Bigquery_BD_demograficos" target="_blank"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Adeinco Asignacion
+                        </a>
+                    </td>
+                </form>
+            </tr>
+            </tr>
+            <hr>
+
+
+            <tr id="Adeinco_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+                <form action="/cargue_tempus/redireccion_archivo_Agavalc" method="POST" enctype="multipart/form-data"
+                    id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Agaval" id="Agaval_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" >
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>                            
+                            Subir Base Agaval 1
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Agaval" name="file_agaval" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Agaval_boton_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/agaval" id="Agaval_URL_cargue_a_Bigquery_BD_demograficos"
+                            target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Agaval
+                        </a>
+                    </td>
+                </form>
+            </tr>
+            </tr>
+            <tr id="Adeinco_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+                <form action="/cargue_tempus/redireccion_archivo_Agavalc2" method="POST" enctype="multipart/form-data"
+                    id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Agaval2" id="Agaval2_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Base Agaval2
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Agaval2" name="file_agaval2" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Agaval_boton_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/agaval2" id="Agaval_URL_cargue_a_Bigquery_BD_demograficos"
+                            target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Agaval2
+                        </a>
+                    </td>
+
+
+                </form>
+            </tr>
+
+            <tr id="Aval_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+                <form action="/cargue_tempus/redireccion_archivo_Avalc" method="POST" enctype="multipart/form-data"
+                    id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Aval" id="Aval_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Base Avalcredito 1
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Aval" name="file_aval" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Aval_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/aval1" id="Agaval_URL_cargue_a_Bigquery_BD_demograficos"
+                            target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Avalcredito 1
+                        </a>
+                    </td>
+
+
+                </form>
+            </tr>
+            <tr id="Aval2_filas_seleccion_y_descargue">
+                <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+
+                <form action="/cargue_tempus/redireccion_archivo_Avalc2" method="POST" enctype="multipart/form-data"
+                    id="Refinancia_form_Demograficos">
+                    <td>
+                        <label for="Aval2" id="Aval2_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Base Avalcredito 2
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file" id="Aval2" name="file_aval2" class="d-none" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <input type="submit" value="Cargar a BI_ARCHIVOS"
+                            id="Aval2_label_cargue_a_Bi-Archivos_BD_demograficos"
+                            class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white" />
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/aval2" id="Aval2_URL_cargue_a_Bigquery_BD_demograficos"
+                            target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Avalcredito 2
+                        </a>
+                    </td>
+
+
+                </form>
+            </tr>
+            <tr id="Cod_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_codigosc" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Cod" id="Cod_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Base Codigos
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Cod" name="file_cod" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Cod_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/cod" id="Agaval_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Codigos
+                        </a>
+                    </td>
+                    
+                    
+                </form>
+            </tr>
+
+            <tr id="Cod_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_estrategiac" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Estrategia" id="Estrategia_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>                           
+                            Subir Base Estrategia 
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Estrategia" name="file_estrategia" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Estrategia_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/estrategia" id="Estrategia_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Estrategia Leonisa
+                        </a>
+                    </td>
+                    
+                    
+                </form>
+            </tr>
+            
+            <tr id="Cod_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_historicoc" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Historico" id="Historico_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Subir Base Historico
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Historico" name="file_historico" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Historico_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/historico" id="Historico_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>
+                            &nbsp;
+                            Actualizar Base Historico
+                        </a>
+                    </td>
+                    
+                    
+                </form>                
+            </tr>
+
+            <tr id="Telefonos_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_telefonosc" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Telefonos" id="Telefonos_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>               
+                            Subir Base Telefonos
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Telefonos" name="file_telefonos" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Telefonos_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/lineatel" id="Telefonos_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>                
+                            Actualizar Base Historico
+                        </a>
+                    </td>
+                    
+                    
+                </form>                
+            </tr>  
+            <tr id="Prejul_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_prejulc" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Prejul" id="Prejul_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>               
+                            Subir Preju Linea Directa
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Prejul" name="file_prejul" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Telefonos_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/prejul" id="Telefonos_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>                
+                            Actualizar Preju Linea Directa
+                        </a>
+                    </td>
+                    
+                    
+                </form>                
+            </tr>
+            <tr id="Prejuleo_filas_seleccion_y_descargue"> <!-- Comienza segunda Fila de la Tabla: Archivo Demográficos -->
+               
+                <form action="/cargue_tempus/redireccion_archivo_prejuleoc" method="POST" enctype="multipart/form-data" id="Refinancia_form_Demograficos">
+                    <td>     
+                        <label for="Prejuleo" id="Prejuleo_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-file-excel-o" aria-hidden="true">
+                            </i>               
+                            Subir Prejuridico Leonisa
+                        </label>
+                    </td>
+                    <td>
+                        <input type="file"  id="Prejuleo" name="file_prejuleo" class="d-none"/>  
+                    </td>
+                    <td>   
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>           
+                        <input type="submit" value="Cargar a BI_ARCHIVOS" id="Prejuleo_label_cargue_a_Bi-Archivos_BD_demograficos" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white"/>
+                    </td>
+                    <td>
+                        <i class="fa fa-arrow-right" aria-hidden="true">
+                        </i>
+                        <a href="http://35.239.77.81:5000/tempus/prejuridico" id="Prejuleo_URL_cargue_a_Bigquery_BD_demograficos" target="_blank" class="btn btn-dark btn-lg text-center ml-2 p-2 m-3 text-white">
+                            <i class="fa fa-refresh" aria-hidden="true">
+                            </i>                
+                            Actualizar Prejuridico Leonisa
+                        </a>
+                    </td>
+                    
+                    
+                </form>                
+            </tr>
+
+        </table>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>

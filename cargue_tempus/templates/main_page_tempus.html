@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('cargue_tempus_api.static',filename='all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('cargue_tempus_api.static',filename='normalize.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('cargue_tempus_api.static',filename='Logo_Contento.png') }}">
+    <link rel="stylesheet" href="{{ url_for('cargue_tempus_api.static',filename='main.css') }}">
+    <title>Cargue Base Tempus</title>
+</head>
+
+<body>
+
+    <div class="burbuja">
+        <div class="burbuja3"></div>
+    </div>
+
+
+    <div class="container">
+        <div class="container-center">
+
+
+            <div class="container-flex">
+                <div class="form">
+
+
+                    <div class="form-title">
+
+                        <img src="{{ url_for('cargue_tempus_api.static',filename='Logo_Contento.png') }}" alt="infy" width="40%">
+                        <h1 class="infy">Cargue Base Tempus</h1>
+                        &nbsp;
+                        <p>Bienvenidos Iniciar Sesion para acceder al módulo</p>
+
+                    </div>
+
+
+                    <form method="post" action="/cargue_tempus/login" id="form">
+                        <div class="inputs">
+                            <span class="material-icons"> &nbsp;account_circle</span>
+                            <input type="text" name="username" id="box_usuario" placeholder="Usuario..." required />
+                        </div>
+                        &nbsp;
+                        <div class="inputs">
+                            <span class="material-icons"> &nbsp;security</span>
+                            <input type="password" name="password" id="box_password" placeholder="Contraseña..." required />
+                        </div>
+                        &nbsp; &nbsp;
+                        <input type="submit" value="Iniciar Sesion" class="boton">
+                    </form>
+                    &nbsp; &nbsp; &nbsp;
+
+
+
+                </div>
+
+                <div class="container-formText">
+                    <div class="formText">
+                        <img src="{{ url_for('cargue_tempus_api.static',filename='Logo-Contento-BPS-Blanco.png') }}" alt="Infy" width="40%">
+                        <h2>Cargue Base Tempus</h2>
+
+                    </div>
+                </div>
+
+                <footer>
+                    <center><small> Creado por: Dirección de Operaciones  ® © V1.0</small></center>
+
+
+                </footer>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

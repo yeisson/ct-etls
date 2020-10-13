@@ -30,6 +30,7 @@ from procesos.Telefonia.cdr import cdr_api
 from procesos.Telefonia.remover import remover_api
 from procesos.Telefonia.skill_detail import skill_detail_api
 from procesos.Telefonia.cdr_unconnected import cdr_unconnected_api
+from procesos.Telefonia.detalle_predictivo import detalle_predictivo_api
 from procesos.Telefonia.tester import tester_api
 from procesos.Telefonia.campaign import webpage_api
 from procesos.Telefonia.chats import chats_api
@@ -48,6 +49,7 @@ app.register_blueprint(cdr_api, url_prefix='/telefonia')
 app.register_blueprint(remover_api, url_prefix='/telefonia')
 app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
+app.register_blueprint(detalle_predictivo_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
@@ -116,7 +118,10 @@ from procesos.Jerarquias import Jerarquias_api
 from procesos.metlife_repositorio_wolkvox import Metlife_Rep_Wolkvox_api
 from procesos.Workforce import workforce_api
 from procesos.MobilityAgentScript import Mobility_Agent_Script
+from procesos.claro_result import claro_result
 from procesos.Telefonia.Agent_scripting import agent_api
+from procesos.felicidad_y_cultura import clima_api
+from procesos.crediorbe_sac import crediorbe_sac_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -132,6 +137,7 @@ app.register_blueprint(skill_detail_api, url_prefix='/telefonia')
 app.register_blueprint(tester_api, url_prefix='/telefonia')
 app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
 app.register_blueprint(cdr_unconnected_api, url_prefix='/telefonia')
+app.register_blueprint(detalle_predictivo_api, url_prefix='/telefonia')
 app.register_blueprint(webpage_api, url_prefix='/telefonia')
 app.register_blueprint(chats_api, url_prefix='/telefonia')
 app.register_blueprint(sms_api, url_prefix='/telefonia')
@@ -181,7 +187,9 @@ app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
 app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')
 app.register_blueprint(workforce_api, url_prefix='/workforce')
 app.register_blueprint(Mobility_Agent_Script, url_prefix='/perfil_cliente')
-
+app.register_blueprint(claro_result, url_prefix='/claro_result')
+app.register_blueprint(clima_api, url_prefix='/clima_encuesta')
+app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -214,6 +222,10 @@ from procesos.base_banco import base_banco_api
 from procesos.Telefonia.ad_consumo import ad_consumo_api
 from procesos.Telefonia.ad_productos import ad_productos_api
 from procesos.bdlal import bdlal_api
+from procesos.protecsatu import protecsatu_api
+from procesos.basetempus import basetempus_api
+from satu_proteccion.server import satu_proteccion_api
+from cargue_tempus.server import cargue_tempus_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -233,6 +245,11 @@ app.register_blueprint(base_banco_api, url_prefix='/Base')
 app.register_blueprint(ad_productos_api, url_prefix='/telefonia')
 app.register_blueprint(ad_consumo_api, url_prefix='/telefonia')
 app.register_blueprint(bdlal_api, url_prefix='/lal')
+app.register_blueprint(basetempus_api, url_prefix='/tempus')
+app.register_blueprint(protecsatu_api, url_prefix='/satu')
+app.register_blueprint(satu_proteccion_api, url_prefix='/satu_proteccion')
+app.register_blueprint(cargue_tempus_api, url_prefix='/cargue_tempus')
+
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

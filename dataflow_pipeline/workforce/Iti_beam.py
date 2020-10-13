@@ -30,7 +30,6 @@ TABLE_SCHEMA = ('ID_ITI:STRING, '
                 'PESO:STRING, '
                 'FECHA_EJECUCION:STRING, '
                 'ESTADO:STRING '
-
                 )
 
 class formatearData(beam.DoFn):
@@ -40,13 +39,13 @@ class formatearData(beam.DoFn):
 		arrayCSV = element.split('|')
 
 		tupla= {'ID_ITI' : arrayCSV[0],
-                'FECHA' : arrayCSV[1],
-                'HORA' : arrayCSV[2],
-                'CENTRO_COSTO' : arrayCSV[3],
-                'PESO' : arrayCSV[4],
-                'FECHA_EJECUCION' : arrayCSV[5],
-                'ESTADO' : arrayCSV[6]
-				}
+                        'FECHA' : arrayCSV[1],
+                        'HORA' : arrayCSV[2],
+                        'CENTRO_COSTO' : arrayCSV[3],
+                        'PESO' : arrayCSV[4],
+                        'FECHA_EJECUCION' : arrayCSV[5],
+                        'ESTADO' : arrayCSV[6]
+			}
 		
 		return [tupla]
 
@@ -77,7 +76,7 @@ def run():
         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
 
 	jobObject = pipeline.run()
-	# jobID = jobObject.job_id()
+
 
 	return ("Corrio sin problema")
 

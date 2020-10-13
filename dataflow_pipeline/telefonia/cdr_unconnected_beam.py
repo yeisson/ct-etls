@@ -33,6 +33,7 @@ TABLE_SCHEMA = (
 	'id_customer:STRING,'
 	'id_campaing:STRING,'
 	'id_cliente:STRING,'
+	'ipdial_code:STRING,'
 	'cartera:STRING'
 )
 
@@ -53,7 +54,8 @@ class formatearData(beam.DoFn):
 				'id_customer': arrayCSV[7],
 				'id_campaing': arrayCSV[8],
 				'id_cliente': arrayCSV[9],
-				'cartera': arrayCSV[10]
+				'ipdial_code': arrayCSV[10],
+				'cartera': arrayCSV[11]
 				}
 		return [tupla]
 

@@ -67,7 +67,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-fanalca-honda-autos" ') #WHERE ipdial_code = "intcob-unisabaneta" 
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_prueba where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta" 
         #  'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-banco-sufi-cast"') 
     query_job = client.query(QUERY)
     rows = query_job.result()
@@ -94,8 +94,8 @@ def Ejecutar():
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
         datos = requests.get(url).content
+     
 
-        
         if len(requests.get(url).content) < 50:
             continue
         else:
@@ -112,6 +112,7 @@ def Ejecutar():
                     str(rown["id_customer"]).encode('utf-8')+"|"+
                     str(rown["id_campaing"]).encode('utf-8')+"|"+              
                     str(row.id_cliente)+"|"+
+                    str(row.ipdial_code)+"|"+
                     str(row.cartera).encode('utf-8') + "\n")
     
     file.close()

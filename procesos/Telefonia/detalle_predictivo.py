@@ -109,7 +109,7 @@ def Ejecutar():
         for rown in datos.split('\r\n'):
             fila= rown.strip()
             print ('tamano de fila:'+str(len(fila)) )
-            print ('fila:'+fila)
+            # print ('fila:'+fila)
             if (len(fila) > 0):
                 file.write(
                     str(fila.split('|')).replace('\n','').replace('\n\n','REG').replace(" ","").replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +

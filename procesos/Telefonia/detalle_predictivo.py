@@ -68,7 +68,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_prueba where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta" 
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta" 
         #  'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-banco-sufi-cast"') 
     query_job = client.query(QUERY)
     rows = query_job.result()
@@ -97,17 +97,26 @@ def Ejecutar():
     data = ''
     for row in rows:
         url = 'https://' + str(row.servidor) + '/ipdialbox/api_campaing.php?token=' + row.token + '&action=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
-        datos = requests.get(url,verify=False).content
+        try:
+            datos = requests.get(url,verify=False).content
+        except requests.exceptions.RequestException as error:
+            print('error conectando con '+ row.ipdial_code + ':'+str(error))
+            continue
+
         print url
 
-    
+    # for rown in datos.split('\r\n'):
         for rown in datos.split('\r\n'):
-            if (len(rown) > 10):
+            fila= rown.strip()
+            print ('tamano de fila:'+str(len(fila)) )
+            print ('fila:'+fila)
+            if (len(fila) > 0):
                 file.write(
-                    str(rown.split('|')).replace('\n','').replace(" ","").replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +
+                    str(fila.split('|')).replace('\n','').replace('\n\n','REG').replace(" ","").replace('\r','').replace('[','').replace(']','').replace("'","").encode('utf-8')+ ',' +
                     str(row.id_cliente) + ',' + 
                     str(row.ipdial_code) + ',' +
-                    str(row.cartera) +'\n'  
+                    str(row.cartera) +
+                    '\n'  
                 )
             else:
                 continue

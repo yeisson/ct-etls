@@ -602,7 +602,7 @@ def llevar_archivos():
     # robotics_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Robotics/Pagos/"
     # bi_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Pagos/"
 
-    fuente_local = "C:/Users/Daniel.Caro/Documents/Carteras de Cobranza/Bancolombia Castigada/Automatismo Pagos/Insumos/Pruebas/Debitos/"
+    fuente_local = "C:/Users/Daniel.Caro/Documents/Carteras de Cobranza/Bancolombia Castigada/Automatismo Pagos/Insumos/Pruebas/Seguimiento/Procesados/"
 
     # archivos = os.listdir(robotics_route)
     archivos = os.listdir(fuente_local)
@@ -612,13 +612,14 @@ def llevar_archivos():
             # copyfile(robotics_route+archivo,bi_route+"Pagos"+mifecha+".csv")
             #read input file
             # with codecs.open(robotics_route+archivo, 'r', encoding = 'utf8') as file:
-            with codecs.open(fuente_local+archivo, 'r', encoding = 'mbcs') as file:
-                lines = file.read()
+            # with codecs.open(fuente_local+archivo, 'r', encoding = 'mbcs') as file:
+            #     lines = file.read()
 
             #write output file
             # with codecs.open(bi_route+archivo, 'w', encoding = 'utf8') as file:
-            with codecs.open(fuente_local+archivo, 'w', encoding = 'utf8') as file:
-                file.write(lines)
+            # with codecs.open(fuente_local+archivo, 'w', encoding = 'utf8') as file:
+            #     file.write(lines)
+            os.remove(fuente_local+archivo)
 
     # move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Debitos/Procesados/"+archivo)
     response["code"] = 200
@@ -747,3 +748,31 @@ def prueba(variable):
     return 'Proceso de cargue para ' + variable 
     # return respuesta
     # return deleteQuery
+
+@bancolombia_castigada_api.route("/limpiar_robotics") 
+def limpiar_robotics():
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    tipo = ['Debitos','Pagos','Estado Cartera','Seguimiento','Historico']
+
+    for i in [0,1,2,3]:
+        if i < 3:
+            robotics_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Robotics/" + tipo[i] + "/Procesados/"
+            ext = ".csv"
+        else:
+            robotics_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Robotics/Historico/"
+            ext = ".zip"
+
+        archivos = os.listdir(robotics_route)
+        for archivo in archivos:
+            if archivo.endswith(ext):
+                os.remove(robotics_route + archivo)
+
+    response["code"] = 200
+    response["description"] = "Se realizo la peticion Full HD"
+    response["status"] = True
+
+    return jsonify(response), response["code"]

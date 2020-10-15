@@ -680,9 +680,20 @@ def robotics(variable):
             mifecha = archivo[8:16]
             # mihora = archivo[17:25]  
 
-            # Lee el archivo en codificación ANSI.
-            with codecs.open(local_route+archivo, 'r', encoding = 'mbcs') as file:
-                lines = file.read()
+            # Lee el archivo en codificación ANSI.       
+            try:
+                with codecs.open(local_route+archivo, 'r', encoding = 'latin-1') as file:
+                    lines = file.read()
+            except:
+                try:                    
+                    with codecs.open(local_route+archivo, 'r', encoding = 'cp1252') as file:
+                        lines = file.read()
+                except:
+                        try:
+                            with codecs.open(local_route+archivo, 'r', encoding = 'mbcs') as file:
+                                lines = file.read()
+                        except:
+                            print('definitivamente no se pudo leer la codificacion del archivo')                        
 
             # Sobreescribe el archivo en la codificación UTR-8.
             with codecs.open(local_route+archivo, 'w', encoding = 'utf8') as file:

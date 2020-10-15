@@ -695,7 +695,7 @@ def robotics(variable):
                         except:
                             print('definitivamente no se pudo leer la codificacion del archivo')                        
 
-            # Sobreescribe el archivo en la codificación UTR-8.
+            # Sobreescribe el archivo en la codificación UTF-8.
             with codecs.open(local_route+archivo, 'w', encoding = 'utf8') as file:
                 file.write(lines)
 

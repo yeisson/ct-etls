@@ -735,7 +735,7 @@ def robotics(variable):
     return jsonify(response), response["code"]
     # return tipo
 
-@bancolombia_castigada_api.route("/ejecutar_query")
+# @bancolombia_castigada_api.route("/ejecutar_query")
 def ejecutar_query(mi_query):
     # Procedimiento que ejecuta los queries.
     client = bigquery.Client()

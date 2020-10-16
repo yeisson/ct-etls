@@ -115,7 +115,7 @@ def Ejecutar():
                     str(rown["q07"])+"|"+
                     str(rown["q08"])+"|"+
                     str(rown["q09"])+"|"+
-                    str(rown["q10"])+"|"+
+                    str(rown["q10"]).encode('utf-8').replace('\n', '').replace('\r', '')+"|"+
                     str(rown["duration"])+"|"+
                     str(rown["type_call"].encode('utf-8'))+"|"+
                     str(rown["result"].encode('utf-8'))+"|"+

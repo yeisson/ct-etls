@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, render_template, Flask, url_for
 import procesos.pyg as pyg
 import procesos.universidad_cooperativa_col as ucc
 import procesos.metlife as met
+import procesos.bancolombia_castigada as bancolombia_castigada
 import os
 
 my_resourses = os.path.join('static','images')
@@ -38,6 +39,14 @@ def ui_cargues_unificadas():
 @ui_api.route("/cargues_metlife")
 def ui_cargues_metlife():
     return render_template('metlife/index.html')
+# ----------------------------------
+
+# Vista de Bancolombia Castigada
+# ----------------------------------
+@myApp.route("/")
+@ui_api.route("/cargues_bancolombia_castigada")
+def ui_cargues_bancolombia_castigada():
+    return render_template('bancolombia_cast/index.html')
 # ----------------------------------
 
 # Invoca a cada ETL individualmente
@@ -94,11 +103,19 @@ def ui_cargar_campanas():
 
 # ----------------------------------    
 
-# Operaciones Unificadas
+# Metlife
 # ----------------------------------    
 @ui_api.route("/cargar_metlife_seguimiento")
 def ui_cargar_metlife_seguimiento():      
     return met.archivos_seguimiento_metlife()    
+
+# ----------------------------------    
+
+# Bancolombia Castigada
+# ----------------------------------    
+@ui_api.route("/cargar_bancolombia_castigada/<base>")
+def ui_cargar_bancolombia_castigada(base):      
+    return bancolombia_castigada.robotics(base)
 
 # ----------------------------------    
 

@@ -68,7 +68,7 @@ def Ejecutar():
     client = bigquery.Client()
     QUERY = (
         # 'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where Estado = "Activado"') #WHERE ipdial_code = "intcob-unisabaneta" 
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where token = "7b69645f6469737472697d2d3230323030393134313235373536" ') 
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_prueba where Estado = "Activado" ') 
     query_job = client.query(QUERY)
     rows = query_job.result()
     data = ""
@@ -93,7 +93,12 @@ def Ejecutar():
     file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
-        datos = requests.get(url).content
+        # datos = requests.get(url).content
+        try:
+            datos = requests.get(url).content
+        except requests.exceptions.RequestException as error:
+            # print('error conectando con '+ row.ipdial_code + ':'+str(error))
+            continue
 
         
         if len(requests.get(url).content) < 50:

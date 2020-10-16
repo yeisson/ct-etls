@@ -100,7 +100,7 @@ def Ejecutar():
         try:
             datos = requests.get(url,verify=False).content
         except requests.exceptions.RequestException as error:
-            print('error conectando con '+ row.ipdial_code + ':'+str(error))
+            # print('error conectando con '+ row.ipdial_code + ':'+str(error))
             continue
 
         print url
@@ -108,7 +108,7 @@ def Ejecutar():
     # for rown in datos.split('\r\n'):
         for rown in datos.split('\r\n'):
             fila= rown.strip()
-            print ('tamano de fila:'+str(len(fila)) )
+            # print ('tamano de fila:'+str(len(fila)) )
             # print ('fila:'+fila)
             if (len(fila) > 0):
                 file.write(

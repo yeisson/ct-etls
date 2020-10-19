@@ -346,5 +346,6 @@ def run(archivo, mifecha):
 		)
 
 	jobObject = pipeline.run()
+	jobObject.wait_until_finish()
 
 	return ("Corrio Full HD")

@@ -100,13 +100,14 @@ def Ejecutar():
         token = row.token
 
 
-    dato = 0            
+    dato = 0        
     
 
     file = open(ruta_completa,"a")
-    for i in range(300):
+    for i in range(60):
         
         url = 'https://mesadeayudaofima.zendesk.com' + '/api/v2/tickets'  + '.json?page=' + str(dato)  
+        
         dato = dato + 1             
         print ('URL es igual '+ url)                
         datos = requests.get(url, auth=(user,token))
@@ -123,13 +124,18 @@ def Ejecutar():
                 file.write(
                     str(rown["url"]).encode('utf-8')+"|"+
                     str(rown["id"]).encode('utf-8')+"|"+
+                    str(rown["type"]).encode('utf-8')+"|"+
                     str(rown["subject"]).encode('utf-8').replace('|', '').replace('\n', ' ').replace('\r', '').replace('&nbsp', '')+"|"+
                     str(rown["requester_id"]).encode('utf-8')+"|"+
                     str(rown["submitter_id"]).encode('utf-8')+"|"+
                     str(rown["organization_id"]).encode('utf-8')+"|"+
+                    str(rown["assignee_id"]).encode('utf-8')+"|"+
                     str(rown["created_at"]).encode('utf-8')+"|"+
                     str(rown["status"]).encode('utf-8')+"|"+   
-                    str(rown["custom_fields"][1]).encode('utf-8').replace('{', ' ').replace('}', ' ').replace(': 360029546592L,', ' ')+"|"+                 
+                    str(rown["priority"]).encode('utf-8')+"|"+
+                    str(rown["updated_at"]).encode('utf-8')+"|"+  
+                    str(rown["custom_fields"]).replace('[','').replace(']','').replace("u'id':",'').replace("{ ",'').replace("u'value': u'",'').replace("'}",'').replace(" ",'').encode('utf-8')+"|"+                                      
+                    str(rown["tags"]).replace('[','').replace("'",'',).replace('u','').replace(' ','').replace("\xed",'i').replace("\xf3",'o').replace("]",'o').encode('utf-8')+"|"+                              
                     str(rown["group_id"]).encode('utf-8')+"|"+ "\n")
                    ## str(rown["via"]["source"]["from"]).encode('utf-8')+"|"+ 
                     
@@ -147,4 +153,3 @@ def Ejecutar():
 
     return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
 ########################################################################################################################
-

@@ -93,7 +93,12 @@ def Ejecutar():
     file = open(ruta_completa,"a")
     for row in rows:
         url = 'http://' + str(row.servidor) + '/ipdialbox/api_reports.php?token=' + row.token + '&report=' + str(CODE_REPORT) + '&date_ini=' + dateini + '&date_end=' + dateend
-        datos = requests.get(url).content
+        # datos = requests.get(url).content
+        try:
+            datos = requests.get(url).content
+        except requests.exceptions.RequestException as error:
+            # print('error conectando con '+ row.ipdial_code + ':'+str(error))
+            continue
 
         
         if len(requests.get(url).content) < 50:

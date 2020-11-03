@@ -104,7 +104,7 @@ def Ejecutar():
     
 
     file = open(ruta_completa,"a")
-    for i in range(60):
+    for i in range(300):
         
         url = 'https://mesadeayudaofima.zendesk.com' + '/api/v2/tickets'  + '.json?page=' + str(dato)  
         

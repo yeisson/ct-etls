@@ -12,7 +12,6 @@ import argparse
 import uuid
 import datetime
 import socket
-
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
@@ -23,18 +22,25 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-TABLE_SCHEMA = ('IDKEY:STRING, '
-				'FECHA:STRING, '
-				'CONSECUTIVO:STRING, '
-				'NIT:STRING, '
-				'NOMBRES:STRING, '
-				'FECHA_DE_PAGO:STRING, '
-				'OBLIGACION:STRING, '
-				'VALOR_PAGADO:STRING, '
-				'CODIGO_ABOGADO:STRING, '
-				'NOMBRE_ASESOR:STRING, '
-				'FECHA_DE_GRABACION:STRING '
-				)
+TABLE_SCHEMA = ('idkey:STRING, '
+		        'fecha:STRING, '
+                'CHANNEL:STRING, '
+                'AGENT:STRING, '
+                'SKILL:STRING, '
+                'ID_CASE:STRING, '
+                'SUBJECT:STRING, '
+                'DE_QUIEN:STRING, '
+                'DE_DONDE:STRING, '
+                'BODY:STRING, '
+                'ANSWER:STRING, '
+                'DATE_OF_CREATION:STRING, '
+                'CLOSING_DATE:STRING, '
+                'CLOSING_TIME:STRING, '
+                'EVALUATION_SURVEY:STRING, '
+                'CODE:STRING, '
+                'COMMENTS:STRING '
+
+                )
 
 class formatearData(beam.DoFn):
 
@@ -43,26 +49,36 @@ class formatearData(beam.DoFn):
 		self.mifecha = mifecha
 	
 	def process(self, element):
-		arrayCSV = element.split('|')
+		# print(element)
+		arrayCSV = element.split(';')
 
-		tupla = {'IDKEY' : str(uuid.uuid4()),
-				'FECHA': self.mifecha,
-				'CONSECUTIVO' : arrayCSV[0],
-				'NIT' : arrayCSV[1],
-				'NOMBRES' : arrayCSV[2],
-				'FECHA_DE_PAGO' : arrayCSV[3],
-				'OBLIGACION' : arrayCSV[4],
-				'VALOR_PAGADO' : arrayCSV[5],
-				'CODIGO_ABOGADO' : arrayCSV[6],
-				'NOMBRE_ASESOR' : arrayCSV[7],
-				'FECHA_DE_GRABACION' : arrayCSV[8]
+		tupla= {'idkey' : str(uuid.uuid4()),
+				'fecha': self.mifecha,
+                'CHANNEL' : arrayCSV[0],
+                'AGENT' : arrayCSV[1],
+                'SKILL' : arrayCSV[2],
+                'ID_CASE' : arrayCSV[3],
+                'SUBJECT' : arrayCSV[4],
+                'DE_QUIEN' : arrayCSV[5],
+                'DE_DONDE' : arrayCSV[6],
+                'BODY' : arrayCSV[7],
+                'ANSWER' : arrayCSV[8],
+                'DATE_OF_CREATION' : arrayCSV[9],
+                'CLOSING_DATE' : arrayCSV[10],
+                'CLOSING_TIME' : arrayCSV[11],
+                'EVALUATION_SURVEY' : arrayCSV[12],
+                'CODE' : arrayCSV[13],
+                'COMMENTS' : arrayCSV[14]
+
 				}
 		
 		return [tupla]
 
+
+
 def run(archivo, mifecha):
 
-	gcs_path = "gs://ct-bancolombia_castigada" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -72,24 +88,23 @@ def run(archivo, mifecha):
         "--temp_location", ("%s/dataflow_files/temp" % gcs_path),
         "--output", ("%s/dataflow_files/output" % gcs_path),
         "--setup_file", "./setup.py",
-        "--max_num_workers", "5",
+        "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
-        # "--num_workers", "30",
-        # "--autoscaling_algorithm", "NONE"		
+
 	])
 	
 	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
-
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-
-	transformed | 'Escritura a BigQuery Bancolombia' >> beam.io.WriteToBigQuery(
-		gcs_project + ":bancolombia_castigada.rob_aux_pagos", 
+	transformed | 'Escritura a BigQuery telefonia' >> beam.io.WriteToBigQuery(
+		gcs_project + ":telefonia.Chat_interacciones", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
 
-	jobObject = pipeline.run()
-	jobObject.wait_until_finish()
 
+	jobObject = pipeline.run()
 	return ("Corrio Full HD")
+
+
+

@@ -695,7 +695,7 @@ def robotics(variable):
                         except:
                             print('definitivamente no se pudo leer la codificacion del archivo')                        
 
-            # Sobreescribe el archivo en la codificación UTR-8.
+            # Sobreescribe el archivo en la codificación UTF-8.
             with codecs.open(local_route+archivo, 'w', encoding = 'utf8') as file:
                 file.write(lines)
 
@@ -725,6 +725,7 @@ def robotics(variable):
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
             mensaje = my_pipeline[puntero].run('gs://ct-bancolombia_castigada/info-rob-aux-'+ tipo + '/' + archivo, mifecha)
+            # mensaje.wait_until_finish()
             if mensaje == "Corrio Full HD":
                 ejecutar_query(my_qry_insert[puntero])  # Inserta sólo los nuevos elementos en la tabla principal a partir de la tabla auxiliar.
                 move(local_route + archivo, procesados_route + archivo)

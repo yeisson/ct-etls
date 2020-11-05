@@ -25,14 +25,20 @@ from apache_beam.options.pipeline_options import SetupOptions
 TABLE_SCHEMA = (
 	'URL:STRING, '
 	'ID:STRING, '
+	'TYPE:STRING, '
 	'SUBJECT:STRING, '
 	'REQUESTER_ID:STRING, '
 	'SUBMITTER_ID:STRING, '
 	'ORGANIZATION_ID:STRING, '
+	'ASSIGNEE_ID:STRING, '
 	'CREATED_AT:STRING, '
 	'STATUS:STRING, '
+	'PRIORITY:STRING, '
+	'UPDATED_AT:STRING, '
 	'CUSTOM_FIELDS:STRING, '
+	'TAGS:STRING, '
 	'GROUP_ID:STRING '
+
 
 	
 )
@@ -46,14 +52,20 @@ class formatearData(beam.DoFn):
 		tupla= {
 				'URL' : arrayCSV[0],
 				'ID' : arrayCSV[1],
-				'SUBJECT' : arrayCSV[2],
-				'REQUESTER_ID' : arrayCSV[3],
-				'SUBMITTER_ID' : arrayCSV[4],
-				'ORGANIZATION_ID' : arrayCSV[5],
-				'CREATED_AT' : arrayCSV[6],
-				'STATUS' : arrayCSV[7],
-				'CUSTOM_FIELDS' : arrayCSV[8],
-				'GROUP_ID' : arrayCSV[9]
+				'TYPE' : arrayCSV[2],
+				'SUBJECT' : arrayCSV[3],
+				'REQUESTER_ID' : arrayCSV[4],
+				'SUBMITTER_ID' : arrayCSV[5],
+				'ORGANIZATION_ID' : arrayCSV[6],
+				'ASSIGNEE_ID' : arrayCSV[7],
+				'CREATED_AT' : arrayCSV[8],
+				'STATUS' : arrayCSV[9],
+				'PRIORITY' : arrayCSV[10],
+				'UPDATED_AT' : arrayCSV[11],
+				'CUSTOM_FIELDS' : arrayCSV[12],
+				'TAGS' : arrayCSV[13],
+				'GROUP_ID' : arrayCSV[14]
+
 
 				}
 		return [tupla]

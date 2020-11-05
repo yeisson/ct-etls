@@ -770,8 +770,8 @@ def limpiar_robotics():
 
     tipo = ['Debitos','Pagos','Estado Cartera','Seguimiento','Historico']
 
-    for i in [0,1,2,3]:
-        if i < 3:
+    for i in [0,1,2,3,4]:
+        if i < 4:
             robotics_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Bancolombia_Cast/Robotics/" + tipo[i] + "/Procesados/"
             ext = ".csv"
         else:

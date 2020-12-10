@@ -230,6 +230,7 @@ from procesos.protecsatu import protecsatu_api
 from procesos.basetempus import basetempus_api
 from satu_proteccion.server import satu_proteccion_api
 from cargue_tempus.server import cargue_tempus_api
+from procesos.bdalarmas import bdalarmas_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -253,6 +254,7 @@ app.register_blueprint(basetempus_api, url_prefix='/tempus')
 app.register_blueprint(protecsatu_api, url_prefix='/satu')
 app.register_blueprint(satu_proteccion_api, url_prefix='/satu_proteccion')
 app.register_blueprint(cargue_tempus_api, url_prefix='/cargue_tempus')
+app.register_blueprint(bdalarmas_api, url_prefix='/alarmas')
 
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

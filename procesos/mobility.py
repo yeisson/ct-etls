@@ -20,6 +20,7 @@ import dataflow_pipeline.mobility.perfil_demografico_beam as perfil_demografico_
 
 
 
+
 import os
 import socket
 
@@ -626,7 +627,7 @@ def perfil():
     archivos = os.listdir(local_route)
     for archivo in archivos:
         if archivo.endswith(".csv"):
-            mifecha = archivo[0:]
+            mifecha = archivo[0:8]
 
             storage_client = storage.Client()
             bucket = storage_client.get_bucket('ct-auteco')
@@ -655,3 +656,4 @@ def perfil():
 
     return jsonify(response), response["code"]
     # return "Corriendo : " + mensaje
+

@@ -124,6 +124,7 @@ from procesos.Telefonia.Agent_scripting import agent_api
 from procesos.felicidad_y_cultura import clima_api
 from procesos.crediorbe_sac import crediorbe_sac_api
 from procesos.formacion import formacion_api
+from procesos.coopantex import coopantex_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -194,6 +195,7 @@ app.register_blueprint(claro_result, url_prefix='/claro_result')
 app.register_blueprint(clima_api, url_prefix='/clima_encuesta')
 app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 app.register_blueprint(formacion_api, url_prefix='/formacion')
+app.register_blueprint(coopantex_api, url_prefix='/coopantex')
 
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

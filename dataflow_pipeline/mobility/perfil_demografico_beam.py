@@ -49,7 +49,8 @@ TABLE_SCHEMA = (
                 'SUBCATEGORIA:STRING, '
                 'SEGMENTO:STRING, '
                 'SUBSEGMENTO:STRING, '
-                'MARCA2:STRING '
+                'MARCA2:STRING, '
+                'FECHA_CARGUE:STRING '
                 )
 # ?
 class formatearData(beam.DoFn):
@@ -88,7 +89,8 @@ class formatearData(beam.DoFn):
                 'SUBCATEGORIA' : arrayCSV[23],
                 'SEGMENTO' : arrayCSV[24],
                 'SUBSEGMENTO' : arrayCSV[25],
-                'MARCA2' : arrayCSV[26]
+                'MARCA2' : arrayCSV[26],
+                'FECHA_CARGUE': self.mifecha
 				}
 		
 		return [tupla]

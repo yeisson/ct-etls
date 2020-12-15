@@ -126,6 +126,7 @@ from procesos.Telefonia.Agent_scripting import agent_api
 from procesos.felicidad_y_cultura import clima_api
 from procesos.crediorbe_sac import crediorbe_sac_api
 from procesos.formacion import formacion_api
+from procesos.coopantex import coopantex_api
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -198,6 +199,7 @@ app.register_blueprint(liberty_result, url_prefix='/liberty_result')
 app.register_blueprint(clima_api, url_prefix='/clima_encuesta')
 app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 app.register_blueprint(formacion_api, url_prefix='/formacion')
+app.register_blueprint(coopantex_api, url_prefix='/coopantex')
 
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -234,6 +236,7 @@ from procesos.protecsatu import protecsatu_api
 from procesos.basetempus import basetempus_api
 from satu_proteccion.server import satu_proteccion_api
 from cargue_tempus.server import cargue_tempus_api
+from procesos.bdalarmas import bdalarmas_api
 
 app.register_blueprint(turnos_api, url_prefix='/turnos')
 app.register_blueprint(sensus_api, url_prefix='/sensus')
@@ -257,6 +260,7 @@ app.register_blueprint(basetempus_api, url_prefix='/tempus')
 app.register_blueprint(protecsatu_api, url_prefix='/satu')
 app.register_blueprint(satu_proteccion_api, url_prefix='/satu_proteccion')
 app.register_blueprint(cargue_tempus_api, url_prefix='/cargue_tempus')
+app.register_blueprint(bdalarmas_api, url_prefix='/alarmas')
 
 
 # Dirección Leonel Henao <<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

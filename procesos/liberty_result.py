@@ -45,7 +45,7 @@ def Descarga_Resultado_Consolidado():
     ##operacion= request.args.get('modulo_ipdial')
 
   
-    myRoute = '/BI_Archivos/GOOGLE/Liberty/result_consolidado/.csv'
+    myRoute = '/BI_Archivos/GOOGLE/Liberty/result_consolidado/'"gestion_consolidada"'.csv'
     # myQuery ='SELECT * FROM `contento-bi.telefonia_vistas.claro_fija_cons` where periodo between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'+'AND'+'"'operacion'"''   
     myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_Consolidado`'
 

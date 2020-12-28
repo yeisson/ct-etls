@@ -27,7 +27,7 @@ def Descarga_Resultado():
     myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_diario` where Fecha_Gestion between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'
 
     print (myQuery)
-    myHeader = ["Id", "Nombre", "Cuenta_Gestiones", "Base", "Codigo_Tipificacion", "Fecha_Gestion", "Campana", "Agent_name", "wpc", "rpc", "sin_contacto", "hit", "Source", "Intentos", "Gestionable", "Ipdial_code", "Producto"
+    myHeader = ["Id", "Nombre", "Cuenta_Gestiones", "Base", "Codigo_Tipificacion", "tel_number","Fecha_Gestion", "Campana", "Agent_name", "wpc", "rpc", "sin_contacto", "hit", "Source", "Intentos", "Gestionable", "Ipdial_code", "Producto"
 ]
     
     
@@ -50,7 +50,7 @@ def Descarga_Resultado_Consolidado():
     myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_Consolidado`'
 
     print (myQuery)
-    myHeader = ["id_customer", "nombre", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "mes", "fecha_getion_efectiva", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "source", "intentos", "Intentos", "gestionable", "ipdial_code", "producto"
+    myHeader = ["id_customer", "nombre", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "tel_number", "mes", "fecha_getion_efectiva", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "source", "intentos", "Intentos", "gestionable", "ipdial_code", "producto"
 ]
     
     

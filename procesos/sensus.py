@@ -3,6 +3,8 @@ from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
+import pandas as pd
+from pandas import DataFrame
 import dataflow_pipeline.sensus.sensus_seguimiento_beam as sensus_seguimiento_beam
 import dataflow_pipeline.sensus.sensus_metas_beam as sensus_metas_beam
 import dataflow_pipeline.sensus.sensus_adh_beam as sensus_adh_beam
@@ -13,8 +15,14 @@ import dataflow_pipeline.sensus.sensus_banco_beam as sensus_banco_beam
 import dataflow_pipeline.sensus.sensus_metalal_beam as sensus_metalal_beam
 import dataflow_pipeline.sensus.sensus_poc_beam as sensus_poc_beam
 import dataflow_pipeline.sensus.sensus_tecnicos_beam as sensus_tecnicos_beam
+import dataflow_pipeline.sensus.sensus_agricolaadmin_beam as sensus_agricolaadmin_beam
+import dataflow_pipeline.sensus.sensus_agricolacast_beam as sensus_agricolacast_beam
+import procesos.descargas as descargas
 import os
 import socket
+import requests
+from flask import request
+import csv
 
 sensus_api = Blueprint('sensus_api', __name__)
 
@@ -460,3 +468,113 @@ def tecnicos():
                 response["status"] = True
 
     return jsonify(response), response["code"]    
+
+#####################################################################################################
+
+@sensus_api.route("/agricolaa")
+def agricolaa():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Dagricola/Administrativa/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('agricolaadmin/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.agricolaadm` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_agricolaadmin_beam.run('gs://ct-sensus/agricolaadmin/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Dagricola/Administrativa/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se cargaron los ficheros exitosamente"
+                response["status"] = True
+
+    return jsonify(response), response["code"]    
+
+
+#####################################################################################################
+
+@sensus_api.route("/agricolac")
+def agricolac():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Dagricola/Castigada/"
+    archivos = os.listdir(local_route)
+    
+    for archivo in archivos:
+        
+
+
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:8]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-sensus')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('agricolacast/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.sensus.agricolacast` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = sensus_agricolacast_beam.run('gs://ct-sensus/agricolacast/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Dagricola/Castigada/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se cargaron los ficheros exitosamente"
+                response["status"] = True
+
+    return jsonify(response), response["code"]        
+
+######################################################################################################
+
+@sensus_api.route("/descargar", methods=['POST','GET'])
+
+def Descarga_Encuesta():
+       
+    dateini= request.args.get('desde')
+    dateend= request.args.get('hasta')
+   
+  
+    myRoute = '/BI_Archivos/GOOGLE/Sensus/Aseguramiento/Dagricola/Descargas/'+dateini+'_'+dateend+'.csv'
+    myQuery ='SELECT * FROM `contento-bi.sensus.Dagrciola_admin`  where fecha between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'    
+    myHeader = ["Unico","Nombre","Fecha","Nombre_gestor","Cartera","Nombre_evaluador","PEC","Telefono_cliente","Cierre_de_la_llamada","Evaluacion_del_Saludo","Evaluacion_negociacion","Aspectos_mejora","Aspectos_positivos","Observaciones"
+   ]
+    
+    
+
+    return descargas.descargar_csv(myRoute, myQuery, myHeader)    

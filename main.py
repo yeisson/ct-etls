@@ -102,6 +102,7 @@ from metlife_base_marcada.server import metlife_base_marcada_api
 from refinancia_base_marcada.server import refinancia_base_marcada_api
 from procesos.ucc import ucc_api
 from procesos.Hermeco import Hermeco_api
+from procesos.neurologico import neurologico_api
 
 from procesos.Bridge.bridge import bridge_api
 from procesos.PhpTOPython.mirror import mirror_api
@@ -180,6 +181,8 @@ app.register_blueprint(Metlife_BM_descarga_api, url_prefix='/metlife')
 app.register_blueprint(Refinancia_descarga_api, url_prefix='/refinancia')
 app.register_blueprint(metlife_base_marcada_api, url_prefix='/metlife_base_marcada')
 app.register_blueprint(refinancia_base_marcada_api, url_prefix='/refinancia_base_marcada')
+app.register_blueprint(neurologico_api, url_prefix='/neurologico')
+
 
 
 app.register_blueprint(bancolombia_api2, url_prefix='/bancolombia_adm_api')

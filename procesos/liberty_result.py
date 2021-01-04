@@ -58,3 +58,53 @@ def Descarga_Resultado_Consolidado():
     return descargas.descargar_csv(myRoute, myQuery, myHeader)
  
 
+ ##############################################################################################################################################################################3
+
+@liberty_result.route("/descarga_diaria_pichincha", methods=['POST','GET'])
+
+def Descarga_Resultado_diario_pichincha():
+       
+    dateini= request.args.get('desde')
+    dateend= request.args.get('hasta')
+    ##operacion= request.args.get('modulo_ipdial')
+
+  
+    myRoute = '/BI_Archivos/GOOGLE/Liberty/result_diario/'+dateini+'_'+dateend+'_'+"pichincha"+'.csv'
+    # myQuery ='SELECT * FROM `contento-bi.telefonia_vistas.claro_fija_cons` where periodo between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'+'AND'+'"'operacion'"''   
+    myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_pichincha_bdo_Dirario` where Fecha_Gestion between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'
+
+    print (myQuery)
+    myHeader = ["id_customer", "placa", "nombre", "mes_de_campana", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "fecha_gestion", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "hit", "source", "barridos", "gestionable", "ipdial_code", "producto"
+]
+    
+    
+
+    return descargas.descargar_csv(myRoute, myQuery, myHeader)
+
+##############################################################################################################################################################################3
+
+@liberty_result.route("/descarga_consolidada_pichincha", methods=['POST','GET'])
+
+def Descarga_Resultado_Consolidado_pichincha():
+       
+    ##dateini= request.args.get('desde')
+   ## dateend= request.args.get('hasta')
+    ##operacion= request.args.get('modulo_ipdial')
+
+  
+    myRoute = '/BI_Archivos/GOOGLE/Liberty/result_consolidado/'"gestion_consolidada_pichincha"'.csv'
+    # myQuery ='SELECT * FROM `contento-bi.telefonia_vistas.claro_fija_cons` where periodo between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'+'AND'+'"'operacion'"''   
+    myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_pichincha_bdo_consolidado`'
+
+    print (myQuery)
+    myHeader = ["id_customer", "placa", "nombre", "mes_de_campana", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "fecha_gestion", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "hit", "source", "barridos", "gestionable", "ipdial_code", "producto"
+]
+    
+    
+
+    return descargas.descargar_csv(myRoute, myQuery, myHeader)
+ 
+
+
+
+

@@ -12,6 +12,7 @@ import dataflow_pipeline.linead.SF_Chats_estados_beam as SF_Chats_estados_beam
 import dataflow_pipeline.linead.SF_NS_solucion_beam as SF_NS_solucion_beam
 import dataflow_pipeline.linead.SF_Chats_agente_beam as SF_Chats_agente_beam
 import dataflow_pipeline.linead.chat_interacciones_beam as chat_interacciones_beam
+import dataflow_pipeline.linead.chats_beam as chats_beam
 import os
 import socket
 
@@ -389,6 +390,7 @@ def chats_agente():
     # return "Corriendo : " 
     return jsonify(response), response["code"]
 
+###################################################################################################################################
 ################################# BASE CHAT INTERACCIONES #################################
 
 @linead_api.route("/interacciones")
@@ -426,6 +428,54 @@ def interacciones():
             mensaje = chat_interacciones_beam.run('gs://ct-telefonia/Chat_interacciones/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Linead/Chat_interacciones/Procesados/"+archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo el cargue exitosamente"
+                response["status"] = True
+
+    return jsonify(response), response["code"]
+    # return "Corriendo : " + mensaje
+
+##################################################################################################################################
+
+
+####################################################### CHATS SALESFORCE ##################################################
+
+
+@linead_api.route("/chats")
+def chats():
+
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron ficheros"
+    response["status"] = False
+
+    local_route =  fileserver_baseroute + "/BI_Archivos/GOOGLE/Linead/Salesforce/Chats/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-linead')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('Chats/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            deleteQuery = "DELETE FROM `contento-bi.linea_directa.Chats` WHERE fecha = '" + mifecha + "'"
+
+            #Primero eliminamos todos los registros que contengan esa fecha
+            client = bigquery.Client()
+            query_job = client.query(deleteQuery)
+
+            #result = query_job.result()
+            query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = chats_beam.run('gs://ct-linead/Chats/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Linead/Salesforce/Chats/Procesados/"+archivo)
                 response["code"] = 200
                 response["description"] = "Se realizo el cargue exitosamente"
                 response["status"] = True

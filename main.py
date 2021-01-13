@@ -126,6 +126,7 @@ from procesos.MobilityAgentScript import Mobility_Agent_Script
 from procesos.claro_result import claro_result
 from procesos.metlife_result import metlife_result
 from procesos.liberty_result import liberty_result
+from procesos.cafam_result import cafam_result
 from procesos.Telefonia.Agent_scripting import agent_api
 from procesos.felicidad_y_cultura import clima_api
 from procesos.crediorbe_sac import crediorbe_sac_api
@@ -207,6 +208,7 @@ app.register_blueprint(Mobility_Agent_Script, url_prefix='/perfil_cliente')
 app.register_blueprint(claro_result, url_prefix='/claro_result')
 app.register_blueprint(metlife_result, url_prefix='/metlife_result')
 app.register_blueprint(liberty_result, url_prefix='/liberty_result')
+app.register_blueprint(cafam_result, url_prefix='/cafam_result')
 app.register_blueprint(clima_api, url_prefix='/clima_encuesta')
 app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 app.register_blueprint(formacion_api, url_prefix='/formacion')

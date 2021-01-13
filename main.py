@@ -94,6 +94,7 @@ from procesos.cesde import cesde_api
 from procesos.rappi import rappi_api
 from procesos.pyg import pyg_api
 from procesos.liberty import liberty_api
+from procesos.cafam import cafam_api
 from procesos.metlife import Metlife_BM_api
 # from procesos.Prueba import Prueba_api
 from procesos.metlife import Metlife_BM_descarga_api
@@ -177,6 +178,7 @@ app.register_blueprint(cesde_api, url_prefix='/cesde')
 app.register_blueprint(rappi_api, url_prefix='/rappi')
 app.register_blueprint(pyg_api, url_prefix='/pyg')
 app.register_blueprint(liberty_api, url_prefix='/liberty')
+app.register_blueprint(cafam_api, url_prefix='/cafam')
 app.register_blueprint(Metlife_BM_api, url_prefix='/metlife')
 # app.register_blueprint(Prueba_api, url_prefix='/Prueba')
 app.register_blueprint(Metlife_BM_descarga_api, url_prefix='/metlife')

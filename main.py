@@ -102,6 +102,7 @@ from procesos.refinancia import Refinancia_descarga_api
 from metlife_base_marcada.server import metlife_base_marcada_api
 from refinancia_base_marcada.server import refinancia_base_marcada_api
 from procesos.ucc import ucc_api
+from procesos.ucc import descarga_agent_script_blueprint
 from procesos.Hermeco import Hermeco_api
 from procesos.neurologico import neurologico_api
 
@@ -131,6 +132,7 @@ from procesos.crediorbe_sac import crediorbe_sac_api
 from procesos.formacion import formacion_api
 from procesos.coopantex import coopantex_api
 from procesos.gestion_humana import gto_api
+
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
 
@@ -196,6 +198,7 @@ app.register_blueprint(unificadas_api, url_prefix='/unificadas')
 # app.register_blueprint(ucc_api, url_prefix='/ucc')
 app.register_blueprint(proteccion_api, url_prefix='/proteccion')
 app.register_blueprint(ucc_api, url_prefix='/ucc')
+app.register_blueprint(descarga_agent_script_blueprint, url_prefix='/ucc')
 app.register_blueprint(Metlife_Rep_Wolkvox_api, url_prefix='/metlife_repositorio')
 app.register_blueprint(Hermeco_api, url_prefix='/hermeco')
 app.register_blueprint(Jerarquias_api, url_prefix='/Jerarquias')

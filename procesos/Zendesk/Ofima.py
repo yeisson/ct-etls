@@ -122,9 +122,8 @@ def Ejecutar():
                     str(rown["author_id"]).encode('utf-8')+"|"+                   
                     str(rown["public"]).encode('utf-8')+"|"+  
                     str(rown["created_at"]).encode('utf-8')+"|"+
-                    str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '').replace(' ', '') +"|"+ 
-                     str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '') +"|"+ 
-                     "\n")
+                    str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '').replace(' ', '').replace('|', '') +"|"+ 
+                    str(rown["body"]).encode('utf-8').replace('\n', ' ').replace('\r', '').replace('&nbsp', '').replace('|', '') + "|"+ "\n")
                
     file.close()
     blob.upload_from_filename(ruta_completa)
@@ -133,5 +132,4 @@ def Ejecutar():
     time.sleep(60)
 
     return("Se acaba de ejecutar el proceso de " + KEY_REPORT + " Para actualizar desde: " + dateini + " hasta " + dateend)
-########################################################################################################################
-
+#######################################################################################################################

@@ -3,6 +3,8 @@ from flask import jsonify
 from shutil import copyfile, move
 from google.cloud import storage
 from google.cloud import bigquery
+from flask import request
+
 import dataflow_pipeline.ucc2.sms_beam as sms_beam
 import dataflow_pipeline.ucc2.sms_opc1_beam as sms_opc1_beam
 import dataflow_pipeline.ucc2.Apertura_beam as Apertura_beam
@@ -12,6 +14,9 @@ import dataflow_pipeline.ucc2.Doble_via_beam as Doble_via_beam
 import os
 import socket
 import time
+import procesos.descargas as descargas
+
+
 
 ucc_api = Blueprint('ucc_api', __name__)
 
@@ -323,3 +328,21 @@ def doble_via():
     # # return jsonify(response), response["code"]
     # return "Corriendo : " 
     return jsonify(response), response["code"]
+
+#----------------------------------------------------------------------------------------------------#
+#                                  DESCARGA DE DATOS DE AGENT SCRIPT                                 #
+#----------------------------------------------------------------------------------------------------#
+
+descarga_agent_script_blueprint = Blueprint('descarga_agent_script_blueprint', __name__)
+@descarga_agent_script_blueprint.route('/descargar', methods =['POST','GET'])
+
+def DescargaDatosAgentScript():
+
+    dateini = request.args.get('desde')
+    dateend = request.args.get('hasta')
+
+    myRoute = '/BI_Archivos/GOOGLE/Ucc/Tipificador/'+dateini+'_'+dateend+'.csv'
+    myQuery = 'SELECT * FROM `contento-bi.telefonia_vistas.Vista_Agent_Script_UCC` WHERE FECHA BETWEEN'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'
+    myHeader = ["FECHA","HORA","ID_AGENTE","NOMBRE","INTERES","CANAL","CEDULA","CAMPUS","TIPO_PROGRAMA","PROGRAMA","CELULAR","FIJO","EMAIL","CODIGO_1","CODIGO_2","CODIGO_3","CODIGO_2A","CODIGO_3A","CODIGO_2B","CODIGO_3B","ID_LLAMADA"]
+
+    return descargas.descargar_csv(myRoute, myQuery, myHeader)

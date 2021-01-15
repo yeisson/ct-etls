@@ -763,7 +763,7 @@ def historico_eva():
     for row in conn:
         text_row =  ""
         text_row += str(row['id_evaluacion_historico']).encode('utf-8') + "|"
-        text_row += str(row['observaciones']).encode('utf-8') + "|"
+        text_row += str(row['observaciones']).encode('utf-8').replace('\n','') + "|"
         text_row += str(row['documento_evaluador']).encode('utf-8') + "|"
         text_row += str(row['id_cargo_evaluador']).encode('utf-8') + "|"
         text_row += str(row['documento_evaluado']).encode('utf-8') + "|"

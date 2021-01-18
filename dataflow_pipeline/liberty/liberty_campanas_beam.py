@@ -103,7 +103,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha, id_campana):
 
-	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-liberty" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]

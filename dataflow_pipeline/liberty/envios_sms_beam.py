@@ -1,4 +1,4 @@
-#encoding: utf-8 
+#coding: utf-8 
 from __future__ import print_function, absolute_import
 import logging
 import re
@@ -21,43 +21,35 @@ from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-TABLE_SCHEMA = ('FECHA_CARGUE:STRING, '
-                'CAMPANA:STRING, '
-                'TARIFA_POLIZA:STRING, '
-                'META_CONTACTABILIDAD:STRING, '
-                'META_EFECTIVIDAD:STRING, '
-                'META_AHT_VENTAS__SEGUNDOS_:INTEGER, '
-                'META_AHT_NO_EFECTIVOS__SEGUNDOS_:INTEGER, '
-                'META_INTENTOS_REGISTRO:INTEGER, '
-                'META_VENTAS_MES:INTEGER, '
-                'FECHA_METAS:DATE '
-
-
-
-	        )
+TABLE_SCHEMA = ('ARCHIVO:STRING,'
+                'NOMBRE_BASE:STRING, '
+                'ID:STRING, '
+                'TELEFONO:STRING, '
+                'MENSAJE:STRING, '
+                'FECHA_ENVIO:STRING, '
+                'TIPO_MENSAJE:STRING, '
+                'CAMPANA:STRING '
+            )
 
 class formatearData(beam.DoFn):
-    
-        def __init__(self, mifecha):
+
+	def __init__(self, mifecha):
 		super(formatearData, self).__init__()
 		self.mifecha = mifecha
 	
 	def process(self, element):
+		# print(element)
 		arrayCSV = element.split(';')
 
-		tupla= {'FECHA_CARGUE' : self.mifecha,
-                'CAMPANA' : arrayCSV[0],
-                'TARIFA_POLIZA' : arrayCSV[1],
-                'META_CONTACTABILIDAD' : arrayCSV[2],
-                'META_EFECTIVIDAD' : arrayCSV[3],
-                'META_AHT_VENTAS__SEGUNDOS_' : arrayCSV[4],
-                'META_AHT_NO_EFECTIVOS__SEGUNDOS_' : arrayCSV[5],
-                'META_INTENTOS_REGISTRO' : arrayCSV[6],
-                'META_VENTAS_MES' : arrayCSV[7],
-                'FECHA_METAS' : arrayCSV[8]
-
-
-                }
+		tupla= {'ARCHIVO': self.mifecha,
+                'NOMBRE_BASE' : arrayCSV[0],
+                'ID' : arrayCSV[1],
+                'TELEFONO' : arrayCSV[2],
+                'MENSAJE' : arrayCSV[3],
+                'FECHA_ENVIO' : arrayCSV[4],
+                'TIPO_MENSAJE' : arrayCSV[5],
+                'CAMPANA' : arrayCSV[6]
+				}
 		
 		return [tupla]
 
@@ -77,18 +69,21 @@ def run(archivo, mifecha):
         "--setup_file", "./setup.py",
         "--max_num_workers", "10",
 		"--subnetwork", "https://www.googleapis.com/compute/v1/projects/contento-bi/regions/us-central1/subnetworks/contento-subnet1"
+
 	])
 	
-	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo,skip_header_lines=1)
+	lines = pipeline | 'Lectura de Archivo' >> ReadFromText(archivo, skip_header_lines=1)
 	transformed = (lines | 'Formatear Data' >> beam.ParDo(formatearData(mifecha)))
-	transformed | 'Escritura a BigQuery contento.metas_liberty' >> beam.io.WriteToBigQuery(
-		gcs_project + ":Contento.metas_liberty", 
+	transformed | 'Escritura a BigQuery Liberty.envios_sms' >> beam.io.WriteToBigQuery(
+		gcs_project + ":Liberty.envios_sms", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
 		)
 
-	jobObject = pipeline.run()
-	# jobID = jobObject.job_id()
 
+	jobObject = pipeline.run()
 	return ("Corrio Full HD")
+
+
+

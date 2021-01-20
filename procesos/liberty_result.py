@@ -42,23 +42,37 @@ def Descarga_Resultado_Consolidado():
        
     dateini= request.args.get('mes_inicio')
     dateend= request.args.get('mes_final')
+
+    if dateini is None: 
+        dateini = ""
+    else:
+        dateini = dateini    
+
+    if dateend is None: 
+        dateend = ""
+    else:
+        dateend = dateend    
     # operacion= request.args.get('modulo_ipdial')
 
   
     myRoute = '/BI_Archivos/GOOGLE/Liberty/result_consolidado/'"gestion_consolidada"'.csv'
     # myQuery ='SELECT * FROM `contento-bi.telefonia_vistas.claro_fija_cons` where periodo between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'+'AND'+'"'operacion'"''   
-    myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_Consolidado`where mes_base between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'
+
+    if dateini == "": 
+        myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_Consolidado`'
+        
+    else: 
+        myQuery ='SELECT * FROM `contento-bi.Liberty.Exportable_Liberty_Consolidado`where mes_base between'+'"'+dateini+'"'+'AND'+'"'+dateend+'"'
 
     print (myQuery)
-    myHeader = ["id_customer", "nombre", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "tel_number", "mes_base", "fecha_getion_efectiva", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "source", "intentos", "Intentos", "gestionable", "ipdial_code", "producto"
+    myHeader = ["id_customer", "nombre", "cuenta_gestion", "cuenta_base", "codigo_tipificacion", "tel_number", "mes_base", "fecha_getion_efectiva","hora_getion_efectiva", "campana", "agent_name", "wpc", "rpc", "sin_contacto", "source", "intentos", "gestionable", "ipdial_code", "producto"
 ]
-    
-    
+       
 
     return descargas.descargar_csv(myRoute, myQuery, myHeader)
  
 
- ##############################################################################################################################################################################3
+ ##############################################################################################################################################################################
 
 @liberty_result.route("/descarga_diaria_pichincha", methods=['POST','GET'])
 

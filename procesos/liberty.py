@@ -6,6 +6,8 @@ from google.cloud import storage
 from google.cloud import bigquery
 import dataflow_pipeline.liberty.liberty_campanas_beam as liberty_campanas_beam
 import dataflow_pipeline.liberty.liberty_metas_beam as metas_beam
+import dataflow_pipeline.liberty.envios_sms_beam as envios_sms_beam
+import dataflow_pipeline.liberty.respuestas_sms_beam as respuestas_sms_beam
 import os
 import socket
 
@@ -29,7 +31,7 @@ def archivos_campanas():
             id_campana = archivo[17:23]
 
             storage_client = storage.Client()
-            bucket = storage_client.get_bucket('ct-telefonia')
+            bucket = storage_client.get_bucket('ct-liberty')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
             blob = bucket.blob('liberty_campanas/' + archivo)
@@ -46,7 +48,7 @@ def archivos_campanas():
             # query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = liberty_campanas_beam.run('gs://ct-telefonia/liberty_campanas/' + archivo, mifecha, id_campana)
+            mensaje = liberty_campanas_beam.run('gs://ct-liberty/liberty_campanas/' + archivo, mifecha, id_campana)
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Campanas/Procesados/"+archivo)
                 response["code"] = 200
@@ -71,7 +73,7 @@ def metas():
             mifecha = archivo[0:]
 
             storage_client = storage.Client()
-            bucket = storage_client.get_bucket('ct-prueba')
+            bucket = storage_client.get_bucket('ct-liberty')
 
             # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
             blob = bucket.blob('liberty/metas/' + archivo)
@@ -88,7 +90,7 @@ def metas():
             query_job.result() # Corremos el job de eliminacion de datos de BigQuery
 
             # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
-            mensaje = metas_beam.run('gs://ct-prueba/liberty/metas/' + archivo, mifecha)
+            mensaje = metas_beam.run('gs://ct-liberty/liberty/metas/' + archivo, mifecha)
             if mensaje == "Corrio Full HD":
                 move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Metas/Procesados/"+archivo)
                 response["code"] = 200
@@ -101,4 +103,93 @@ def metas():
     return jsonify(response), response["code"]
 
 
+##################################### BASE ENVIOS SMS ############################################
+
+@liberty_api.route("/envios")
+def envios():
+    
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron archivos para subir"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Canales digitales/Envios/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-liberty')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('Canales_digitales/Envios_sms/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            # deleteQuery = "DELETE FROM `contento-bi.Liberty.envios_sms` WHERE FECHA = '" + mifecha + "'"
+
+            # #Primero eliminamos todos los registros que contengan esa fecha
+            # client = bigquery.Client()
+            # query_job = client.query(deleteQuery)
+
+            # result = query_job.result()
+            # query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = envios_sms_beam.run('gs://ct-liberty/Canales_digitales/Envios_sms/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Canales digitales/Envios/Procesados/"+ archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo el cargue correctamente"
+                response["status"] = True
+
+    
+    return jsonify(response), response["code"]
+
+
+
+##################################### BASE RESPUESTAS SMS ############################################
+
+@liberty_api.route("/respuesta")
+def respuesta():
+    
+    response = {}
+    response["code"] = 400
+    response["description"] = "No se encontraron archivos para subir"
+    response["status"] = False
+
+    local_route = fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Canales digitales/Respuestas/"
+    archivos = os.listdir(local_route)
+    for archivo in archivos:
+        if archivo.endswith(".csv"):
+            mifecha = archivo[0:]
+
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket('ct-liberty')
+
+            # Subir fichero a Cloud Storage antes de enviarlo a procesar a Dataflow
+            blob = bucket.blob('Canales_digitales/Respuestas_sms/' + archivo)
+            blob.upload_from_filename(local_route + archivo)
+
+            # # Una vez subido el fichero a Cloud Storage procedemos a eliminar los registros de BigQuery
+            # deleteQuery = "DELETE FROM `contento-bi.Liberty.envios_sms` WHERE FECHA = '" + mifecha + "'"
+
+            # #Primero eliminamos todos los registros que contengan esa fecha
+            # client = bigquery.Client()
+            # query_job = client.query(deleteQuery)
+
+            # result = query_job.result()
+            # query_job.result() # Corremos el job de eliminacion de datos de BigQuery
+
+            # Terminada la eliminacion de BigQuery y la subida a Cloud Storage corremos el Job
+            mensaje = respuestas_sms_beam.run('gs://ct-liberty/Canales_digitales/Respuestas_sms/' + archivo, mifecha)
+            if mensaje == "Corrio Full HD":
+                move(local_route + archivo, fileserver_baseroute + "/BI_Archivos/GOOGLE/Liberty/Canales digitales/Respuestas/Procesados/"+ archivo)
+                response["code"] = 200
+                response["description"] = "Se realizo el cargue correctamente"
+                response["status"] = True
+
+    
+    return jsonify(response), response["code"]
 

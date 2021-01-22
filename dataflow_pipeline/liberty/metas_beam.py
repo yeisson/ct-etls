@@ -1,4 +1,3 @@
-#encoding: utf-8 
 from __future__ import print_function, absolute_import
 import logging
 import re
@@ -6,11 +5,12 @@ import json
 import requests
 import uuid
 import time
+from datetime import date
 import os
+import socket
 import argparse
 import uuid
 import datetime
-import socket
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
@@ -20,6 +20,8 @@ from apache_beam.metrics.metric import MetricsFilter
 from apache_beam import pvalue
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
+
+
 
 TABLE_SCHEMA = ('FECHA_CARGUE:STRING, '
                 'CAMPANA:STRING, '

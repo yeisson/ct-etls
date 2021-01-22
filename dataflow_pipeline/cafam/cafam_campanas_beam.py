@@ -103,7 +103,7 @@ class formatearData(beam.DoFn):
 
 def run(archivo, mifecha, id_campana):
 
-	gcs_path = "gs://ct-liberty" #Definicion de la raiz del bucket
+	gcs_path = "gs://ct-telefonia" #Definicion de la raiz del bucket
 	gcs_project = "contento-bi"
 
 	mi_runer = ("DirectRunner", "DataflowRunner")[socket.gethostname()=="contentobi"]
@@ -130,8 +130,8 @@ def run(archivo, mifecha, id_campana):
 	# transformed | 'Escribir en Archivo' >> WriteToText("archivos/Info_carga_banco_seg", file_name_suffix='.csv',shard_name_template='')
 	#transformed | 'Escribir en Archivo' >> WriteToText("gs://ct-bancolombia/info-segumiento/info_carga_banco_seg",file_name_suffix='.csv',shard_name_template='')
 
-	transformed | 'Escritura a BigQuery liberty_campanas' >> beam.io.WriteToBigQuery(
-		gcs_project + ":telefonia.liberty_campanas", 
+	transformed | 'Escritura a BigQuery cafam_campanas' >> beam.io.WriteToBigQuery(
+		gcs_project + ":telefonia.cafam_campanas", 
 		schema=TABLE_SCHEMA, 
 		create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED, 
 		write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND

@@ -288,6 +288,7 @@ from WebPage.inicio import webpage_app
 from procesos.Contento_tech.Tof.tof import tof_api
 from procesos.Contento_tech.BancolombiaSac.BancolombiaSac import bancosac_api
 from procesos.Contento_tech.proyectoFC.profitto import profitto_api
+from procesos.TempusMobility import tipificador_api
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
@@ -295,6 +296,7 @@ app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 app.register_blueprint(tof_api, url_prefix='/tof')
 app.register_blueprint(bancosac_api, url_prefix='/bancosac')
 app.register_blueprint(profitto_api, url_prefix='/profitto')
+app.register_blueprint(tipificador_api, url_prefix='/Mobility')
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

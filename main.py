@@ -133,6 +133,7 @@ from procesos.crediorbe_sac import crediorbe_sac_api
 from procesos.formacion import formacion_api
 from procesos.coopantex import coopantex_api
 from procesos.gestion_humana import gto_api
+from procesos.receive_api import general_receive_api 
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
@@ -214,6 +215,7 @@ app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 app.register_blueprint(formacion_api, url_prefix='/formacion')
 app.register_blueprint(coopantex_api, url_prefix='/coopantex')
 app.register_blueprint(gto_api, url_prefix='/gto')
+app.register_blueprint(general_receive_api, url_prefix='/receive_api')
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

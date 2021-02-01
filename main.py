@@ -70,8 +70,8 @@ app.register_blueprint(llamadas_report_api, url_prefix='/telefonia')
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<INICIO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 from procesos.bancolombia import bancolombia_api
-from procesos.avon import avon_api
-from procesos.avon_2 import avon_2_api
+# from procesos.avon import avon_api
+# from procesos.avon_2 import avon_2_api
 from procesos.negociadores import negociadores_api
 from procesos.leonisa import leonisa_api
 from procesos.bancolombia_castigada import bancolombia_castigada_api
@@ -157,8 +157,8 @@ app.register_blueprint(agent_detail_api, url_prefix='/telefonia')
 app.register_blueprint(agent_api, url_prefix='/telefonia')
 
 app.register_blueprint(bancolombia_api, url_prefix='/bancolombia')
-app.register_blueprint(avon_api, url_prefix='/avon')
-app.register_blueprint(avon_2_api, url_prefix='/avon_2')
+# app.register_blueprint(avon_api, url_prefix='/avon')
+# app.register_blueprint(avon_2_api, url_prefix='/avon_2')
 app.register_blueprint(negociadores_api, url_prefix='/negociadores')
 app.register_blueprint(leonisa_api, url_prefix='/leonisa')
 app.register_blueprint(bancolombia_castigada_api, url_prefix='/bancolombia_castigada')

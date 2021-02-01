@@ -68,7 +68,7 @@ def Ejecutar():
 
     client = bigquery.Client()
     QUERY = (
-        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_prueba where Estado = "Activado" ') #WHERE ipdial_code = "intcob-unisabaneta" 
+        'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_prueba where ipdial_code = "intcob-liberty-autos-banbog"  ') #WHERE ipdial_code = "intcob-unisabaneta" 
         #  'SELECT servidor, operacion, token, ipdial_code, id_cliente, cartera FROM telefonia.parametros_ipdial where ipdial_code = "intcob-banco-sufi-cast"') 
     query_job = client.query(QUERY)
     rows = query_job.result()
@@ -87,7 +87,7 @@ def Ejecutar():
 
     try:
         # QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where cast(substr(fecha,0,8)as date) = ' + '"' + dateini[0:4] + '-' + dateini[4:-6] + '-' + dateini[6:-8] + '"')
-        QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where substr(fecha,0,9) = ' + '"' + dateini[0:4] +  dateini[4:-6] +  dateini[6:-8] + '"')
+        QUERY2 = ('delete FROM `contento-bi.telefonia.detalle_predictivo` where concat(substr(fecha,0,4),'-',substr(fecha,5,2),'-',substr(fecha,7,2) = concat(substr(fecha,0,4),'-',substr(fecha,5,2),'-',substr(fecha,7,2) and ipdial_code = ipdial_code')
         query_job = client.query(QUERY2)
         rows2 = query_job.result()
     except: 

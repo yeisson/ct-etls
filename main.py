@@ -133,6 +133,7 @@ from procesos.crediorbe_sac import crediorbe_sac_api
 from procesos.formacion import formacion_api
 from procesos.coopantex import coopantex_api
 from procesos.gestion_humana import gto_api
+from procesos.receive_api import general_receive_api 
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'OAuth2Credential.json'
@@ -214,6 +215,7 @@ app.register_blueprint(crediorbe_sac_api, url_prefix='/crediorbe_sac')
 app.register_blueprint(formacion_api, url_prefix='/formacion')
 app.register_blueprint(coopantex_api, url_prefix='/coopantex')
 app.register_blueprint(gto_api, url_prefix='/gto')
+app.register_blueprint(general_receive_api, url_prefix='/receive_api')
 
 # BI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -295,6 +297,7 @@ from WebPage.inicio import webpage_app
 from procesos.Contento_tech.Tof.tof import tof_api
 from procesos.Contento_tech.BancolombiaSac.BancolombiaSac import bancosac_api
 from procesos.Contento_tech.proyectoFC.profitto import profitto_api
+from procesos.TempusMobility import tipificador_api
 
 app.register_blueprint(bridge_api, url_prefix='/bridge')
 app.register_blueprint(mirror_api, url_prefix='/PhpTOPython')
@@ -302,6 +305,7 @@ app.register_blueprint(webpage_app, url_prefix='/webpage_app')
 app.register_blueprint(tof_api, url_prefix='/tof')
 app.register_blueprint(bancosac_api, url_prefix='/bancosac')
 app.register_blueprint(profitto_api, url_prefix='/profitto')
+app.register_blueprint(tipificador_api, url_prefix='/Mobility')
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FIN>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
